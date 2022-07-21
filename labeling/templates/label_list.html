@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
+                <li class="breadcrumb-item active"><a aria-current="page">Labeling</a></li>
+            </ol>
+        </nav>
+        <div class="col" style="justify-content: space-between;">
+            <a class="btn p-0 flex-item" href="{% url 'labeling:label_detail' %}">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img-top img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+        </div>
+        <nav aria-label="Page navigation" style="margin-top: 1.3rem;">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% endblock %}

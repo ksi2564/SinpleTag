@@ -1,0 +1,24 @@
+{% load static %}
+
+<div class="container mt-2">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/" style="font-weight: bold"><img src="{% static 'images/BrandLogo.svg' %}" width="25" height="25" class="d-inline-block align-top" alt="">RISTAG</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link" id="navbar-items" href="{% url 'labeling:label_list' %}">라벨링</a>
+                <a class="nav-link" id="navbar-items" href="{% url 'labeling:my_info' %}">검수(마이페이지)</a>
+                <a class="nav-link" id="navbar-items" href="{% url 'labeling:status_board' %}">작업현황</a>
+                <a class="nav-link" id="navbar-items" href="{% url 'labeling:data_upload' %}">데이터업로드</a>
+            </div>
+        </div>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+            <div class="inline my-2 my-lg-0">
+                <a class="nav-link" href="{% url 'labeling:login' %}">로그인/회원가입</a>
+            </div>
+        </div>
+    </nav>
+</div>

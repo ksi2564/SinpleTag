@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
+                <li class="breadcrumb-item active"><a aria-current="page">Status Dashboard</a></li>
+            </ol>
+        </nav>
+        <table class="table" style="margin-bottom: 1.6rem">
+            <thead>
+            <tr>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span style="font-size: 16px">총 이미지 수</span><br>100
+                    <div style="height: 1.5rem; width: 15rem;"></div>
+                </th>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">라벨링된 이미지</span><br>25%<span
+                        style="font-size: 12px; font-weight: normal">  (25개)</span>
+                    <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
+                        <div class="progress-bar" role="progressbar" style="width: 25%;"></div>
+                    </div>
+                </th>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">검수된 이미지</span><br>18%<span
+                        style="font-size: 12px; font-weight: normal">  (18개)</span>
+                    <div class="progress" style="width: 18rem; margin-bottom: .5rem">
+                        <div class="progress-bar progress-bar-custom" role="progressbar" style="width: 25%;"></div>
+                    </div>
+                </th>
+            </tr>
+            </thead>
+        </table>
+        <h3 style="font-weight: bold">데이터 내려받기</h3>
+        <div class="card">
+            <div class="card-body">
+                <h5 style="font-weight: bold">카테고리 선택</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                        전체선택
+                    </label>
+                </div>
+                <p>
+                <h5 style="font-weight: bold">내려받을 파일 형식</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
+                           value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        CSV파일(.csv 형식)
+                    </label>
+                </div>
+                </p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <a type="button" class="btn btn-outline-primary btn-m" style="margin-top: .6rem;" href="#">내려받기</a>
+        </div>
+    </div>
+{% endblock %}
