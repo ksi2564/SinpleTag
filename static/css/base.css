@@ -103,3 +103,9 @@
 .page-item.disabled .page-link {
     color: #6C757D !important;
 }
+
+.selected-item {
+    max-width: 100%;
+    height: auto;
+    border: 3px solid #8BC34A !important;
+}
