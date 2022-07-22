@@ -6,8 +6,8 @@
     color: #000;
 }
 
-.nav-link:hover {
-    color: #8BC34A;
+.dropdown-menu li a.dropdown-item:focus {
+    background-color: #BADA55;
 }
 
 #main {

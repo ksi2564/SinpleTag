@@ -6,11 +6,10 @@
         <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
-                <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:label_list' %}">Labeling</a></li>
+                <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:inspect_list' %}">Inspection</a></li>
                 <li class="breadcrumb-item active"><a aria-current="page">Data</a></li>
             </ol>
         </nav>
-        {#        상위 10개 미리보기#}
         <div class="justify-content-center" style="display: inline">
             <a href="#"><i class="bi bi-chevron-left"></i></a>
             <a class="col-1 btn p-0 pre-item selected-item" href="#">
@@ -164,13 +163,18 @@
                                     style="width: 7rem; margin-right: .7rem;" data-toggle="modal"
                                     data-target="#DeletData">데이터 삭제
                             </button>
-                            <button type="button" class="btn btn-primary" style="width: 7rem;">라벨링 저장</button>
+                            <button type="button" class="btn btn-primary" style="width: 7rem;">검수 완료</button>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
                         <div class="col-12" style="margin-top: 1.5rem;">
-                            <h4><b>데이터 불러온 날짜</b></h4>
+                            <h4><b>라벨링 날짜</b></h4>
                             <p>2022년 OO월 OO일</p>
+                        </div>
+                        <hr>
+                        <div class="col-12" style="margin-top: 1.5rem;">
+                            <h4><b>담당 작업자</b></h4>
+                            <p>김철수</p>
                         </div>
                         <hr>
                     </div>

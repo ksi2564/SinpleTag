@@ -55,7 +55,27 @@
             </div>
         </div>
         <div class="row justify-content-center">
-            <a type="button" class="btn btn-outline-primary btn-m" style="margin-top: .6rem;" href="#">내려받기</a>
+            <a type="button" class="btn btn-outline-primary btn-m" style="margin-top: .6rem;" href="#"
+               data-toggle="modal" data-target="#Unsatisfied">내려받기</a>
+        </div>
+        <div class="modal" id="Unsatisfied">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">카테고리 및 관련 속성 선택</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>카테고리 혹은 관련 속성이 선택되지 않았습니다.<br>
+                            카테고리와 관련 속성을 모두 최소 1개 이상 선택해주세요.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">확인</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

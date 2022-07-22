@@ -7,8 +7,8 @@
             <div style="text-align:left; margin: 4.5rem 0 0 0">
                 <h1 style="font-weight: bold">신발 제작을 똑똑하게</h1>
                 <h3 style="margin-top: 1.5rem;">KRISTIN AI를 위한 라벨링</h3>
-                <h4 style="margin-top: 3rem;">안녕하세요. 김성인 님<br>작업에 참여해주셔서 감사합니다.</h4>
-                <a type="button" class="btn btn-primary btn-lg" style="margin-top: .6rem; padding: .8rem;" href="#">라벨링 작업하기</a>
+                <h4 style="margin-top: 3rem;">안녕하세요. {{ social_account.extra_data.name }} 님<br>작업에 참여해주셔서 감사합니다.</h4>
+                <a type="button" class="btn btn-primary btn-lg" style="margin-top: .6rem; padding: .8rem;" href="{% url 'labeling:label_list' %}">라벨링 작업하기</a>
             </div>
         </div>
         <div style="float: right; margin-right: 1rem;">
