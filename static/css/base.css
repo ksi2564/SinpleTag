@@ -7,7 +7,11 @@
 }
 
 .dropdown-menu li a.dropdown-item:focus {
-    background-color: #BADA55;
+    background-color: #8BC34A;
+}
+
+.dropdown-menu li button.dropdown-item:focus {
+    background-color: #8BC34A;
 }
 
 #main {

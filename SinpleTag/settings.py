@@ -156,4 +156,7 @@ SITE_ID = 1  # 하나의 프로젝트에서 여러 사이트 운영할 때 구�
 LOGIN_REDIRECT_URL = '/'
 
 ACCOUNT_EMAIL_REQUIRED = True  # 계정 이메일 필수
+ACCOUNT_USERNAME_REQUIRED = False  # 유저네임(ID Default) 요구 X
+ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'  # 계정 인증은 email을 통해서
+ACCOUNT_LOGOUT_ON_GET = True  # 로그아웃 확인 페이지 생략
