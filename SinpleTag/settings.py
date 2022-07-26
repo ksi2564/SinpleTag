@@ -56,15 +56,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # my app
+    'labeling',
+
     # allauth 적용 사항
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.naver',  # allauth 네이버 적용
-    
-    # my app
-    'labeling',
+    'allauth.socialaccount.providers.google',  # allauth 구글 적용
 ]
 
 MIDDLEWARE = [
@@ -82,7 +83,9 @@ ROOT_URLCONF = 'SinpleTag.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

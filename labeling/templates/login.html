@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load socialaccount %}
 {% providers_media_js %}
 
@@ -11,8 +12,17 @@
                     <div class="row justify-content-center">
                         <form action="{% provider_login_url 'naver' %}" method="post">
                             {% csrf_token %}
-                            <button class="btn btn-naver" type="submit">N<span
-                                    style="margin: 0 1rem 0 3.5rem;">네이버 로그인</span></button>
+                            <button class="btn btn-naver" type="submit"><img
+                                    src="{% static 'images/btn_naver_logo.png' %}" alt=""
+                                    style="padding: 0; height: 2.3rem; width: 2.3rem"><span
+                                    style="margin: 0 2rem;">네이버 로그인</span></button>
+                        </form>
+                        <form action="{% provider_login_url 'google' %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-google" type="submit" style="margin-top: .5rem;"><img
+                                    src="{% static 'images/btn_google_logo.svg' %}" alt=""
+                                    style="padding: 0"><span
+                                    style="margin: 0 2.5rem">구글 로그인</span></button>
                         </form>
                     </div>
                 </div>

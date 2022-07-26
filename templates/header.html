@@ -15,7 +15,6 @@
                 <a class="nav-link" id="navbar-items" href="{% url 'labeling:label_list' %}">라벨링</a>
                 <a class="nav-link" id="navbar-items" href="{% url 'labeling:inspect_list' %}">검수</a>
                 <a class="nav-link" id="navbar-items" href="{% url 'labeling:status_board' %}">작업현황</a>
-                <a class="nav-link" id="navbar-items" href="{% url 'labeling:data_upload' %}">데이터업로드</a>
             </div>
         </div>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
@@ -25,10 +24,10 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                                aria-expanded="false">
-                                {{ social_account.extra_data.name }}님
+                                {{ user.socialaccount_set.all.0.extra_data.name }}님
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'labeling:my_info' %}">내 정보 관리</a></li>
+                                <li><a class="dropdown-item" href="{% url 'labeling:my_info' user.id %}">내 정보 관리</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

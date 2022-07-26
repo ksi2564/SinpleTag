@@ -2,46 +2,47 @@
 
 {% block content %}
     <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
         <h2 style="font-weight: bold; text-align: center; margin-top: 50px">내 정보 관리</h2>
         <div class="row justify-content-center">
             <table class="table" style="margin-top: 2rem; width: 25rem;">
                 <tr>
                     <th scope="row">이메일</th>
-                    <td>tester@test.com</td>
+                    <td>{{ user.email }}</td>
                 </tr>
                 <tr>
                     <th scope="row">이름</th>
-                    <td>홍길동</td>
+                    <td>{{ user.socialaccount_set.all.0.extra_data.name }}</td>
                 </tr>
                 <tr>
                     <th scope="row">권한</th>
-                    <td>작업자</td>
+                    {% if user.is_staff == False %}
+                        <td>작업자</td>
+                    {% else %}
+                        <td>전문가</td>
+                    {% endif %}
                 </tr>
             </table>
         </div>
         <div class="row justify-content-start" style="float:right; width: 30rem;">
-            <div class="d-flex flex-row-reverse">
-                <a href="#" class="badge badge-info" data-toggle="modal" data-target="#ExpertApply">전문가 권한 요청</a>
-            </div>
-        </div>
-        <div class="modal" id="ExpertApply">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">전문가 권한 요청</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>전문가 권한을 요청하였습니다.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">확인</button>
-                    </div>
-                </div>
-            </div>
+            <form action="" method="post">
+                {% csrf_token %}
+                {% if user.is_staff == True or user.requestpermission %}
+                    <button type="submit" class="badge badge-info" style="background-color: #ABB5BE" disabled>전문가 권한
+                        요청
+                    </button>
+                {% else %}
+                    <button type="submit" class="badge badge-info">
+                        전문가 권한 요청
+                    </button>
+                {% endif %}
+            </form>
         </div>
     </div>
-
 {% endblock %}
