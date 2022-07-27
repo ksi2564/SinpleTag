@@ -10,6 +10,7 @@
                 <li class="breadcrumb-item active"><a aria-current="page">Data</a></li>
             </ol>
         </nav>
+        {#        상위 10개 미리보기#}
         <div class="justify-content-center" style="display: inline">
             <a href="#"><i class="bi bi-chevron-left"></i></a>
             <a class="col-1 btn p-0 pre-item selected-item" href="#">
@@ -159,22 +160,40 @@
                             </div>
                         </div>
                         <div class="row justify-content-end" style="margin-right: 1.5rem;">
-                            <button type="button" class="btn btn-outline-danger" style="width: 7rem; margin-right: .7rem;">데이터 삭제</button>
+                            <button type="button" class="btn btn-outline-danger"
+                                    style="width: 7rem; margin-right: .7rem;" data-toggle="modal"
+                                    data-target="#DeleteData">데이터 삭제
+                            </button>
                             <button type="button" class="btn btn-primary" style="width: 7rem;">라벨링 저장</button>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
                         <div class="col-12" style="margin-top: 1.5rem;">
-                            <h4><b>파일명</b></h4>
-                            <p>뭔지 몰라잉 ㅠㅠ</p>
-                        </div>
-                        <hr>
-                        <div class="col-12" style="margin-top: 1.5rem;">
-                            <h4><b>업로드 일자</b></h4>
+                            <h4><b>데이터 불러온 날짜</b></h4>
                             <p>2022년 OO월 OO일</p>
                         </div>
                         <hr>
-
+                    </div>
+                    {#                    데이터 삭제 버튼 클릭 시 모달 생성#}
+                    <div class="modal" id="DeleteData">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">데이터 삭제</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>데이터 삭제 시 복구할 수 없습니다.<br>
+                                        정말로 데이터 삭제를 삭제할까요?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-danger">삭제</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

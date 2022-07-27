@@ -28,7 +28,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Take environment variables from .env file
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -40,9 +39,15 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,7 +55,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # my app
     'labeling',
+
+    # allauth 적용 사항
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.naver',  # allauth 네이버 적용
+    'allauth.socialaccount.providers.google',  # allauth 구글 적용
 ]
 
 MIDDLEWARE = [
@@ -68,7 +83,9 @@ ROOT_URLCONF = 'SinpleTag.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,7 +100,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'SinpleTag.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -93,7 +109,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -113,7 +128,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -124,7 +138,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -141,3 +154,12 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SITE_ID = 1  # 하나의 프로젝트에서 여러 사이트 운영할 때 구분하는 ID
+LOGIN_REDIRECT_URL = '/'
+
+ACCOUNT_EMAIL_REQUIRED = True  # 계정 이메일 필수
+ACCOUNT_USERNAME_REQUIRED = False  # 유저네임(ID Default) 요구 X
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'  # 계정 인증은 email을 통해서
+ACCOUNT_LOGOUT_ON_GET = True  # 로그아웃 확인 페이지 생략

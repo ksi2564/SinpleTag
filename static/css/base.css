@@ -6,8 +6,16 @@
     color: #000;
 }
 
-.nav-link:hover {
+.nav-link:hover{
     color: #8BC34A;
+}
+
+.dropdown-menu li a.dropdown-item:focus {
+    background-color: #8BC34A;
+}
+
+.dropdown-menu li button.dropdown-item:focus {
+    background-color: #8BC34A;
 }
 
 #main {
@@ -53,8 +61,22 @@
     color: #fff !important;
     font-size: .8rem !important;
     font-weight: 700 !important;
-    padding: 1rem 0 !important;
+    padding: 0 !important;
     width: 12.5rem;
+    height: 3rem;
+    box-shadow: 1px 1px #c9c9c9;
+}
+
+.btn-google {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: .8rem !important;
+    font-weight: 700 !important;
+    padding: 0 !important;
+    border-color: #eeeeee !important;
+    width: 12.5rem;
+    height: 3rem;
+    box-shadow: 1px 1px #c9c9c9;
 }
 
 .link {
