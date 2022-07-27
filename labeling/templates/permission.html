@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h2 style="text-align: center; font-weight: bold; margin-top: 50px">전문가 권한 요청 리스트</h2>
+        <h6 style="text-align: center; color: #6C757D; margin-bottom: 0;">적합한 작업자에게 전문가 권한을 부여해주세요.</h6>
+        <div class="row justify-content-center">
+            <table class="table" style="margin-top: 1rem;">
+                <thead>
+                <tr>
+                    <th scope="col"><input class="form-check-input position-static" type="checkbox" id="blankCheckbox"
+                                           value="option1" aria-label="..." style="margin-left: auto"></th>
+                    <th scope="col">이름</th>
+                    <th scope="col">이메일</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row"><input class="form-check-input position-static" type="checkbox" id="blankCheckbox"
+                                           value="option1" aria-label="..." style="margin-left: auto"></th>
+                    <td>홍길동</td>
+                    <td>hong@test.com</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row"><input class="form-check-input position-static" type="checkbox" id="blankCheckbox"
+                                           value="option1" aria-label="..." style="margin-left: auto"></th>
+                    <td>김철수</td>
+                    <td>kim@test.com</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row"><input class="form-check-input position-static" type="checkbox" id="blankCheckbox"
+                                           value="option1" aria-label="..." style="margin-left: auto"></th>
+                    <td>이유리</td>
+                    <td>lee@test.com</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row justify-content-center">
+            <button type="button" class="btn btn-primary" style="width: 7.5rem;">허용</button>
+        </div>
+    </div>
+
+{% endblock %}
