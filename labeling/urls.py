@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 
 from labeling.views import main_page, login, label_list, label_detail, status_board, inspect_list, inspect_detail, \
@@ -15,3 +17,5 @@ urlpatterns = [
     path('inspect/image_num/', inspect_detail, name='inspect_detail'),
     path('board/', status_board, name='status_board'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
