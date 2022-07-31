@@ -18,7 +18,9 @@
                     <h4 style="margin-top: 3rem;">안녕하세요. {{ user.socialaccount_set.all.0.extra_data.name }}님<br>작업에 참여해주셔서 감사합니다.
                     </h4>
                     <a type="button" class="btn btn-primary btn-lg" style="margin-top: .6rem; padding: .8rem;"
-                       href="{% url 'labeling:label_list' %}">라벨링 작업하기</a>
+                       href="{% url 'labeling:label_list' %}">라벨링 작업하기</a><br>
+                    <a type="button" class="btn btn-outline-primary btn-lg" style="margin-top: .6rem; padding: .8rem;"
+                       href="{% url 'labeling:classification_list' %}">분류 작업하기</a>
                 </div>
             </div>
             <div style="float: right; margin-right: 1rem;">

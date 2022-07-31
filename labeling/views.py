@@ -43,6 +43,14 @@ class MyInfo(DetailView):
         return redirect(self.request.path_info)
 
 
+def classification_list(request):
+    return render(request, 'classification_list.html')
+
+
+def classification_detail(request):
+    return render(request, 'classification_detail.html')
+
+
 # def permission(request):
 #     return render(request, 'permission.html')
 
