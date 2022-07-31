@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="margin: 0;">
+                <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
+                <li class="breadcrumb-item active"><a aria-current="page">Classification</a></li>
+            </ol>
+        </nav>
+        <strong class="row justify-content-end" style="font-size: 70%; margin-right: .6rem;">분류 대기 데이터: 1520개</strong>
+        <div class="row justify-content-end">
+            <a href="#" class="badge badge-secondary" style="margin: 0 1.5rem 1rem 0;">데이터 25개 추가하기</a>
+        </div>
+        <div class="col" style="justify-content: space-between;">
+            <a class="btn p-0 flex-item" href="{% url 'labeling:classification_detail' %}">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img-top img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+            <a class="btn p-0 flex-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
+            </a>
+        </div>
+        <nav aria-label="Page navigation" style="margin-top: 1.3rem;">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% endblock %}

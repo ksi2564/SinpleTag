@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
+                <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:classification_list' %}">Classification</a>
+                </li>
+                <li class="breadcrumb-item active"><a aria-current="page">Data</a></li>
+            </ol>
+        </nav>
+        {#        상위 10개 미리보기#}
+        <div class="justify-content-center" style="display: inline">
+            <a href="#"><i class="bi bi-chevron-left"></i></a>
+            <a class="col-1 btn p-0 pre-item selected-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img-top pre-img-size" alt="...">
+            </a>
+            <a class="col-1 btn p-0 pre-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
+            </a>
+            <a class="col-1 btn p-0 pre-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
+            </a>
+            <a class="col-1 btn p-0 pre-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
+            </a>
+            <a class="col-1 btn p-0 pre-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
+            </a>
+            <a class="col-1 btn p-0 pre-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
+            </a>
+            <a class="col-1 btn p-0 pre-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
+            </a>
+            <a class="col-1 btn p-0 pre-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
+            </a>
+            <a class="col-1 btn p-0 pre-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
+            </a>
+            <a class="col-1 btn p-0 pre-item" href="#">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
+            </a>
+            <a href="#"><i class="bi bi-chevron-right"></i></a>
+        </div>
+        <div class="row justify-content-center" style="margin-top: 3rem;">
+            <div class="col-6 card" style="height: fit-content;">
+                <img src="{% static 'images/MainPhoto.png' %}" class="card-img-top" alt="">
+            </div>
+        </div>
+        <div class="row justify-content-center" style="margin-top: 1.5rem;">
+            <button type="button" class="btn btn-outline-primary"
+                    style="width: 15rem; height: 5rem; margin-right: 3rem;" autofocus><strong>제품 상세컷</strong>
+            </button>
+            <button type="button" class="btn btn-outline-danger"
+                    style="width: 15rem; height: 5rem;"><strong>모델 코디컷</strong>
+            </button>
+        </div>
+    </div>
+{% endblock %}
