@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from labeling.models import RequestPermission
+from labeling.models import RequestPermission, InitialImage
 
 admin.site.login = login_required(admin.site.login)
 admin.site.unregister(User)
@@ -41,3 +41,4 @@ class UserAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(RequestPermission)
+admin.site.register(InitialImage)

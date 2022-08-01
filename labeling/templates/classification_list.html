@@ -11,30 +11,17 @@
         </nav>
         <strong class="row justify-content-end" style="font-size: 70%; margin-right: .6rem;">분류 대기 데이터: 1520개</strong>
         <div class="row justify-content-end">
-            <a href="#" class="badge badge-secondary" style="margin: 0 1.5rem 1rem 0;">데이터 25개 추가하기</a>
+            <form action="{% url 'labeling:classification_load_data' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="badge badge-secondary" style="margin: 0 1.5rem 1rem 0; border: #eeeeee">데이터 25개 추가하기</button>
+            </form>
         </div>
         <div class="col" style="justify-content: space-between;">
-            <a class="btn p-0 flex-item" href="{% url 'labeling:classification_detail' %}">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img-top img-size" alt="...">
-            </a>
-            <a class="btn p-0 flex-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
-            </a>
-            <a class="btn p-0 flex-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
-            </a>
-            <a class="btn p-0 flex-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
-            </a>
-            <a class="btn p-0 flex-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
-            </a>
-            <a class="btn p-0 flex-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
-            </a>
-            <a class="btn p-0 flex-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img img-size" alt="...">
-            </a>
+            {% for object in object_list %}
+                <a class="btn p-0 flex-item" href="{% url 'labeling:classification_detail' object.id %}">
+                    <img src="{{ object.image.url }}" class="card-img img-size" alt="...">
+                </a>
+            {% endfor %}
         </div>
         <nav aria-label="Page navigation" style="margin-top: 1.3rem;">
             <ul class="pagination justify-content-center">
