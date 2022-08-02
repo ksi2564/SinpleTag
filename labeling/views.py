@@ -2,12 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 # Create your views here.
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.views import View
-from django.views.generic import DetailView, ListView, UpdateView
+from django.views.generic import DetailView, ListView
 
-from labeling.forms import InitialImageForm
-from labeling.models import RequestPermission, InitialImage
+from labeling.models import RequestPermission, InitialImage, ClassificationImage
 
 
 def main_page(request):
@@ -30,10 +29,10 @@ class MyInfo(DetailView):
         user_pk = request.user.pk
         url_pk = self.kwargs['pk']
 
-        if user_pk is url_pk:
-            return super(MyInfo, self).dispatch(request)
-        messages.error(request, "접근할 수 없는 정보입니다.", extra_tags='danger')
-        return redirect(reverse("labeling:mainpage"))
+        if user_pk is not url_pk:
+            messages.error(request, "접근할 수 없는 정보입니다.", extra_tags='danger')
+            return redirect(reverse("labeling:mainpage"))
+        return super(MyInfo, self).dispatch(request)  # 해당 유저가 맞으면 기존에 있던 부모 dispatch를 사용
 
     def post(self, request, *args, **kwargs):
         new_request = RequestPermission()
@@ -50,13 +49,28 @@ class MyInfo(DetailView):
 
 
 class ClassificationList(ListView):
-    model = InitialImage
-    paginate_by = 25
+    paginate_by = 5
     template_name = 'classification_list.html'
 
     def get_queryset(self):
-        queryset = InitialImage.objects.filter(label_user=self.request.user)
+        queryset = InitialImage.objects.filter(label_user=self.request.user, classificationimage__isnull=True)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ClassificationList, self).get_context_data(**kwargs)
+
+        block_size = 5  # 하단의 페이지 목록 수
+
+        start_index = int(
+            (context['page_obj'].number - 1) / block_size) * block_size  # page_obj.number 1~5 => start_index 0
+        end_index = min(start_index + block_size,
+                        len(context['paginator'].page_range))  # block_size만큼씩 커지되 page_range를 넘진 않게 설정
+
+        context['page_range'] = context['paginator'].page_range[start_index:end_index]
+
+        context['waiting_images'] = InitialImage.objects.filter(label_user__isnull=True)
+
+        return context
 
 
 # def classification_detail(request):
@@ -67,29 +81,62 @@ class ClassificationDetail(DetailView):
     model = InitialImage
     template_name = 'classification_detail.html'
 
+    def get_success_url(self):
+        return reverse('labeling:classification_list')
+
     def get_context_data(self, **kwargs):
         context = super(ClassificationDetail, self).get_context_data(**kwargs)
         context['pre_images'] = InitialImage.objects.filter(label_user=self.request.user, pk__gte=self.object.pk)[:10]
         try:
             context['the_prev'] = InitialImage.objects.filter(label_user=self.request.user,
+                                                              classificationimage__isnull=True,
                                                               pk__lt=self.object.pk).order_by('-pk').first().pk
         except:
             context['the_prev'] = InitialImage.objects.filter(label_user=self.request.user,
+                                                              classificationimage__isnull=True,
                                                               pk__gt=self.object.pk).order_by('-pk').first().pk
         try:
             context['the_next'] = InitialImage.objects.filter(label_user=self.request.user,
+                                                              classificationimage__isnull=True,
                                                               pk__gt=self.object.pk).order_by('pk').first().pk
         except:
             context['the_next'] = InitialImage.objects.filter(label_user=self.request.user,
+                                                              classificationimage__isnull=True,
                                                               pk__lt=self.object.pk).order_by('pk').first().pk
         return context
 
+    def post(self, request, *args, **kwargs):
+        classification_image = ClassificationImage()
+        classification_image.image = self.get_object()
+        classification_image.detail_or_not = request.POST.get('classification')
+        classification_image.save()
+
+        if not InitialImage.objects.filter(label_user=self.request.user, pk__gt=self.get_object().pk):
+            return redirect('labeling:classification_list')
+        else:
+            return redirect('labeling:classification_detail', InitialImage.objects.filter(label_user=self.request.user,
+                                                                                          pk__gt=self.get_object().pk).first().pk)
+
 
 class ClassificationUpdate(View):
-    def post(self, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         queryset = InitialImage.objects.filter(label_user__isnull=True)
-        queryset.update(label_user=self.request.user)
+        bulk = []
+        for image in queryset[:25]:
+            image.label_user = self.request.user
+            bulk.append(image)
+        InitialImage.objects.bulk_update(bulk, ['label_user'])  # bulk에 있는 데이터 모두 한번에 업데이트
+        if len(bulk) > 0:
+            messages.success(request, f'{len(bulk)}장의 사진이 추가되었습니다.')
+        else:
+            messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
         return redirect(reverse('labeling:classification_list'))
+
+
+def delete_object_function(request, pk):
+    obj = InitialImage.objects.get(id=pk)
+    obj.delete()
+    return redirect(reverse('labeling:classification_list'))
 
 
 # def permission(request):

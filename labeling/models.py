@@ -20,8 +20,24 @@ class InitialImage(models.Model):
                                      related_name='inspect_user')
     date_save = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def classificated(self):
+        try:
+            return self.image is not None
+        except ClassificationImage.DoesNotExist:
+            return False
+
     def __str__(self):
         return str(self.date_save)
 
     class Meta:
         ordering = ['id']
+
+
+class ClassificationImage(models.Model):
+    image = models.OneToOneField(InitialImage, on_delete=models.CASCADE)
+    detail_or_not = models.BooleanField(null=False)
+    date_classification = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.date_classification)
