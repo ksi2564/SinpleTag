@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from labeling.models import RequestPermission, InitialImage, ClassificationImage
+from labeling.models import RequestPermission, InitialImage, ClassificationImage, ClassificationInspectImage
 
 admin.site.login = login_required(admin.site.login)
 admin.site.unregister(User)
@@ -55,3 +55,4 @@ admin.site.register(User, UserAdmin)
 admin.site.register(RequestPermission)
 admin.site.register(InitialImage, InitialImageAdmin)
 admin.site.register(ClassificationImage)
+admin.site.register(ClassificationInspectImage)

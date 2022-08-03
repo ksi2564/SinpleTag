@@ -41,3 +41,14 @@ class ClassificationImage(models.Model):
 
     def __str__(self):
         return str(self.date_classification)
+
+    class Meta:
+        ordering = ['id']
+
+
+class ClassificationInspectImage(models.Model):
+    image = models.OneToOneField(ClassificationImage, on_delete=models.CASCADE)
+    date_inspected = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.date_inspected)
