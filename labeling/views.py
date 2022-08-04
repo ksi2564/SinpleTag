@@ -116,7 +116,9 @@ class ClassificationDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ClassificationDetail, self).get_context_data(**kwargs)
-        context['pre_images'] = InitialImage.objects.filter(label_user=self.request.user, pk__gte=self.object.pk)[:10]
+        context['pre_images'] = InitialImage.objects.filter(label_user=self.request.user,
+                                                            classificationimage__isnull=True, pk__gte=self.object.pk)[
+                                :10]
         try:
             context['the_prev'] = InitialImage.objects.filter(label_user=self.request.user,
                                                               classificationimage__isnull=True,

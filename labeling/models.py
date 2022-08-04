@@ -11,6 +11,10 @@ class RequestPermission(models.Model):
 
     def __str__(self):
         return self.user.email + ' / ' + self.name
+    
+    class Meta:
+        verbose_name = '전문가 권한 요청'
+        verbose_name_plural = '전문가 권한 요청'
 
 
 class InitialImage(models.Model):
@@ -31,6 +35,8 @@ class InitialImage(models.Model):
         return str(self.date_save)
 
     class Meta:
+        verbose_name = '원본 이미지'
+        verbose_name_plural = '원본 이미지'
         ordering = ['id']
 
 
@@ -43,6 +49,8 @@ class ClassificationImage(models.Model):
         return str(self.date_classification)
 
     class Meta:
+        verbose_name = '분류된 이미지'
+        verbose_name_plural = '분류된 이미지'
         ordering = ['id']
 
 
@@ -52,3 +60,7 @@ class ClassificationInspectImage(models.Model):
 
     def __str__(self):
         return str(self.date_inspected)
+
+    class Meta:
+        verbose_name = '분류 검수된 이미지'
+        verbose_name_plural = '분류 검수된 이미지'

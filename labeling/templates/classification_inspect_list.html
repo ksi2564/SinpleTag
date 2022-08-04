@@ -31,21 +31,23 @@
         <form action="{% url 'labeling:just_test' %}" method="post">
             {% csrf_token %}
             <div class="col" style="justify-content: space-between;">
+                <label class="btn btn-secondary" style="margin-top: -2rem"><input type="checkbox" onClick="toggle(this)"
+                                                                                  hidden> 전체 선택</label><br>
                 {% for object in object_list %}
-                    <div class="li justify-content-center">
+                    <div class="li">
                         <input type="checkbox" id="cb{{ object.id }}" value="{{ object.id }}" name="cb"/>
                         <label class="label" for="cb{{ object.id }}"><img src="{{ object.image.image.url }}"
                                                                           class="card-img img-size"
                                                                           alt="...">
-                            <div class="row justify-content-center">
-                                <strong>{{ object.detail_or_not|yesno:'상세컷,모델컷' }}</strong>
-                            </div>
+                            <strong class="row justify-content-center">{{ object.detail_or_not|yesno:'상세컷,모델컷' }}</strong>
                         </label>
                     </div>
                 {% endfor %}
             </div>
-            <button type="submit" name="non-pass">거부</button>
-            <button type="submit" name="pass">확인</button>
+            <div class="row justify-content-end" style="margin-top: 1rem;">
+                <button class="btn btn-danger mr-2" type="submit" name="non-pass">검수 거부</button>
+                <button class="btn btn-primary mr-5" type="submit" name="pass">검수 통과</button>
+            </div>
         </form>
         <nav aria-label="Page navigation" style="margin-top: 1.3rem;">
             <ul class="pagination justify-content-center mb-4">
@@ -83,4 +85,13 @@
             </ul>
         </nav>
     </div>
+    <script>
+        function toggle(source) {
+            let checkboxes = document.getElementsByName('cb');
+            let i = 0, n = checkboxes.length;
+            for (; i < n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
 {% endblock %}
