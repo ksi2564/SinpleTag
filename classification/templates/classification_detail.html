@@ -5,28 +5,28 @@
     <div class="container">
         <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
-                <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:classification_list' %}">Classification</a>
+                <li class="breadcrumb-item"><a class="link" href="/static">Home</a></li>
+                <li class="breadcrumb-item"><a class="link" href="{% url 'classification:classification_list' %}">Classification</a>
                 </li>
                 <li class="breadcrumb-item active"><a aria-current="page">Data</a></li>
             </ol>
         </nav>
         {#        상위 10개 미리보기#}
         <div class="justify-content-center" style="display: inline">
-            <a href="{% url 'labeling:classification_detail' the_prev %}"><i class="bi bi-chevron-left"></i></a>
+            <a href="{% url 'classification:classification_detail' the_prev %}"><i class="bi bi-chevron-left"></i></a>
             {% for pre_image in pre_images %}
                 {% if pre_image == object %}
                     <a class="col-1 btn p-0 pre-item selected-item"
-                       href="{% url 'labeling:classification_detail' pre_image.id %}">
+                       href="{% url 'classification:classification_detail' pre_image.id %}">
                         <img src="{{ pre_image.image.url }}" class="card-img-top pre-img-size" alt="...">
                     </a>
                 {% else %}
-                    <a class="col-1 btn p-0 pre-item" href="{% url 'labeling:classification_detail' pre_image.id %}">
+                    <a class="col-1 btn p-0 pre-item" href="{% url 'classification:classification_detail' pre_image.id %}">
                         <img src="{{ pre_image.image.url }}" class="card-img-top pre-img-size" alt="...">
                     </a>
                 {% endif %}
             {% endfor %}
-            <a href="{% url 'labeling:classification_detail' the_next %}"
+            <a href="{% url 'classification:classification_detail' the_next %}"
                style="float: right; margin: 1.5rem 2.5rem 0 0;"><i class="bi bi-chevron-right"></i></a>
         </div>
         <div class="row justify-content-center" style="margin-top: 3rem;">
@@ -62,7 +62,7 @@
                                 정말로 해당사항이 없나요?</p>
                         </div>
                         <div class="modal-footer">
-                            <form action="{% url 'labeling:classification_delete' object.id %}" method="post">
+                            <form action="{% url 'classification:classification_delete' object.id %}" method="post">
                                 {% csrf_token %}
                                 <button class="btn btn-outline-danger">해당사항 없음</button>
                             </form>

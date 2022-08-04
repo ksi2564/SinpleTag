@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from labeling.models import RequestPermission, InitialImage, ClassificationImage, ClassificationInspectImage
+from labeling.models import RequestPermission
 
 admin.site.login = login_required(admin.site.login)
 admin.site.unregister(User)
@@ -37,22 +37,5 @@ class UserAdmin(admin.ModelAdmin):
     permission_delete.short_description = '전문가 권한 요청 삭제'
 
 
-class InitialImageAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'image', 'label_user', 'inspect_user')
-    actions = ['label_user_null', 'inspect_user_null']
-
-    def label_user_null(self, request, queryset):
-        queryset.update(label_user=None)
-
-    def inspect_user_null(self, request, queryset):
-        queryset.update(inspect_user=None)
-
-    label_user_null.short_description = '작업자 초기화'
-    inspect_user_null.short_description = '전문가 초기화'
-
-
 admin.site.register(User, UserAdmin)
 admin.site.register(RequestPermission)
-admin.site.register(InitialImage, InitialImageAdmin)
-admin.site.register(ClassificationImage)
-admin.site.register(ClassificationInspectImage)
