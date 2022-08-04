@@ -111,30 +111,36 @@ class ClassificationDetail(DetailView):
     model = InitialImage
     template_name = 'classification_detail.html'
 
-    def get_success_url(self):
-        return reverse('labeling:classification_list')
+    def dispatch(self, request, *args, **kwargs):
+        image_pk = request.user.pk
+        url_pk = InitialImage.objects.filter(pk=self.kwargs['pk'], label_user__isnull=False,
+                                             classificationimage__isnull=True).first()
+
+        if url_pk is None or image_pk is not url_pk.label_user.pk:
+            messages.error(request, "접근할 수 없는 정보입니다.", extra_tags='danger')
+            return redirect(reverse("labeling:classification_list"))
+        return super(ClassificationDetail, self).dispatch(request)  # 해당 유저가 맞으면 기존에 있던 부모 dispatch를 사용
 
     def get_context_data(self, **kwargs):
         context = super(ClassificationDetail, self).get_context_data(**kwargs)
         context['pre_images'] = InitialImage.objects.filter(label_user=self.request.user,
                                                             classificationimage__isnull=True, pk__gte=self.object.pk)[
                                 :10]
-        try:
-            context['the_prev'] = InitialImage.objects.filter(label_user=self.request.user,
-                                                              classificationimage__isnull=True,
-                                                              pk__lt=self.object.pk).order_by('-pk').first().pk
-        except:
-            context['the_prev'] = InitialImage.objects.filter(label_user=self.request.user,
-                                                              classificationimage__isnull=True,
-                                                              pk__gt=self.object.pk).order_by('-pk').first().pk
-        try:
-            context['the_next'] = InitialImage.objects.filter(label_user=self.request.user,
-                                                              classificationimage__isnull=True,
-                                                              pk__gt=self.object.pk).order_by('pk').first().pk
-        except:
-            context['the_next'] = InitialImage.objects.filter(label_user=self.request.user,
-                                                              classificationimage__isnull=True,
-                                                              pk__lt=self.object.pk).order_by('pk').first().pk
+        context['the_prev'] = InitialImage.objects.filter(label_user=self.request.user,
+                                                          classificationimage__isnull=True,
+                                                          pk__lt=self.object.pk).order_by('-pk').first()
+        context['the_next'] = InitialImage.objects.filter(label_user=self.request.user,
+                                                          classificationimage__isnull=True,
+                                                          pk__gt=self.object.pk).first()
+        if context['the_prev']:
+            context['the_prev'] = context['the_prev'].pk
+        else:
+            context['the_prev'] = self.object.pk
+        if context['the_next']:
+            context['the_next'] = context['the_next'].pk
+        else:
+            context['the_next'] = self.object.pk
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -143,7 +149,8 @@ class ClassificationDetail(DetailView):
         classification_image.detail_or_not = request.POST.get('classification')
         classification_image.save()
 
-        if not InitialImage.objects.filter(label_user=self.request.user, pk__gt=self.get_object().pk):
+        if not InitialImage.objects.filter(label_user=self.request.user, classificationimage__isnull=True,
+                                           pk__gt=self.get_object().pk):
             return redirect('labeling:classification_list')
         else:
             return redirect('labeling:classification_detail', InitialImage.objects.filter(label_user=self.request.user,
