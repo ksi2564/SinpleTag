@@ -12,8 +12,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
+                <a class="nav-link" id="navbar-items" href="{% url 'labeling:classification_list' %}">분류</a>
+                <a class="nav-link" id="navbar-items" href="{% url 'labeling:classification_inspect_list' %}">분류검수</a>
                 <a class="nav-link" id="navbar-items" href="{% url 'labeling:label_list' %}">라벨링</a>
-                <a class="nav-link" id="navbar-items" href="{% url 'labeling:inspect_list' %}">검수</a>
+                <a class="nav-link" id="navbar-items" href="{% url 'labeling:inspect_list' %}">라벨링검수</a>
                 <a class="nav-link" id="navbar-items" href="{% url 'labeling:status_board' %}">작업현황</a>
             </div>
         </div>
