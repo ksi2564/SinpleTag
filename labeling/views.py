@@ -26,7 +26,7 @@ class MyInfo(DetailView):
 
         if user_pk is not url_pk:
             messages.error(request, "접근할 수 없는 정보입니다.", extra_tags='danger')
-            return redirect(reverse("labeling:mainpage"))
+            return redirect(reverse("mainpage"))
         return super(MyInfo, self).dispatch(request)  # 해당 유저가 맞으면 기존에 있던 부모 dispatch를 사용
 
     def post(self, request, *args, **kwargs):

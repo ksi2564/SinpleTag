@@ -74,7 +74,7 @@ class ClassificationDetail(DetailView):
 
         if url_pk is None or image_pk is not url_pk.label_user.pk:
             messages.error(request, "접근할 수 없는 정보입니다.", extra_tags='danger')
-            return redirect(reverse("labeling:classification_list"))
+            return redirect(reverse("classification:classification_list"))
         return super(ClassificationDetail, self).dispatch(request)  # 해당 유저가 맞으면 기존에 있던 부모 dispatch를 사용
 
     def get_context_data(self, **kwargs):

@@ -11,9 +11,7 @@ class RequestPermission(models.Model):
 
     def __str__(self):
         return self.user.email + ' / ' + self.name
-    
+
     class Meta:
         verbose_name = '전문가 권한 요청'
         verbose_name_plural = '전문가 권한 요청'
-
-
