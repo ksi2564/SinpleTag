@@ -18,15 +18,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from labeling.views import main_page, login, MyInfo
+from labeling.views import main_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', main_page, name='mainpage'),
-    path('login/', login, name='login'),
-    path('myinfo/<int:pk>/', MyInfo.as_view(), name='my_info'),
 
+    path('account/', include('accountapp.urls')),
     path('labeling/', include('labeling.urls')),
     path('classification/', include('classification.urls')),
     path('accounts/', include('allauth.urls')),

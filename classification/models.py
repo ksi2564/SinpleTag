@@ -35,18 +35,23 @@ class ClassificationImage(models.Model):
         return str(self.date_classification)
 
     class Meta:
-        verbose_name = '분류된 이미지'
-        verbose_name_plural = '분류된 이미지'
+        verbose_name = '분류 완료 이미지'
+        verbose_name_plural = '분류 완료 이미지'
         ordering = ['id']
 
 
 class ClassificationInspectImage(models.Model):
     image = models.OneToOneField(ClassificationImage, on_delete=models.CASCADE)
+    labeling_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
+                                      related_name='labeling_user')
+    label_inspect_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
+                                           related_name='label_inspect_user')
     date_inspected = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.date_inspected)
 
     class Meta:
-        verbose_name = '분류 검수된 이미지'
-        verbose_name_plural = '분류 검수된 이미지'
+        verbose_name = '검수 완료 이미지'
+        verbose_name_plural = '검수 완료 이미지'
+        ordering = ['id']

@@ -2,12 +2,15 @@ from django.contrib import messages
 from django.shortcuts import redirect
 # Create your views here.
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView, DetailView
 
+from accountapp.decorators import is_login
 from classification.models import InitialImage, ClassificationImage, ClassificationInspectImage
 
 
+@method_decorator(is_login, name='dispatch')
 class ClassificationList(ListView):
     paginate_by = 5
     template_name = 'classification_list.html'
@@ -120,6 +123,7 @@ def delete_object_function(request, pk):
     return redirect(reverse('classification:classification_list'))
 
 
+@method_decorator(is_login, name='dispatch')
 class ClassificationInspectList(ListView):
     paginate_by = 10
     template_name = 'classification_inspect_list.html'
