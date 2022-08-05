@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # my app
+    'accountapp',
+    'classification',
     'labeling',
 
     # allauth 적용 사항

@@ -19,7 +19,7 @@
         <strong class="row justify-content-end" style="font-size: 70%; margin-right: .6rem;">분류 대기
             데이터: {{ waiting_images.count }}</strong>
         <div class="row justify-content-end">
-            <form action="{% url 'labeling:classification_load_data' %}" method="post">
+            <form action="{% url 'classification:classification_load_data' %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="badge badge-secondary" style="margin: 0 1.5rem 1rem 0; border: #eeeeee">데이터
                     25개 추가하기
@@ -28,7 +28,7 @@
         </div>
         <div class="col" style="justify-content: space-between;">
             {% for object in object_list %}
-                <a class="btn p-0 flex-item" href="{% url 'labeling:classification_detail' object.id %}">
+                <a class="btn p-0 flex-item" href="{% url 'classification:classification_detail' object.id %}">
                     <img src="{{ object.image.url }}" class="card-img img-size" alt="...">
                 </a>
             {% endfor %}
