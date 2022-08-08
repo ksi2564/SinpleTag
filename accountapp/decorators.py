@@ -10,6 +10,6 @@ def is_login(func):
             return func(request, *args, **kwargs)
         else:
             messages.error(request, '로그인 안하면 큰일나!', extra_tags='danger')
-            return redirect('/')
+            return redirect('accountapp:login')
 
     return decorated

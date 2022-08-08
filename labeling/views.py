@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from accountapp.decorators import is_login
 from classification.models import ClassificationInspectImage
@@ -44,6 +44,42 @@ class LabelingList(ListView):
 
 # def label_list(request):
 #     return render(request, 'label_list.html')
+class LabelingDetail(DetailView):
+    model = ClassificationInspectImage
+    template_name = 'label_detail.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        image_pk = request.user.pk
+        url_pk = ClassificationInspectImage.objects.filter(pk=self.kwargs['pk'],
+                                                           label_inspect_user__isnull=True).first()
+
+        if url_pk is None or image_pk is not url_pk.labeling_user.pk:
+            messages.error(request, "접근할 수 없는 정보입니다.", extra_tags='danger')
+            return redirect(reverse("labeling:label_list"))
+        return super(LabelingDetail, self).dispatch(request)  # 해당 유저가 맞으면 기존에 있던 부모 dispatch를 사용
+
+    def get_context_data(self, **kwargs):
+        context = super(LabelingDetail, self).get_context_data(**kwargs)
+        context['pre_images'] = ClassificationInspectImage.objects.filter(labeling_user=self.request.user,
+                                                                          labelimage__isnull=True,
+                                                                          pk__gte=self.object.pk)[
+                                :10]
+        context['the_prev'] = ClassificationInspectImage.objects.filter(labeling_user=self.request.user,
+                                                                        labelimage__isnull=True,
+                                                                        pk__lt=self.object.pk).order_by('-pk').first()
+        context['the_next'] = ClassificationInspectImage.objects.filter(labeling_user=self.request.user,
+                                                                        labelimage__isnull=True,
+                                                                        pk__gt=self.object.pk).first()
+        if context['the_prev']:
+            context['the_prev'] = context['the_prev'].pk
+        else:
+            context['the_prev'] = self.object.pk
+        if context['the_next']:
+            context['the_next'] = context['the_next'].pk
+        else:
+            context['the_next'] = self.object.pk
+
+        return context
 
 
 def label_detail(request):
