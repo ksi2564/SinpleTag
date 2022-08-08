@@ -1,11 +1,11 @@
 {% load static %}
 
-<div class="container mt-2">
+<div class="container-fluid mt-2">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/" style="font-weight: bold"><img src="{% static 'images/BrandLogo.svg' %}"
-                                                                        width="25" height="25"
+        <a class="navbar-brand" href="/" style="font-weight: bold; margin-right: 3rem; font-size: 1.5rem;"><img src="{% static 'images/BrandLogo.svg' %}"
+                                                                        width="32" height="32"
                                                                         class="d-inline-block align-top"
-                                                                        alt="">RISTAG</a>
+                                                                        alt=""> R I S T A G</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -28,7 +28,7 @@
                                aria-expanded="false">
                                 {{ user.socialaccount_set.all.0.extra_data.name }}님
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a class="dropdown-item" href="{% url 'accountapp:my_info' user.id %}">내 정보 관리</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
