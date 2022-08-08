@@ -1,4 +1,10 @@
+import os.path
+from io import BytesIO
+from urllib.request import urlopen
+from zipfile import ZipFile
+
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import redirect
 # Create your views here.
 from django.urls import reverse
@@ -185,7 +191,7 @@ class ClassificationInspectLoadImage(View):
 
 
 # 체크 박스 값 받아서 분류 라벨링 삭제하기(검수 거부 데이터)
-def just_test(request):
+def pass_or_not(request):
     if 'non-pass' in request.POST:
         selected = request.POST.getlist('cb')
         for sel in selected:
@@ -199,3 +205,22 @@ def just_test(request):
             new_inspect.image = obj
             new_inspect.save()
     return redirect(reverse('classification:classification_inspect_list'))
+
+
+def classification_dataset(request):
+    dataset = ClassificationInspectImage.objects.all()
+    f = BytesIO()
+    zip_f = ZipFile(f, 'w')
+    domain_url = 'http://127.0.0.1:8000'
+
+    for photo in dataset:
+        url = urlopen(domain_url + str(photo.image.image.image.url))
+        if photo.image.detail_or_not:
+            filename = os.path.join('detail_cut', str(photo.image.image.image).split('/')[-1])
+        else:
+            filename = os.path.join('model_cut', str(photo.image.image.image).split('/')[-1])
+        zip_f.writestr(filename, url.read())
+    zip_f.close()
+    response = HttpResponse(f.getvalue(), content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename=image-test.zip'
+    return response
