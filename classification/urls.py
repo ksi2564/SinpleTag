@@ -1,11 +1,14 @@
 from django.urls import path
 
 from classification.views import ClassificationList, ClassificationDetail, ClassificationInspectList, \
-    ClassificationLoadImage, ClassificationInspectLoadImage, delete_object_function, pass_or_not, classification_dataset
+    ClassificationLoadImage, ClassificationInspectLoadImage, delete_object_function, pass_or_not, \
+    classification_dataset, image_api
 
 app_name = 'classification'
 
 urlpatterns = [
+    path('imageapi/', image_api, name='image_api'),
+
     path('', ClassificationList.as_view(), name='classification_list'),
     path('<int:pk>/', ClassificationDetail.as_view(), name='classification_detail'),
     path('inspect/', ClassificationInspectList.as_view(), name='classification_inspect_list'),

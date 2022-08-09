@@ -35,15 +35,13 @@ class LabelingList(ListView):
                         len(context['paginator'].page_range))  # block_size만큼씩 커지되 page_range를 넘진 않게 설정
 
         context['page_range'] = context['paginator'].page_range[start_index:end_index]
-
+        # 라벨링 페이지에서는 제품 상세컷만 추가됨
         context['waiting_images'] = ClassificationInspectImage.objects.filter(labeling_user__isnull=True,
-                                                                              image__detail_or_not=True,
+                                                                              image__image_type=0,
                                                                               labelimage__isnull=True)
         return context
 
 
-# def label_list(request):
-#     return render(request, 'label_list.html')
 class LabelingDetail(DetailView):
     model = ClassificationInspectImage
     template_name = 'label_detail.html'
@@ -100,7 +98,8 @@ def status_board(request):
 
 class LabelingLoadImage(View):
     def post(self, request, *args, **kwargs):
-        queryset = ClassificationInspectImage.objects.filter(labeling_user__isnull=True, labelimage__isnull=True)
+        queryset = ClassificationInspectImage.objects.filter(labeling_user__isnull=True, image__image_type=0,
+                                                             labelimage__isnull=True)
         n = ClassificationInspectImage.objects.filter(labeling_user=self.request.user, labelimage__isnull=True)
         bulk = []
 

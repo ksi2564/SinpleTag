@@ -29,7 +29,7 @@
         <div class="col" style="justify-content: space-between;">
             {% for object in object_list %}
                 <a class="btn p-0 flex-item" href="{% url 'labeling:label_detail' object.id %}">
-                    <img src="{{ object.image.image.image.url }}" class="card-img img-size" alt="...">
+                    <img src="{{ object.image.image.image }}" class="card-img img-size" alt="...">
                 </a>
             {% endfor %}
         </div>
