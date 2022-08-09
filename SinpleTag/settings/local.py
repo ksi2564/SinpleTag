@@ -6,7 +6,6 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 
-
 # Take environment variables from .env file
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
@@ -21,7 +20,6 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -33,3 +31,5 @@ DATABASES = {
         default='sqlite:///tmp/my-tmp-sqlite.db'
     )
 }
+
+HOST_IP = env('HOST_IP')

@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView, DetailView
 
+from SinpleTag.settings.local import HOST_IP
 from accountapp.decorators import is_login
 from classification.models import InitialImage, ClassificationImage, ClassificationInspectImage
 
@@ -209,12 +210,11 @@ def pass_or_not(request):
 
 def classification_dataset(request):
     dataset = ClassificationInspectImage.objects.all()
-    f = BytesIO()
-    zip_f = ZipFile(f, 'w')
-    domain_url = 'http://127.0.0.1:8000'
+    f = BytesIO()  # 버퍼 할당
+    zip_f = ZipFile(f, 'w')  # 해당 버퍼에 zip할 파일들 쓰기
 
     for photo in dataset:
-        url = urlopen(domain_url + str(photo.image.image.image.url))
+        url = urlopen(HOST_IP + str(photo.image.image.image.url))  # 환경변수 파일에 미리 저장한 ip주소와 사진 url 결합
         if photo.image.detail_or_not:
             filename = os.path.join('detail_cut', str(photo.image.image.image).split('/')[-1])
         else:
@@ -222,5 +222,5 @@ def classification_dataset(request):
         zip_f.writestr(filename, url.read())
     zip_f.close()
     response = HttpResponse(f.getvalue(), content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename=image-test.zip'
+    response['Content-Disposition'] = 'attachment; filename=image-test.zip'  # 다운받게 될 zip 파일 이름 설정
     return response
