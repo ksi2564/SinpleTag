@@ -3,6 +3,7 @@ from io import BytesIO
 from urllib.request import urlopen
 from zipfile import ZipFile
 
+import requests
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -12,9 +13,21 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView, DetailView
 
-from SinpleTag.settings.local import HOST_IP
 from accountapp.decorators import is_login
 from classification.models import InitialImage, ClassificationImage, ClassificationInspectImage
+
+
+def image_api(request):
+    url = "http://118.67.133.29/naver/all-images"
+    bulk = []
+    image_list = requests.get(url).json()
+    images = image_list['data']
+
+    for image in images[:10]:
+        image_url = image['url']
+        bulk.append(InitialImage(image=image_url))
+    InitialImage.objects.bulk_create(bulk)
+    return redirect(reverse('classification:classification_list'))
 
 
 @method_decorator(is_login, name='dispatch')
@@ -112,7 +125,7 @@ class ClassificationDetail(DetailView):
     def post(self, request, *args, **kwargs):
         classification_image = ClassificationImage()
         classification_image.image = self.get_object()
-        classification_image.detail_or_not = request.POST.get('classification')
+        classification_image.image_type = request.POST.get('classification')
         classification_image.save()
 
         if not InitialImage.objects.filter(label_user=self.request.user, classificationimage__isnull=True,
@@ -214,11 +227,13 @@ def classification_dataset(request):
     zip_f = ZipFile(f, 'w')  # 해당 버퍼에 zip할 파일들 쓰기
 
     for photo in dataset:
-        url = urlopen(HOST_IP + str(photo.image.image.image.url))  # 환경변수 파일에 미리 저장한 ip주소와 사진 url 결합
-        if photo.image.detail_or_not:
+        url = urlopen(str(photo.image.image.image))  # 사진 url
+        if photo.image.image_type == 0:  # 상세컷
             filename = os.path.join('detail_cut', str(photo.image.image.image).split('/')[-1])
-        else:
+        elif photo.image.image_type == 1:  # 모델컷
             filename = os.path.join('model_cut', str(photo.image.image.image).split('/')[-1])
+        else:
+            filename = os.path.join('trash_cut', str(photo.image.image.image).split('/')[-1])
         zip_f.writestr(filename, url.read())
     zip_f.close()
     response = HttpResponse(f.getvalue(), content_type='application/zip')

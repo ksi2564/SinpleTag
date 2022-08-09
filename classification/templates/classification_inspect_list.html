@@ -17,7 +17,10 @@
                 </li>
                 <li class="breadcrumb-item active"><a aria-current="page">Inspection</a></li>
                 <li>
-                    <a class="btn btn-outline-success" type="submit" href="{% url 'classification:classification_dataset' %}" style="margin-left: 1rem; padding: 0 .5rem">
+                    <a class="btn btn-outline-success" type="submit" id="popoverData"
+                       href="{% url 'classification:classification_dataset' %}"
+                       style="margin-left: 1rem; padding: 0 .5rem" data-container="body" data-toggle="popover"
+                       data-placement="bottom" data-trigger="hover" data-content="분류 데이터 다운로드">
                         <i class="bi bi-file-earmark-arrow-down"></i>
                     </a>
                 </li>
@@ -41,7 +44,7 @@
                 {% for object in object_list %}
                     <div class="li">
                         <input type="checkbox" id="cb{{ object.id }}" value="{{ object.id }}" name="cb"/>
-                        <label class="label" for="cb{{ object.id }}"><img src="{{ object.image.image.url }}"
+                        <label class="label" for="cb{{ object.id }}"><img src="{{ object.image.image }}"
                                                                           class="card-img img-size"
                                                                           alt="...">
                             <strong class="row justify-content-center">{{ object.detail_or_not|yesno:'상세컷,모델컷' }}</strong>
@@ -98,5 +101,7 @@
                 checkboxes[i].checked = source.checked;
             }
         }
+        $('#popoverData').popover()
+
     </script>
 {% endblock %}

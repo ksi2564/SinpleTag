@@ -26,9 +26,16 @@ class InitialImage(models.Model):
         ordering = ['id']
 
 
+CHOICES_TYPE = (
+    (0, '상세컷'),
+    (1, '모델컷'),
+    (2, '해당사항없음'),
+)
+
+
 class ClassificationImage(models.Model):
     image = models.OneToOneField(InitialImage, on_delete=models.CASCADE)
-    detail_or_not = models.BooleanField(null=False)
+    image_type = models.IntegerField(null=False, choices=CHOICES_TYPE)
     date_classification = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

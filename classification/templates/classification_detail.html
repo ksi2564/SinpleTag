@@ -18,11 +18,11 @@
                 {% if pre_image == object %}
                     <a class="col-1 btn p-0 pre-item selected-item"
                        href="{% url 'classification:classification_detail' pre_image.id %}">
-                        <img src="{{ pre_image.image.url }}" class="card-img-top pre-img-size" alt="...">
+                        <img src="{{ pre_image.image }}" class="card-img-top pre-img-size" alt="...">
                     </a>
                 {% else %}
                     <a class="col-1 btn p-0 pre-item" href="{% url 'classification:classification_detail' pre_image.id %}">
-                        <img src="{{ pre_image.image.url }}" class="card-img-top pre-img-size" alt="...">
+                        <img src="{{ pre_image.image }}" class="card-img-top pre-img-size" alt="...">
                     </a>
                 {% endif %}
             {% endfor %}
@@ -31,46 +31,49 @@
         </div>
         <div class="row justify-content-center" style="margin-top: 3rem;">
             <div class="col-6 card" style="height: fit-content;">
-                <img src="{{ object.image.url }}" class="card-img-top" alt="" style="height: 33rem;">
+                <img src="{{ object.image }}" class="card-img-top" alt="" style="height: 33rem;">
             </div>
         </div>
-        <div class="row justify-content-center" style="margin-top: 1.5rem;">
+        <div class="row justify-content-center" style="margin: 1.5rem 0 0 3rem;">
             <form action="" method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-outline-primary" value="1" name="classification"
+                <button type="submit" class="btn btn-outline-primary" value="0" name="classification"
                         style="width: 10rem; height: 5rem; margin-right: 3rem;" autofocus><strong>제품 상세컷</strong>
                 </button>
-                <button type="submit" class="btn btn-outline-info" value="0" name="classification"
+                <button type="submit" class="btn btn-outline-info" value="1" name="classification"
                         style="width: 10rem; height: 5rem; margin-right: 3rem;"><strong>모델 코디컷</strong>
                 </button>
+                <button type="submit" class="btn btn-outline-danger" value="2" name="classification"
+                        style="width: 10rem; height: 5rem; margin-right: 3rem;"><strong>해당 사항 없음</strong>
+                </button>
             </form>
-            <button type="button" class="btn btn-outline-danger"
-                    style="width: 10rem; height: 5rem;" data-toggle="modal" data-target="#Delete"><strong>해당 사항
-                없음</strong>
-            </button>
-            <div class="modal" id="Delete">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">해당 사항 없음</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>해당 이미지를 삭제합니다.<br>
-                                정말로 해당사항이 없나요?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <form action="{% url 'classification:classification_delete' object.id %}" method="post">
-                                {% csrf_token %}
-                                <button class="btn btn-outline-danger">해당사항 없음</button>
-                            </form>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+{#            <button type="button" class="btn btn-outline-danger"#}
+            {#                    style="width: 10rem; height: 5rem;" data-toggle="modal" data-target="#Delete"><strong>해당 사항#}
+            {#                없음</strong>#}
+            {#            </button>#}
+            {#            <div class="modal" id="Delete">#}
+            {#                <div class="modal-dialog">#}
+            {#                    <div class="modal-content">#}
+            {#                        <div class="modal-header">#}
+            {#                            <h5 class="modal-title">해당 사항 없음</h5>#}
+            {#                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+            {#                                <span aria-hidden="true">&times;</span>#}
+            {#                            </button>#}
+            {#                        </div>#}
+            {#                        <div class="modal-body">#}
+            {#                            <p>해당 이미지를 삭제합니다.<br>#}
+            {#                                정말로 해당사항이 없나요?</p>#}
+            {#                        </div>#}
+            {#                        <div class="modal-footer">#}
+            {#                            <form action="{% url 'classification:classification_delete' object.id %}" method="post">#}
+            {#                                {% csrf_token %}#}
+            {#                                <button class="btn btn-outline-danger">해당사항 없음</button>#}
+            {#                            </form>#}
+            {#                            <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </div>#}
+{#            </div>#}
         </div>
     </div>
 {% endblock %}

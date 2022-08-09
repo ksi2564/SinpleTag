@@ -31,5 +31,3 @@ DATABASES = {
         default='sqlite:///tmp/my-tmp-sqlite.db'
     )
 }
-
-HOST_IP = env('HOST_IP')
