@@ -6,47 +6,33 @@
         <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
+                <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:label_list' %}">Labeling</a></li>
                 <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:inspect_list' %}">Inspection</a></li>
                 <li class="breadcrumb-item active"><a aria-current="page">Data</a></li>
             </ol>
         </nav>
+        {#        상위 10개 미리보기#}
         <div class="justify-content-center" style="display: inline">
-            <a href="#"><i class="bi bi-chevron-left"></i></a>
-            <a class="col-1 btn p-0 pre-item selected-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img-top pre-img-size" alt="...">
-            </a>
-            <a class="col-1 btn p-0 pre-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
-            </a>
-            <a class="col-1 btn p-0 pre-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
-            </a>
-            <a class="col-1 btn p-0 pre-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
-            </a>
-            <a class="col-1 btn p-0 pre-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
-            </a>
-            <a class="col-1 btn p-0 pre-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
-            </a>
-            <a class="col-1 btn p-0 pre-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
-            </a>
-            <a class="col-1 btn p-0 pre-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
-            </a>
-            <a class="col-1 btn p-0 pre-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
-            </a>
-            <a class="col-1 btn p-0 pre-item" href="#">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img pre-img-size" alt="...">
-            </a>
-            <a href="#" style="float: right; margin: 1.5rem 2.5rem 0 0;"><i class="bi bi-chevron-right"></i></a>
+            <a href="{% url 'labeling:inspect_detail' the_prev %}"><i class="bi bi-chevron-left"></i></a>
+            {% for pre_image in pre_images %}
+                {% if pre_image == object %}
+                    <a class="col-1 btn p-0 pre-item selected-item"
+                       href="{% url 'labeling:inspect_detail' pre_image.id %}">
+                        <img src="{{ pre_image.image.image.image.image }}" class="card-img-top pre-img-size" alt="...">
+                    </a>
+                {% else %}
+                    <a class="col-1 btn p-0 pre-item"
+                       href="{% url 'labeling:inspect_detail' pre_image.id %}">
+                        <img src="{{ pre_image.image.image.image.image }}" class="card-img-top pre-img-size" alt="...">
+                    </a>
+                {% endif %}
+            {% endfor %}
+            <a href="{% url 'labeling:inspect_detail' the_next %}"
+               style="float: right; margin: 1.5rem 2.5rem 0 0;"><i class="bi bi-chevron-right"></i></a>
         </div>
         <div class="row" style="margin-top: 3rem;">
             <div class="col-6 card" style="height: fit-content;">
-                <img src="{% static 'images/MainPhoto.png' %}" class="card-img-top" alt="">
+                <img src="{{ object.image.image.image.image }}" class="card-img-top" alt="">
             </div>
             <div class="col">
                 <nav>
@@ -57,145 +43,175 @@
                            aria-controls="nav-info" aria-selected="false">상세 정보</a>
                     </div>
                 </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-label" role="tabpanel"
-                         aria-labelledby="nav-label-tab">
-                        <div class="form-group col-md-12">
-                            <label for="inputCategory"
-                                   style="font-weight: bold; font-size: 17px; margin-top: 1rem;">카테고리</label>
-                            <select id="inputCategory" class="form-control">
-                                <option selected>Choose...</option>
-                                <option>...</option>
-                            </select>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-label" role="tabpanel"
+                             aria-labelledby="nav-label-tab">
+                            <div class="form-group col-md-12">
+                                <label for="top-category"
+                                       style="font-weight: bold; font-size: 17px; margin-top: 1rem;">카테고리</label>
+                                <select class="form-control" id="top-category" name="top-category">
+                                    {% for obj in topcategory %}
+                                        {% if object.top_category.id == obj.id %}
+                                            <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                        {% else %}
+                                            <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-row col-12">
+                                <div class="form-group col-md-6">
+                                    <label for="item"
+                                           style="font-size: 16px;">아이템</label>
+                                    <select class="form-control" id="item" name="item">
+                                        {% for obj in item %}
+                                            {% if object.item.id == obj.id %}
+                                                <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                            {% else %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="heel-height" style="font-size: 16px;">굽 높이</label>
+                                    <select class="form-control" id="heel-height" name="heel-height">
+                                        {% for obj in heel_height %}
+                                            {% if object.heel_height.id == obj.id %}
+                                                <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                            {% else %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="col-12 mb-2" style="margin-left: -5px">
+                                <strong style="font-size: 17px; margin-top: 1rem;">복수 선택 가능</strong>
+                            </div>
+                            <div class="form-row col-12">
+                                <div class="form-group col-md-6">
+                                    <label for="sole"
+                                           style="font-size: 16px;">밑창 모양</label><br>
+                                    <div>
+                                        <select class="choices-multiple-remove-button" name="sole" id="sole"
+                                                placeholder="Select upto 5 tags" multiple>
+                                            {% for obj in sole %}
+                                                {% if obj in object.sole.all %}
+                                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                                {% else %}
+                                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="material"
+                                           style="font-size: 16px;">소재감</label><br>
+                                    <div>
+                                        <select class="choices-multiple-remove-button" name="material" id="material"
+                                                placeholder="Select upto 5 tags" multiple>
+                                            {% for obj in material %}
+                                                {% if obj in object.material.all %}
+                                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                                {% else %}
+                                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row col-12">
+                                <div class="form-group col-md-6">
+                                    <label for="printing"
+                                           style="font-size: 16px;">프린트</label><br>
+                                    <div>
+                                        <select class="choices-multiple-remove-button" name="printing" id="printing"
+                                                placeholder="Select upto 5 tags" multiple>
+                                            {% for obj in printing %}
+                                                {% if obj in object.printing.all %}
+                                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                                {% else %}
+                                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="detail"
+                                           style="font-size: 16px;">디테일</label><br>
+                                    <div>
+                                        <select class="choices-multiple-remove-button" name="detail" id="detail"
+                                                placeholder="Select upto 5 tags" multiple>
+                                            {% for obj in detail %}
+                                                {% if obj in object.detail.all %}
+                                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                                {% else %}
+                                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row col-12">
+                                <div class="form-group col-md-6">
+                                    <label for="color"
+                                           style="font-size: 16px;">색상</label><br>
+                                    <div>
+                                        <select class="choices-multiple-remove-button" name="color" id="color"
+                                                placeholder="Select upto 5 tags" multiple>
+                                            {% for obj in color %}
+                                                {% if obj in object.color.all %}
+                                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                                {% else %}
+                                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-end" style="margin-right: 1.5rem;">
+                                <button type="button" class="btn btn-outline-danger"
+                                        style="width: 7rem; margin-right: .7rem;" data-toggle="modal"
+                                        data-target="#DeleteData">데이터 삭제
+                                </button>
+                                <button type="submit" class="btn btn-primary" style="width: 7rem;">라벨링 저장</button>
+                            </div>
                         </div>
-                        <div class="form-row col-12">
-                            <div class="form-group col-md-6">
-                                <label for="inputItem"
-                                       style="font-size: 16px;">아이템</label>
-                                <select id="inputItem" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
-                                </select>
+                        <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
+                            <div class="col-12" style="margin-top: 1.5rem;">
+                                <h4><b>데이터 라벨링 일자</b></h4>
+                                <p>{{ object.date_labeled|date:'Y년 m월 d일 H:i' }}</p>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputToe"
-                                       style="font-size: 16px;">앞코 모양</label>
-                                <select id="inputToe" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row col-12">
-                            <div class="form-group col-md-6">
-                                <label for="inputItem"
-                                       style="font-size: 16px;">아이템</label>
-                                <select id="inputItem" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputToe"
-                                       style="font-size: 16px;">앞코 모양</label>
-                                <select id="inputToe" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row col-12">
-                            <div class="form-group col-md-6">
-                                <label for="inputItem"
-                                       style="font-size: 16px;">아이템</label>
-                                <select id="inputItem" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputToe"
-                                       style="font-size: 16px;">앞코 모양</label>
-                                <select id="inputToe" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row col-12">
-                            <div class="form-group col-md-6">
-                                <label for="inputItem"
-                                       style="font-size: 16px;">아이템</label>
-                                <select id="inputItem" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputToe"
-                                       style="font-size: 16px;">앞코 모양</label>
-                                <select id="inputToe" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row col-12">
-                            <div class="form-group col-md-6">
-                                <label for="inputItem"
-                                       style="font-size: 16px;">아이템</label>
-                                <select id="inputItem" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputToe"
-                                       style="font-size: 16px;">앞코 모양</label>
-                                <select id="inputToe" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row justify-content-end" style="margin-right: 1.5rem;">
-                            <button type="button" class="btn btn-outline-danger"
-                                    style="width: 7rem; margin-right: .7rem;" data-toggle="modal"
-                                    data-target="#DeletData">데이터 삭제
-                            </button>
-                            <button type="button" class="btn btn-primary" style="width: 7rem;">검수 완료</button>
+                            <hr>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
-                        <div class="col-12" style="margin-top: 1.5rem;">
-                            <h4><b>라벨링 날짜</b></h4>
-                            <p>2022년 OO월 OO일</p>
-                        </div>
-                        <hr>
-                        <div class="col-12" style="margin-top: 1.5rem;">
-                            <h4><b>담당 작업자</b></h4>
-                            <p>김철수</p>
-                        </div>
-                        <hr>
-                    </div>
-                    {#                    데이터 삭제 버튼 클릭 시 모달 생성#}
-                    <div class="modal" id="DeletData">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">데이터 삭제</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>데이터 삭제 시 복구할 수 없습니다.<br>
-                                        정말로 데이터 삭제를 삭제할까요?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-danger">삭제</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                                </div>
+                </form>
+                {#                    데이터 삭제 버튼 클릭 시 모달 생성#}
+                <div class="modal" id="DeleteData">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">데이터 삭제</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>데이터 삭제 시 복구할 수 없습니다.<br>
+                                    정말로 데이터 삭제를 삭제할까요?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-danger">삭제</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                             </div>
                         </div>
                     </div>
@@ -203,4 +219,16 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            let multipleCancelButton = new Choices('.choices-multiple-remove-button', {
+                shouldSort: false, {# 자동 정렬 취소 #}
+                removeItemButton: true, {# 선택된 아이템 취소버튼 생성 #}
+                maxItemCount: 5, {# 최대 선택 개수 제한 #}
+                {#searchResultLimit: 5,#}
+                {#renderChoiceLimit: 5#}
+            });
+        });
+    </script>
 {% endblock %}

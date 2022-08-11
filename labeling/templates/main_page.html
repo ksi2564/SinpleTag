@@ -2,26 +2,34 @@
 {% load static %}
 
 {% block content %}
-    <div class="container" id="main">
-        <div class="col" style="margin-left: 1rem;">
-            <div style="text-align:left; margin: 4.5rem 0 0 0">
-                <h1 style="font-weight: bold">신발 제작을 똑똑하게</h1>
-                <h3 style="margin-top: 1.5rem;">Smart Sinple AI를 위한 라벨링</h3>
-                <h4 style="margin-top: 3rem;">라벨링을 하기 전,<br>본인의 이름을 작성해주세요.</h4>
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <div style="float: left">
-                        <input style="margin-top: .6rem; width: 12rem" class="form-control" type="text"
-                               placeholder="본인 이름">
-                    </div>
-                    <div style="float: left">
-                        <button type="submit" class="btn btn-primary btn-m" style="margin: .6rem 0 0 .3rem;">저장</button>
-                    </div>
-                </form>
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div id="main">
+            <div class="row" style="float: left; margin-left: 1rem;">
+                <div style="text-align:left; margin: 4.5rem 0 0 0">
+                    <h1 style="font-weight: bold">신발 제작을 똑똑하게</h1>
+                    <h3 style="margin-top: 1.5rem;">KRISTIN AI를 위한 라벨링</h3>
+                    {% if user.is_authenticated %}
+                    <h4 style="margin-top: 3rem;">안녕하세요. {{ user.socialaccount_set.all.0.extra_data.name }}님<br>작업에 참여해주셔서 감사합니다.
+                    </h4>
+                    {% else %}
+                    <h4 style="margin-top: 3rem;">안녕하세요. Kristag 로그인 후<br>작업에 참여하여주세요.</h4>
+                    {% endif %}
+                    <a type="button" class="btn btn-primary btn-lg" style="margin-top: .6rem; padding: .8rem;"
+                       href="{% url 'labeling:label_list' %}">라벨링 작업하기</a><br>
+                    <a type="button" class="btn btn-outline-primary btn-lg" style="margin-top: .6rem; padding: .8rem;"
+                       href="{% url 'classification:classification_list' %}">분류 작업하기</a>
+                </div>
             </div>
-        </div>
-        <div class="col" style="float: right; margin-right: 1rem;">
-            <img src="{% static 'images/MainPhoto.png' %}" alt="..." style="width: 35rem;">
+            <div style="float: right; margin-right: 1rem;">
+                <img src="{% static 'images/MainPhoto.png' %}" alt="..." style="width: 35rem;">
+            </div>
         </div>
     </div>
 {% endblock %}

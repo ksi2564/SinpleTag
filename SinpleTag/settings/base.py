@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'accountapp',
     'classification',
     'labeling',
+    'category',
 
     # allauth 적용 사항
     'django.contrib.sites',

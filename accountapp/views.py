@@ -33,4 +33,4 @@ class MyInfo(DetailView):
         new_request.save()
 
         messages.success(request, "전문가 권한 요청을 하였습니다.")
-        return redirect(self.request.path_info)
+        return redirect(self.request.path_info)  # url 주소에 따라 참조되어야하는 view를 결정 즉, self 참조

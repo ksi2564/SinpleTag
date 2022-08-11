@@ -17,19 +17,6 @@ from accountapp.decorators import is_login
 from classification.models import InitialImage, ClassificationImage, ClassificationInspectImage
 
 
-def image_api(request):
-    url = "http://118.67.133.29/naver/all-images"
-    bulk = []
-    image_list = requests.get(url).json()
-    images = image_list['data']
-
-    for image in images[:10]:
-        image_url = image['url']
-        bulk.append(InitialImage(image=image_url))
-    InitialImage.objects.bulk_create(bulk)
-    return redirect(reverse('classification:classification_list'))
-
-
 @method_decorator(is_login, name='dispatch')
 class ClassificationList(ListView):
     paginate_by = 5
@@ -54,36 +41,6 @@ class ClassificationList(ListView):
         context['waiting_images'] = InitialImage.objects.filter(label_user__isnull=True,
                                                                 classificationimage__isnull=True)
         return context
-
-
-class ClassificationLoadImage(View):
-    def post(self, request, *args, **kwargs):
-        queryset = InitialImage.objects.filter(label_user__isnull=True, classificationimage__isnull=True)
-        n = InitialImage.objects.filter(label_user=self.request.user, classificationimage__isnull=True)
-        bulk = []
-
-        if n.count() >= 10:
-            messages.error(request, '보유 이미지 수가 너무 많습니다. 보유하신 이미지가 10장 이하일 때 다시 추가 해주세요.', extra_tags='danger')
-        elif n.count() + 2 > 10:
-            plus_data = 2 - 10 + n.count()
-            for image in queryset[:plus_data]:
-                image.label_user = self.request.user
-                bulk.append(image)
-            InitialImage.objects.bulk_update(bulk, ['label_user'])  # bulk에 있는 데이터 모두 한번에 업데이트
-            if len(bulk) > 0:
-                messages.success(request, f'{len(bulk)}장의 사진이 추가되었습니다.')
-            else:
-                messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
-        else:
-            for image in queryset[:2]:
-                image.label_user = self.request.user
-                bulk.append(image)
-            InitialImage.objects.bulk_update(bulk, ['label_user'])  # bulk에 있는 데이터 모두 한번에 업데이트
-            if len(bulk) > 0:
-                messages.success(request, f'{len(bulk)}장의 사진이 추가되었습니다.')
-            else:
-                messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
-        return redirect(reverse('classification:classification_list'))
 
 
 class ClassificationDetail(DetailView):
@@ -119,7 +76,6 @@ class ClassificationDetail(DetailView):
             context['the_next'] = context['the_next'].pk
         else:
             context['the_next'] = self.object.pk
-
         return context
 
     def post(self, request, *args, **kwargs):
@@ -135,12 +91,6 @@ class ClassificationDetail(DetailView):
             return redirect('classification:classification_detail',
                             InitialImage.objects.filter(label_user=self.request.user,
                                                         pk__gt=self.get_object().pk).first().pk)
-
-
-def delete_object_function(request, pk):
-    obj = InitialImage.objects.get(id=pk)
-    obj.delete()
-    return redirect(reverse('classification:classification_list'))
 
 
 @method_decorator(is_login, name='dispatch')
@@ -168,8 +118,37 @@ class ClassificationInspectList(ListView):
         context['waiting_images'] = InitialImage.objects.filter(label_user__isnull=False, inspect_user__isnull=True,
                                                                 classificationimage__isnull=False,
                                                                 classificationimage__classificationinspectimage__isnull=True)
-
         return context
+
+
+class ClassificationLoadImage(View):
+    def post(self, request, *args, **kwargs):
+        queryset = InitialImage.objects.filter(label_user__isnull=True, classificationimage__isnull=True)
+        n = InitialImage.objects.filter(label_user=self.request.user, classificationimage__isnull=True)
+        bulk = []
+
+        if n.count() >= 10:
+            messages.error(request, '보유 이미지 수가 너무 많습니다. 보유하신 이미지가 10장 이하일 때 다시 추가 해주세요.', extra_tags='danger')
+        elif n.count() + 2 > 10:
+            plus_data = 2 - 10 + n.count()
+            for image in queryset[:plus_data]:
+                image.label_user = self.request.user
+                bulk.append(image)
+            InitialImage.objects.bulk_update(bulk, ['label_user'])  # bulk에 있는 데이터 모두 한번에 업데이트
+            if len(bulk) > 0:
+                messages.success(request, f'{len(bulk)}장의 사진이 추가되었습니다.')
+            else:
+                messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
+        else:
+            for image in queryset[:2]:
+                image.label_user = self.request.user
+                bulk.append(image)
+            InitialImage.objects.bulk_update(bulk, ['label_user'])  # bulk에 있는 데이터 모두 한번에 업데이트
+            if len(bulk) > 0:
+                messages.success(request, f'{len(bulk)}장의 사진이 추가되었습니다.')
+            else:
+                messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
+        return redirect(reverse('classification:classification_list'))
 
 
 class ClassificationInspectLoadImage(View):
@@ -204,7 +183,27 @@ class ClassificationInspectLoadImage(View):
         return redirect(reverse('classification:classification_inspect_list'))
 
 
-# 체크 박스 값 받아서 분류 라벨링 삭제하기(검수 거부 데이터)
+@is_login
+def image_api(request):
+    url = "http://118.67.133.29/naver/all-images"
+    bulk = []
+    image_list = requests.get(url).json()
+    images = image_list['data']
+
+    for image in images[:10]:
+        image_url = image['url']
+        bulk.append(InitialImage(image=image_url))
+    InitialImage.objects.bulk_create(bulk)
+    return redirect(reverse('classification:classification_list'))
+
+
+def delete_object_function(request, pk):
+    obj = InitialImage.objects.get(id=pk)
+    obj.delete()
+    return redirect(reverse('classification:classification_list'))
+
+
+# 분류 검수 페이지 검수 pass or non-pass 결정하는 함수
 def pass_or_not(request):
     if 'non-pass' in request.POST:
         selected = request.POST.getlist('cb')
@@ -221,6 +220,7 @@ def pass_or_not(request):
     return redirect(reverse('classification:classification_inspect_list'))
 
 
+# 분류된 이미지 zip 파일 다운로드
 def classification_dataset(request):
     dataset = ClassificationInspectImage.objects.all()
     f = BytesIO()  # 버퍼 할당
