@@ -210,7 +210,8 @@
                                     정말로 데이터 삭제를 삭제할까요?</p>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger">삭제</button>
+                                <a type="button" class="btn btn-outline-danger"
+                                   href="{% url 'labeling:labeling_object_delete' object.id %}">삭제</a>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                             </div>
                         </div>
