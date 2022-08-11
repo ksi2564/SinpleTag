@@ -9,7 +9,7 @@ def is_login(func):
         if session:
             return func(request, *args, **kwargs)
         else:
-            messages.error(request, '로그인 안하면 큰일나!', extra_tags='danger')
+            messages.error(request, '로그인을 먼저 해주세요', extra_tags='danger')
             return redirect('accountapp:login')
 
     return decorated

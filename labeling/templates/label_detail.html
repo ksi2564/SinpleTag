@@ -42,173 +42,143 @@
                            aria-controls="nav-info" aria-selected="false">상세 정보</a>
                     </div>
                 </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-label" role="tabpanel"
-                         aria-labelledby="nav-label-tab">
-                        <div class="form-group col-md-12">
-                            <label for="inputCategory"
-                                   style="font-weight: bold; font-size: 17px; margin-top: 1rem;">카테고리</label>
-                            <select id="inputCategory" class="form-control">
-                                <option>모름</option>
-                                <option>운동화</option>
-                            </select>
-                        </div>
-                        <div class="form-row col-12">
-                            <div class="form-group col-md-6">
-                                <label for="inputItem"
-                                       style="font-size: 16px;">아이템</label>
-                                <select id="inputItem" class="form-control">
-                                    <option>모름</option>
-                                    <option>패션 스니커즈</option>
-                                    <option>슬립온</option>
-                                    <option>기타 스니커즈</option>
-                                    <option>캔버스/단화</option>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-label" role="tabpanel"
+                             aria-labelledby="nav-label-tab">
+                            <div class="form-group col-md-12">
+                                <label for="top-category"
+                                       style="font-weight: bold; font-size: 17px; margin-top: 1rem;">카테고리</label>
+                                <select class="form-control" id="top-category" name="top-category">
+                                    {% for obj in topcategory %}
+                                        <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputToe"
-                                       style="font-size: 16px;">굽 높이</label>
-                                <select id="inputToe" class="form-control">
-                                    <option>모름</option>
-                                    <option>2cm(반스, 컨버스 류)</option>
-                                    <option>2~3cm(뉴발, 나이키 류)</option>
-                                    <option>3~4cm(어글리 류)</option>
-                                </select>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="col-12 mb-2" style="margin-left: -5px">
-                            <strong style="font-size: 17px; margin-top: 1rem;">복수 선택 가능</strong>
-                        </div>
-                        <div class="form-row col-12">
-                            <div class="form-group col-md-6">
-                                <label for="Hi"
-                                       style="font-size: 16px;">밑창 모양</label><br>
-                                <div>
-                                    <select class="choices-multiple-remove-button" id="Hi"
-                                            placeholder="Select upto 5 tags" multiple>
-                                        <option value="샤크">샤크</option>
-                                        <option value="Jquery">스포츠</option>
-                                        <option value="CSS">어글리</option>
-                                        <option value="Bootstrap 3">워커</option>
-                                        <option value="Bootstrap 4">플랫</option>
-                                        <option value="Java">트레드</option>
-                                        <option value="Javascript">컵솔</option>
+                            <div class="form-row col-12">
+                                <div class="form-group col-md-6">
+                                    <label for="item"
+                                           style="font-size: 16px;">아이템</label>
+                                    <select class="form-control" id="item" name="item">
+                                        {% for obj in item %}
+                                            <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="heel-height" style="font-size: 16px;">굽 높이</label>
+                                    <select class="form-control" id="heel-height" name="heel-height">
+                                        {% for obj in heel_height %}
+                                            <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="Hi"
-                                       style="font-size: 16px;">소재감</label><br>
-                                <div><select class="choices-multiple-remove-button" id="Hi"
-                                             placeholder="Select upto 5 tags" multiple>
-                                    <option value="HTML">가죽</option>
-                                    <option value="Jquery">캔버스</option>
-                                    <option value="CSS">매쉬/니트</option>
-                                    <option value="Bootstrap 3">스웨이드</option>
-                                    <option value="Bootstrap 4">퍼</option>
-                                    <option value="Java">나일론</option>
-                                    <option value="Javascript">에나멜</option>
-                                </select></div>
+                            <hr>
+                            <div class="col-12 mb-2" style="margin-left: -5px">
+                                <strong style="font-size: 17px; margin-top: 1rem;">복수 선택 가능</strong>
+                            </div>
+                            <div class="form-row col-12">
+                                <div class="form-group col-md-6">
+                                    <label for="sole"
+                                           style="font-size: 16px;">밑창 모양</label><br>
+                                    <div>
+                                        <select class="choices-multiple-remove-button" name="sole" id="sole"
+                                                placeholder="Select upto 5 tags" multiple>
+                                            {% for obj in sole %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="material"
+                                           style="font-size: 16px;">소재감</label><br>
+                                    <div>
+                                        <select class="choices-multiple-remove-button" name="material" id="material"
+                                                placeholder="Select upto 5 tags" multiple>
+                                            {% for obj in material %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row col-12">
+                                <div class="form-group col-md-6">
+                                    <label for="printing"
+                                           style="font-size: 16px;">프린트</label><br>
+                                    <div>
+                                        <select class="choices-multiple-remove-button" name="printing" id="printing"
+                                                placeholder="Select upto 5 tags" multiple>
+                                            {% for obj in printing %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="detail"
+                                           style="font-size: 16px;">디테일</label><br>
+                                    <div>
+                                        <select class="choices-multiple-remove-button" name="detail" id="detail"
+                                                placeholder="Select upto 5 tags" multiple>
+                                            {% for obj in detail %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row col-12">
+                                <div class="form-group col-md-6">
+                                    <label for="color"
+                                           style="font-size: 16px;">색상</label><br>
+                                    <div>
+                                        <select class="choices-multiple-remove-button" name="color" id="color"
+                                                placeholder="Select upto 5 tags" multiple>
+                                            {% for obj in color %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-end" style="margin-right: 1.5rem;">
+                                <button type="button" class="btn btn-outline-danger"
+                                        style="width: 7rem; margin-right: .7rem;" data-toggle="modal"
+                                        data-target="#DeleteData">데이터 삭제
+                                </button>
+                                <button type="submit" class="btn btn-primary" style="width: 7rem;">라벨링 저장</button>
                             </div>
                         </div>
-                        <div class="form-row col-12">
-                            <div class="form-group col-md-6">
-                                <label for="Hi"
-                                       style="font-size: 16px;">프린트</label><br>
-                                <div><select class="choices-multiple-remove-button" id="Hi"
-                                             placeholder="Select upto 5 tags" multiple>
-                                    <option value="HTML">자사 로고</option>
-                                    <option value="Jquery">그래픽</option>
-                                    <option value="CSS">무지</option>
-                                    <option value="Bootstrap 3">패턴</option>
-                                </select></div>
+                        <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
+                            <div class="col-12" style="margin-top: 1.5rem;">
+                                <h4><b>데이터 분류 완료일</b></h4>
+                                <p>{{ object.date_inspected|date:'Y년 m월 d일 H:i' }}</p>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="Hi"
-                                       style="font-size: 16px;">디테일</label><br>
-                                <div><select class="choices-multiple-remove-button" id="Hi"
-                                             placeholder="Select upto 5 tags" multiple>
-                                    <option value="HTML">액세서리 장식</option>
-                                    <option value="Jquery">글리터/스팽글</option>
-                                    <option value="CSS">꼬임</option>
-                                    <option value="Bootstrap 3">리본</option>
-                                    <option value="Bootstrap 4">스트랩</option>
-                                    <option value="Java">앵클스트랩</option>
-                                    <option value="Javascript">자수</option>
-                                    <option value="Angular">태슬</option>
-                                    <option value="Python">라벨</option>
-                                    <option value="Hybris">톤온톤</option>
-                                    <option value="SQL">톤인톤</option>
-                                    <option value="NOSQL">힐 장식</option>
-                                    <option value="NodeJS">아일렛</option>
-                                    <option value="NodeJS">타공</option>
-                                </select></div>
-                            </div>
-                        </div>
-                        <div class="form-row col-12">
-                            <div class="form-group col-md-6">
-                                <label for="Hi"
-                                       style="font-size: 16px;">색상</label><br>
-                                <div><select class="choices-multiple-remove-button" id="Hi"
-                                             placeholder="Select upto 5 tags" multiple>
-                                    <option value="HTML">골드</option>
-                                    <option value="HTML">그레이</option>
-                                    <option value="HTML">그린</option>
-                                    <option value="HTML">네이비</option>
-                                    <option value="HTML">라벤더</option>
-                                    <option value="HTML">레드</option>
-                                    <option value="HTML">로즈골드</option>
-                                    <option value="HTML">민트</option>
-                                    <option value="HTML">베이지</option>
-                                    <option value="HTML">브라운</option>
-                                    <option value="HTML">블랙</option>
-                                    <option value="HTML">블루</option>
-                                    <option value="HTML">스카이블루</option>
-                                    <option value="HTML">실버</option>
-                                    <option value="HTML">옐로우</option>
-                                    <option value="HTML">오렌지</option>
-                                    <option value="HTML">와인</option>
-                                    <option value="HTML">카키</option>
-                                    <option value="HTML">퍼플</option>
-                                    <option value="HTML">핑크</option>
-                                    <option value="HTML">화이트</option>
-                                </select></div>
-                            </div>
-                        </div>
-                        <div class="row justify-content-end" style="margin-right: 1.5rem;">
-                            <button type="button" class="btn btn-outline-danger"
-                                    style="width: 7rem; margin-right: .7rem;" data-toggle="modal"
-                                    data-target="#DeleteData">데이터 삭제
-                            </button>
-                            <button type="button" class="btn btn-primary" style="width: 7rem;">라벨링 저장</button>
+                            <hr>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
-                        <div class="col-12" style="margin-top: 1.5rem;">
-                            <h4><b>데이터 분류 완료일</b></h4>
-                            <p>{{ object.date_inspected|date:'Y년 m월 d일 H:i' }}</p>
-                        </div>
-                        <hr>
-                    </div>
-                    {#                    데이터 삭제 버튼 클릭 시 모달 생성#}
-                    <div class="modal" id="DeleteData">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">데이터 삭제</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>데이터 삭제 시 복구할 수 없습니다.<br>
-                                        정말로 데이터 삭제를 삭제할까요?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-danger">삭제</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                                </div>
+                </form>
+                {#                    데이터 삭제 버튼 클릭 시 모달 생성#}
+                <div class="modal" id="DeleteData">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">데이터 삭제</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>데이터 삭제 시 복구할 수 없습니다.<br>
+                                    정말로 데이터 삭제를 삭제할까요?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-danger">삭제</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                             </div>
                         </div>
                     </div>
@@ -220,8 +190,9 @@
     <script>
         $(document).ready(function () {
             let multipleCancelButton = new Choices('.choices-multiple-remove-button', {
-                removeItemButton: true,
-                maxItemCount: 5,
+                shouldSort: false,  {# 자동 정렬 취소 #}
+                removeItemButton: true,  {# 선택된 아이템 취소버튼 생성 #}
+                maxItemCount: 5,  {# 최대 선택 개수 제한 #}
                 {#searchResultLimit: 5,#}
                 {#renderChoiceLimit: 5#}
             });

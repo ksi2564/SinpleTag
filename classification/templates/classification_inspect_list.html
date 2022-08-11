@@ -12,7 +12,7 @@
         {% endif %}
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb" style="margin: 0;">
-                <li class="breadcrumb-item"><a class="link" href="/static">Home</a></li>
+                <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
                 <li class="breadcrumb-item"><a class="link" href="{% url 'classification:classification_list' %}">Classification</a>
                 </li>
                 <li class="breadcrumb-item active"><a aria-current="page">Inspection</a></li>
@@ -47,7 +47,7 @@
                         <label class="label" for="cb{{ object.id }}"><img src="{{ object.image.image }}"
                                                                           class="card-img img-size"
                                                                           alt="...">
-                            <strong class="row justify-content-center">{{ object.detail_or_not|yesno:'상세컷,모델컷' }}</strong>
+                            <strong class="row justify-content-center">{{ object.get_image_type_display }}</strong>
                         </label>
                     </div>
                 {% endfor %}
