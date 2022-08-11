@@ -273,3 +273,9 @@ class LabelingInspectLoadImage(View):
             else:
                 messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
         return redirect(reverse('labeling:inspect_list'))
+
+
+def delete_object_function(request, pk):
+    obj = LabelImage.objects.get(id=pk)
+    obj.image.image.image.delete()
+    return redirect(reverse('labeling:inspect_list'))
