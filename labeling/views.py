@@ -6,10 +6,12 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView, DetailView
 
-from accountapp.decorators import is_login
+from accountapp.decorators import is_login, is_staff
 from category.models import TopCategory, Item, HeelHeight, Sole, Material, Printing, Detail, Color
 from classification.models import ClassificationInspectImage
 from labeling.models import LabelImage, InspectImage
+
+has_staff_permission = [is_login, is_staff]
 
 
 def main_page(request):
@@ -113,7 +115,7 @@ class LabelingDetail(DetailView):
         return redirect('labeling:label_list')
 
 
-@method_decorator(is_login, name='dispatch')
+@method_decorator(has_staff_permission, name='dispatch')
 class LabelingInspectList(ListView):
     paginate_by = 5
     template_name = 'inspect_list.html'
