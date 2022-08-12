@@ -1,11 +1,10 @@
 from django.contrib import admin
 # Register your models here.
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from accountapp.models import RequestPermission
 
-admin.site.login = login_required(admin.site.login)
+# admin.site.login = login_required(admin.site.login)
 admin.site.unregister(User)
 
 

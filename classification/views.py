@@ -13,8 +13,10 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView, DetailView
 
-from accountapp.decorators import is_login
+from accountapp.decorators import is_login, is_staff
 from classification.models import InitialImage, ClassificationImage, ClassificationInspectImage
+
+has_staff_permission = [is_login, is_staff]
 
 
 @method_decorator(is_login, name='dispatch')
@@ -93,7 +95,7 @@ class ClassificationDetail(DetailView):
                                                         pk__gt=self.get_object().pk).first().pk)
 
 
-@method_decorator(is_login, name='dispatch')
+@method_decorator(has_staff_permission, name='dispatch')
 class ClassificationInspectList(ListView):
     paginate_by = 10
     template_name = 'classification_inspect_list.html'
@@ -184,6 +186,7 @@ class ClassificationInspectLoadImage(View):
 
 
 @is_login
+@is_staff
 def image_api(request):
     url = "http://118.67.133.29/naver/all-images"
     bulk = []
