@@ -6,27 +6,57 @@
         <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
+                <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:inspect_list' %}">Labeling</a></li>
                 <li class="breadcrumb-item active"><a aria-current="page">Status Dashboard</a></li>
             </ol>
         </nav>
+        {% if user.is_staff == True %}
+            <table class="table" style="margin-bottom: 1.6rem">
+                <thead>
+                <tr>
+                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                            style="font-size: 16px">총 이미지 개수</span><br>{{ object_list.count }}
+                        <div style="height: 1.5rem; width: 15rem;"></div>
+                    </th>
+                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                            style="font-size: 16px">라벨링된 이미지</span><br>{{ labeled_percent }}%<span
+                            style="font-size: 12px; font-weight: normal">  ({{ labeled_images.count }}개)</span>
+                        <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ labeled_percent }}%;"></div>
+                        </div>
+                    </th>
+                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                            style="font-size: 16px">검수된 이미지</span><br>{{ inspected_percent }}%<span
+                            style="font-size: 12px; font-weight: normal">  ({{ inspected_images.count }}개)</span>
+                        <div class="progress" style="width: 18rem; margin-bottom: .5rem">
+                            <div class="progress-bar progress-bar-custom" role="progressbar"
+                                 style="width: {{ inspected_percent }}%;"></div>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        {% endif %}
         <table class="table" style="margin-bottom: 1.6rem">
             <thead>
             <tr>
-                <th scope="col" style="font-size: 28px; font-weight: bold;"><span style="font-size: 16px">총 이미지 수</span><br>100
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">내 작업 이미지 개수</span><br>{{ user_images.count }}
                     <div style="height: 1.5rem; width: 15rem;"></div>
                 </th>
                 <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                        style="font-size: 16px">라벨링된 이미지</span><br>25%<span
-                        style="font-size: 12px; font-weight: normal">  (25개)</span>
+                        style="font-size: 16px">내가 라벨링한 이미지</span><br>{{ user_labeled_percent }}%<span
+                        style="font-size: 12px; font-weight: normal">  ({{ user_labeled_images.count }}개)</span>
                     <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
-                        <div class="progress-bar" role="progressbar" style="width: 25%;"></div>
+                        <div class="progress-bar" role="progressbar" style="width: {{ user_labeled_percent }}%;"></div>
                     </div>
                 </th>
                 <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                        style="font-size: 16px">검수된 이미지</span><br>18%<span
-                        style="font-size: 12px; font-weight: normal">  (18개)</span>
+                        style="font-size: 16px">검수 통과된 이미지</span><br>{{ user_inspected_percent }}%<span
+                        style="font-size: 12px; font-weight: normal">  ({{ user_inspected_images.count }}개)</span>
                     <div class="progress" style="width: 18rem; margin-bottom: .5rem">
-                        <div class="progress-bar progress-bar-custom" role="progressbar" style="width: 25%;"></div>
+                        <div class="progress-bar progress-bar-custom" role="progressbar"
+                             style="width: {{ user_inspected_percent }}%;"></div>
                     </div>
                 </th>
             </tr>
@@ -51,7 +81,6 @@
                         CSV파일(.csv 형식)
                     </label>
                 </div>
-                </p>
             </div>
         </div>
         <div class="row justify-content-center">

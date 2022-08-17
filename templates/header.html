@@ -2,22 +2,40 @@
 
 <div class="container-fluid mt-2">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/" style="font-weight: bold; margin-right: 3rem; font-size: 1.5rem;"><img src="{% static 'images/BrandLogo.svg' %}"
-                                                                        width="32" height="32"
-                                                                        class="d-inline-block align-top"
-                                                                        alt=""> R I S T A G</a>
+        <a class="navbar-brand" href="/" style="font-weight: bold; margin-right: 3rem; font-size: 1.5rem;"><img
+                src="{% static 'images/BrandLogo.svg' %}"
+                width="32" height="32"
+                class="d-inline-block align-top"
+                alt="">RISTAG</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" id="navbar-items" href="{% url 'classification:classification_list' %}">분류</a>
-                <a class="nav-link" id="navbar-items" href="{% url 'classification:classification_inspect_list' %}">분류검수</a>
-                <a class="nav-link" id="navbar-items" href="{% url 'labeling:label_list' %}">라벨링</a>
-                <a class="nav-link" id="navbar-items" href="{% url 'labeling:inspect_list' %}">라벨링검수</a>
-                <a class="nav-link" id="navbar-items" href="{% url 'labeling:status_board' %}">작업현황</a>
-            </div>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link active" href="{% url 'classification:classification_list' %}" role="button"
+                       aria-expanded="false">이미지분류</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'classification:classification_list' %}">이미지 분류</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'classification:classification_inspect_list' %}">분류 검수</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'classification:classification_status_board' %}">분류 작업
+                            현황</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link active" href="{% url 'labeling:label_list' %}" role="button" aria-expanded="false">이미지라벨링</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'labeling:label_list' %}">이미지 라벨링</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'labeling:inspect_list' %}">라벨링 검수</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'labeling:labeling_status_board' %}">라벨링 작업 현황</a>
+                    </div>
+                </li>
+            </ul>
         </div>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
             <div class="inline my-2 my-lg-0">
@@ -29,11 +47,15 @@
                                 {{ user.socialaccount_set.all.0.extra_data.name }}님
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a class="dropdown-item" href="{% url 'accountapp:my_info' user.id %}">내 정보 관리</a></li>
+                                <li><a class="dropdown-item" href="{% url 'accountapp:my_info' user.id %}">내 정보 관리</a>
+                                </li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><button class="dropdown-item" data-toggle="modal" data-target="#Logout">로그아웃</button></li>
+                                <li>
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#Logout">로그아웃
+                                    </button>
+                                </li>
                             </ul>
                         </li>
                     </ul>

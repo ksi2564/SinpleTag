@@ -211,8 +211,25 @@ class LabelingInspectDetail(DetailView):
         return redirect('labeling:inspect_list')
 
 
-def status_board(request):
-    return render(request, 'status_board.html')
+class LabelingStatusBoard(ListView):
+    queryset = ClassificationInspectImage.objects.filter(image__image_type=0)
+    template_name = 'labeling_status_board.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(LabelingStatusBoard, self).get_context_data(**kwargs)
+        context['labeled_images'] = LabelImage.objects.all()
+        context['labeled_percent'] = int(context['labeled_images'].count() / self.object_list.count() * 100)
+        context['inspected_images'] = InspectImage.objects.all()
+        context['inspected_percent'] = int(context['inspected_images'].count() / self.object_list.count() * 100)
+
+        context['user_images'] = self.object_list.filter(labeling_user=self.request.user)
+        context['user_labeled_images'] = LabelImage.objects.filter(image__labeling_user=self.request.user)
+        context['user_labeled_percent'] = int(
+            context['user_labeled_images'].count() / context['user_images'].count() * 100)
+        context['user_inspected_images'] = InspectImage.objects.filter(image__image__labeling_user=self.request.user)
+        context['user_inspected_percent'] = int(
+            context['user_inspected_images'].count() / context['user_images'].count() * 100)
+        return context
 
 
 class LabelingLoadImage(View):
