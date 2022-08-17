@@ -18,6 +18,14 @@
     background-color: #8BC34A;
 }
 
+.navbar-nav li:hover > .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu a.dropdown-item:focus {
+    background-color: #8BC34A;
+}
+
 #main {
     margin-top: 7rem;
 }

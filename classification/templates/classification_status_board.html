@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
+                <li class="breadcrumb-item"><a class="link" href="{% url 'classification:classification_list' %}">Classification</a></li>
+                <li class="breadcrumb-item active"><a aria-current="page">Status Dashboard</a></li>
+            </ol>
+        </nav>
+        {% if user.is_staff == True %}
+            <table class="table" style="margin-bottom: 1.6rem">
+                <thead>
+                <tr>
+                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                            style="font-size: 16px">총 이미지 개수</span><br>{{ object_list.count }}
+                        <div style="height: 1.5rem; width: 15rem;"></div>
+                    </th>
+                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                            style="font-size: 16px">라벨링된 이미지</span><br>{{ classified_percent }}%<span
+                            style="font-size: 12px; font-weight: normal">  ({{ classified_images.count }}개)</span>
+                        <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ classified_percent }}%;"></div>
+                        </div>
+                    </th>
+                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                            style="font-size: 16px">검수된 이미지</span><br>{{ inspected_percent }}%<span
+                            style="font-size: 12px; font-weight: normal">  ({{ inspected_images.count }}개)</span>
+                        <div class="progress" style="width: 18rem; margin-bottom: .5rem">
+                            <div class="progress-bar progress-bar-custom" role="progressbar"
+                                 style="width: {{ inspected_percent }}%;"></div>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        {% endif %}
+        <table class="table" style="margin-bottom: 1.6rem">
+            <thead>
+            <tr>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">내 작업 이미지 개수</span><br>{{ user_images.count }}
+                    <div style="height: 1.5rem; width: 15rem;"></div>
+                </th>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">내가 라벨링한 이미지</span><br>{{ user_classified_percent }}%<span
+                        style="font-size: 12px; font-weight: normal">  ({{ user_classified_images.count }}개)</span>
+                    <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
+                        <div class="progress-bar" role="progressbar" style="width: {{ user_classified_percent }}%;"></div>
+                    </div>
+                </th>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">검수 통과된 이미지</span><br>{{ user_inspected_percent }}%<span
+                        style="font-size: 12px; font-weight: normal">  ({{ user_inspected_images.count }}개)</span>
+                    <div class="progress" style="width: 18rem; margin-bottom: .5rem">
+                        <div class="progress-bar progress-bar-custom" role="progressbar"
+                             style="width: {{ user_inspected_percent }}%;"></div>
+                    </div>
+                </th>
+            </tr>
+            </thead>
+        </table>
+        <h3 style="font-weight: bold">데이터 내려받기</h3>
+        <div class="card">
+            <div class="card-body">
+                <h5 style="font-weight: bold">카테고리 선택</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                        전체선택
+                    </label>
+                </div>
+                <p>
+                <h5 style="font-weight: bold">내려받을 파일 형식</h5>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
+                           value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        CSV파일(.csv 형식)
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <a type="button" class="btn btn-outline-primary btn-m" style="margin-top: .6rem;" href="#"
+               data-toggle="modal" data-target="#Unsatisfied">내려받기</a>
+        </div>
+        <div class="modal" id="Unsatisfied">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">카테고리 및 관련 속성 선택</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>카테고리 혹은 관련 속성이 선택되지 않았습니다.<br>
+                            카테고리와 관련 속성을 모두 최소 1개 이상 선택해주세요.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

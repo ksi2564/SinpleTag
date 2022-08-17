@@ -123,6 +123,28 @@ class ClassificationInspectList(ListView):
         return context
 
 
+class ClassificationStatusBoard(ListView):
+    model = InitialImage
+    template_name = 'classification_status_board.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ClassificationStatusBoard, self).get_context_data(**kwargs)
+        context['classified_images'] = ClassificationImage.objects.all()
+        context['classified_percent'] = int(context['classified_images'].count() / self.object_list.count() * 100)
+        context['inspected_images'] = ClassificationInspectImage.objects.all()
+        context['inspected_percent'] = int(context['inspected_images'].count() / self.object_list.count() * 100)
+
+        context['user_images'] = self.object_list.filter(label_user=self.request.user)
+        context['user_classified_images'] = ClassificationImage.objects.filter(image__label_user=self.request.user)
+        context['user_classified_percent'] = int(
+            context['user_classified_images'].count() / context['user_images'].count() * 100)
+        context['user_inspected_images'] = ClassificationInspectImage.objects.filter(
+            image__image__label_user=self.request.user)
+        context['user_inspected_percent'] = int(
+            context['user_inspected_images'].count() / context['user_images'].count() * 100)
+        return context
+
+
 class ClassificationLoadImage(View):
     def post(self, request, *args, **kwargs):
         queryset = InitialImage.objects.filter(label_user__isnull=True, classificationimage__isnull=True)
