@@ -2,7 +2,7 @@ from django.urls import path
 
 from classification.views import ClassificationList, ClassificationDetail, ClassificationInspectList, \
     ClassificationLoadImage, ClassificationInspectLoadImage, pass_or_not, \
-    classification_dataset, image_api, ClassificationStatusBoard
+    image_api, ClassificationStatusBoard, excel_export
 
 app_name = 'classification'
 
@@ -17,5 +17,6 @@ urlpatterns = [
     path('load/classify/data', ClassificationLoadImage.as_view(), name='classification_load_data'),
     path('load/inspect/data', ClassificationInspectLoadImage.as_view(), name='classification_inspect_load_data'),
     path('pass/', pass_or_not, name='pass_or_not'),
-    path('dataset/', classification_dataset, name='classification_dataset'),
+    # path('dataset/', classification_dataset, name='classification_dataset'),
+    path('export/', excel_export, name='export_excel'),
 ]

@@ -14,20 +14,20 @@
             <table class="table" style="margin-bottom: 1.6rem">
                 <thead>
                 <tr>
-                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                            style="font-size: 16px">총 이미지 개수</span><br>{{ object_list.count }}
+                    <th scope="col" style="font-size: 1.75rem; font-weight: bold;"><span
+                            style="font-size: 1rem">총 이미지 개수</span><br>{{ object_list.count }}
                         <div style="height: 1.5rem; width: 15rem;"></div>
                     </th>
-                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                            style="font-size: 16px">라벨링된 이미지</span><br>{{ classified_percent }}%<span
-                            style="font-size: 12px; font-weight: normal">  ({{ classified_images.count }}개)</span>
+                    <th scope="col" style="font-size: 1.75rem; font-weight: bold;"><span
+                            style="font-size: 1rem;">라벨링된 이미지</span><br>{{ classified_percent }}%<span
+                            style="font-size: .75rem; font-weight: normal">  ({{ classified_images.count }}개)</span>
                         <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
                             <div class="progress-bar" role="progressbar" style="width: {{ classified_percent }}%;"></div>
                         </div>
                     </th>
-                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                            style="font-size: 16px">검수된 이미지</span><br>{{ inspected_percent }}%<span
-                            style="font-size: 12px; font-weight: normal">  ({{ inspected_images.count }}개)</span>
+                    <th scope="col" style="font-size: 1.75rem; font-weight: bold;"><span
+                            style="font-size: 1rem">검수된 이미지</span><br>{{ inspected_percent }}%<span
+                            style="font-size: .75rem; font-weight: normal">  ({{ inspected_images.count }}개)</span>
                         <div class="progress" style="width: 18rem; margin-bottom: .5rem">
                             <div class="progress-bar progress-bar-custom" role="progressbar"
                                  style="width: {{ inspected_percent }}%;"></div>
@@ -40,13 +40,13 @@
         <table class="table" style="margin-bottom: 1.6rem">
             <thead>
             <tr>
-                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                        style="font-size: 16px">내 작업 이미지 개수</span><br>{{ user_images.count }}
+                <th scope="col" style="font-size: 1.75rem; font-weight: bold;"><span
+                        style="font-size: 1rem;">내 작업 이미지 개수</span><br>{{ user_images.count }}
                     <div style="height: 1.5rem; width: 15rem;"></div>
                 </th>
-                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                        style="font-size: 16px">내가 라벨링한 이미지</span><br>{{ user_classified_percent }}%<span
-                        style="font-size: 12px; font-weight: normal">  ({{ user_classified_images.count }}개)</span>
+                <th scope="col" style="font-size: 1.75rem; font-weight: bold;"><span
+                        style="font-size: 1rem;">내가 라벨링한 이미지</span><br>{{ user_classified_percent }}%<span
+                        style="font-size: .75rem; font-weight: normal">  ({{ user_classified_images.count }}개)</span>
                     <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
                         <div class="progress-bar" role="progressbar" style="width: {{ user_classified_percent }}%;"></div>
                     </div>
