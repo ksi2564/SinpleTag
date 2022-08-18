@@ -1,9 +1,7 @@
-import os.path
-from io import BytesIO
-from urllib.request import urlopen
-from zipfile import ZipFile
+import datetime
 
 import requests
+import xlwt
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -123,6 +121,7 @@ class ClassificationInspectList(ListView):
         return context
 
 
+@method_decorator(is_login, name='dispatch')
 class ClassificationStatusBoard(ListView):
     model = InitialImage
     template_name = 'classification_status_board.html'
@@ -245,22 +244,55 @@ def pass_or_not(request):
     return redirect(reverse('classification:classification_inspect_list'))
 
 
-# 분류된 이미지 zip 파일 다운로드
-def classification_dataset(request):
-    dataset = ClassificationInspectImage.objects.all()
-    f = BytesIO()  # 버퍼 할당
-    zip_f = ZipFile(f, 'w')  # 해당 버퍼에 zip할 파일들 쓰기
+# # 분류된 이미지 zip 파일 다운로드
+# def classification_dataset(request):
+#     dataset = ClassificationInspectImage.objects.all()
+#     f = BytesIO()  # 버퍼 할당
+#     zip_f = ZipFile(f, 'w')  # 해당 버퍼에 zip할 파일들 쓰기
+#
+#     for photo in dataset:
+#         url = urlopen(str(photo.image.image.image))  # 사진 url
+#         if photo.image.image_type == 0:  # 상세컷
+#             filename = os.path.join('detail_cut', str(photo.image.image.image).split('/')[-1])
+#         elif photo.image.image_type == 1:  # 모델컷
+#             filename = os.path.join('model_cut', str(photo.image.image.image).split('/')[-1])
+#         else:
+#             filename = os.path.join('trash_cut', str(photo.image.image.image).split('/')[-1])
+#         zip_f.writestr(filename, url.read())
+#     zip_f.close()
+#     response = HttpResponse(f.getvalue(), content_type='application/zip')
+#     response['Content-Disposition'] = 'attachment; filename=image-test.zip'  # 다운받게 될 zip 파일 이름 설정
+#     return response
 
-    for photo in dataset:
-        url = urlopen(str(photo.image.image.image))  # 사진 url
-        if photo.image.image_type == 0:  # 상세컷
-            filename = os.path.join('detail_cut', str(photo.image.image.image).split('/')[-1])
-        elif photo.image.image_type == 1:  # 모델컷
-            filename = os.path.join('model_cut', str(photo.image.image.image).split('/')[-1])
-        else:
-            filename = os.path.join('trash_cut', str(photo.image.image.image).split('/')[-1])
-        zip_f.writestr(filename, url.read())
-    zip_f.close()
-    response = HttpResponse(f.getvalue(), content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename=image-test.zip'  # 다운받게 될 zip 파일 이름 설정
+
+def excel_export(request):
+    response = HttpResponse(content_type="application/vnd.ms-excel")
+    # 다운로드 받을 때 생성될 파일명 설정
+    response["Content-Disposition"] = 'attachment; filename=' + str(datetime.date.today()) + '.xls'
+
+    # 인코딩 설정
+    wb = xlwt.Workbook(encoding='utf-8')
+    # 생성될 시트명 설정
+    ws = wb.add_sheet('타입분류')
+
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['image', 'type']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+    rows = ClassificationInspectImage.objects.all().values_list('image__image__image', 'image__image_type')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
     return response

@@ -211,6 +211,7 @@ class LabelingInspectDetail(DetailView):
         return redirect('labeling:inspect_list')
 
 
+@method_decorator(is_login, name='dispatch')
 class LabelingStatusBoard(ListView):
     queryset = ClassificationInspectImage.objects.filter(image__image_type=0)
     template_name = 'labeling_status_board.html'
