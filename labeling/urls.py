@@ -1,7 +1,8 @@
 from django.urls import path
 
 from labeling.views import LabelingList, LabelingLoadImage, LabelingDetail, \
-    LabelingInspectList, LabelingInspectLoadImage, LabelingInspectDetail, delete_object_function, LabelingStatusBoard
+    LabelingInspectList, LabelingInspectLoadImage, LabelingInspectDetail, delete_object_function, LabelingStatusBoard, \
+    excel_export
 
 app_name = 'labeling'
 
@@ -15,4 +16,6 @@ urlpatterns = [
     path('load/label/data', LabelingLoadImage.as_view(), name='labeling_load_data'),
     path('load/inspect/data', LabelingInspectLoadImage.as_view(), name='labeling_inspect_load_data'),
     path('delete/<int:pk>', delete_object_function, name='labeling_object_delete'),
+
+    path('export/', excel_export, name='export_excel'),
 ]
