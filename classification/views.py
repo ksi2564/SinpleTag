@@ -13,13 +13,14 @@ from django.views.generic import ListView, DetailView
 
 from accountapp.decorators import is_login, is_staff
 from classification.models import InitialImage, ClassificationImage, ClassificationInspectImage
+from labeling.views import zero_denom_check
 
 has_staff_permission = [is_login, is_staff]
 
 
 @method_decorator(is_login, name='dispatch')
 class ClassificationList(ListView):
-    paginate_by = 5
+    paginate_by = 20
     template_name = 'classification_list.html'
 
     def get_queryset(self):
@@ -89,13 +90,13 @@ class ClassificationDetail(DetailView):
             return redirect('classification:classification_list')
         else:
             return redirect('classification:classification_detail',
-                            InitialImage.objects.filter(label_user=self.request.user,
+                            InitialImage.objects.filter(label_user=self.request.user, classificationimage__isnull=True,
                                                         pk__gt=self.get_object().pk).first().pk)
 
 
 @method_decorator(has_staff_permission, name='dispatch')
 class ClassificationInspectList(ListView):
-    paginate_by = 10
+    paginate_by = 20
     template_name = 'classification_inspect_list.html'
 
     def get_queryset(self):
@@ -136,11 +137,11 @@ class ClassificationStatusBoard(ListView):
         context['user_images'] = self.object_list.filter(label_user=self.request.user)
         context['user_classified_images'] = ClassificationImage.objects.filter(image__label_user=self.request.user)
         context['user_classified_percent'] = int(
-            context['user_classified_images'].count() / context['user_images'].count() * 100)
+            zero_denom_check(context['user_classified_images'].count(), context['user_images'].count()))
         context['user_inspected_images'] = ClassificationInspectImage.objects.filter(
             image__image__label_user=self.request.user)
         context['user_inspected_percent'] = int(
-            context['user_inspected_images'].count() / context['user_images'].count() * 100)
+            zero_denom_check(context['user_inspected_images'].count(), context['user_images'].count()))
         return context
 
 
@@ -150,10 +151,10 @@ class ClassificationLoadImage(View):
         n = InitialImage.objects.filter(label_user=self.request.user, classificationimage__isnull=True)
         bulk = []
 
-        if n.count() >= 10:
-            messages.error(request, '보유 이미지 수가 너무 많습니다. 보유하신 이미지가 10장 이하일 때 다시 추가 해주세요.', extra_tags='danger')
-        elif n.count() + 2 > 10:
-            plus_data = 2 - 10 + n.count()
+        if n.count() >= 100:
+            messages.error(request, '보유 이미지 수가 너무 많습니다. 보유하신 이미지가 100장 이하일 때 다시 추가 해주세요.', extra_tags='danger')
+        elif n.count() + 20 > 100:
+            plus_data = 20 - 100 + n.count()
             for image in queryset[:plus_data]:
                 image.label_user = self.request.user
                 bulk.append(image)
@@ -163,7 +164,7 @@ class ClassificationLoadImage(View):
             else:
                 messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
         else:
-            for image in queryset[:2]:
+            for image in queryset[:20]:
                 image.label_user = self.request.user
                 bulk.append(image)
             InitialImage.objects.bulk_update(bulk, ['label_user'])  # bulk에 있는 데이터 모두 한번에 업데이트
@@ -182,10 +183,10 @@ class ClassificationInspectLoadImage(View):
         n = ClassificationImage.objects.filter(image__inspect_user=self.request.user,
                                                classificationinspectimage__isnull=True)
         bulk = []
-        if n.count() == 10:
-            messages.error(request, '보유 가능 이미지는 최대 10장으로 제한됩니다. 작업 후 다시 추가 해주세요.', extra_tags='danger')
-        elif n.count() + 2 > 10:
-            plus_data = 2 - 10 + n.count()
+        if n.count() == 100:
+            messages.error(request, '보유 가능 이미지는 최대 100장으로 제한됩니다. 작업 후 다시 추가 해주세요.', extra_tags='danger')
+        elif n.count() + 20 > 100:
+            plus_data = 20 - 100 + n.count()
             for image in queryset[:plus_data]:
                 image.inspect_user = self.request.user
                 bulk.append(image)
@@ -195,7 +196,7 @@ class ClassificationInspectLoadImage(View):
             else:
                 messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
         else:
-            for image in queryset[:2]:
+            for image in queryset[:20]:
                 image.inspect_user = self.request.user
                 bulk.append(image)
             InitialImage.objects.bulk_update(bulk, ['inspect_user'])  # bulk에 있는 데이터 모두 한번에 업데이트
@@ -210,14 +211,17 @@ class ClassificationInspectLoadImage(View):
 @is_staff
 def image_api(request):
     url = "http://118.67.133.29/naver/all-images"
-    bulk = []
+    bulk1 = []
     image_list = requests.get(url).json()
     images = image_list['data']
+    last_num = InitialImage.objects.count()
+    end_num = last_num + 10
 
-    for image in images[:10]:
+    for image in images[last_num:end_num]:
         image_url = image['url']
-        bulk.append(InitialImage(image=image_url))
-    InitialImage.objects.bulk_create(bulk)
+        bulk1.append(InitialImage(image=image_url))
+    InitialImage.objects.bulk_create(bulk1)
+
     return redirect(reverse('classification:classification_list'))
 
 
@@ -268,7 +272,7 @@ def pass_or_not(request):
 def excel_export(request):
     response = HttpResponse(content_type="application/vnd.ms-excel")
     # 다운로드 받을 때 생성될 파일명 설정
-    response["Content-Disposition"] = 'attachment; filename=' + str(datetime.date.today()) + '.xls'
+    response["Content-Disposition"] = 'attachment; filename=classification_' + str(datetime.date.today()) + '.xls'
 
     # 인코딩 설정
     wb = xlwt.Workbook(encoding='utf-8')
@@ -296,3 +300,63 @@ def excel_export(request):
 
     wb.save(response)
     return response
+
+# # 학습 모델 로드
+# model = tf.keras.models.load_model("my_model.h5")
+#
+#
+# def my_view(request):
+#     X = []
+#     image = 'https://cdn.pixabay.com/photo/2019/06/17/14/44/garbage-4280112_960_720.png'
+#     response = requests.get(image)
+#     img = Image.open(BytesIO(response.content))
+#     img = img.resize((128, 128))
+#     img = np.array(img)
+#     X.append(img)
+#     X = np.array(X)
+#     predictions = np.argmax(model.predict(X))
+#
+#     return HttpResponse(
+#         predictions
+#     )
+
+
+# 학습된 분류 모델로 iamge를 불러올 때 분류까지 자동으로 해주는 로직
+# @is_login
+# @is_staff
+# def image_api(request):
+#     url = "http://118.67.133.29/naver/all-images"
+#     bulk1 = []
+#     bulk2 = []
+#     image_list = requests.get(url).json()
+#     images = image_list['data']
+#     last_num = InitialImage.objects.count()
+#     end_num = last_num + 10
+#     X = []
+#     Y = []
+#
+#     for image in images[last_num:end_num]:
+#         image_url = image['url']
+#         bulk1.append(InitialImage(image=image_url))
+#     InitialImage.objects.bulk_create(bulk1)
+#     for image in images[last_num:end_num]:
+#         image_url = image['url']
+#         response = requests.get(image_url)
+#         img = Image.open(BytesIO(response.content))
+#         img = img.resize((128, 128))
+#         img = np.array(img)
+#         X.append(img)
+#     X = np.array(X)
+#     predictions = model.predict(X)
+#     for prediction in predictions:
+#         bulk2.append(ClassificationImage(image=InitialImage.objects.filter(image=images[last_num]['url']).first(),
+#                                          image_type=np.argmax(prediction)))
+#         Y.append(np.argmax(prediction))
+#         last_num += 1
+#     ClassificationImage.objects.bulk_create(bulk2)
+#
+#     # return HttpResponse(
+#     #     Y
+#     # )
+#
+#     return redirect(reverse('classification:classification_list'))

@@ -1,4 +1,8 @@
+import datetime
+
+import xlwt
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
@@ -211,6 +215,13 @@ class LabelingInspectDetail(DetailView):
         return redirect('labeling:inspect_list')
 
 
+def zero_denom_check(numer, denom):
+    if denom != 0:
+        return numer / denom * 100
+    else:
+        return 0
+
+
 @method_decorator(is_login, name='dispatch')
 class LabelingStatusBoard(ListView):
     queryset = ClassificationInspectImage.objects.filter(image__image_type=0)
@@ -219,17 +230,19 @@ class LabelingStatusBoard(ListView):
     def get_context_data(self, **kwargs):
         context = super(LabelingStatusBoard, self).get_context_data(**kwargs)
         context['labeled_images'] = LabelImage.objects.all()
-        context['labeled_percent'] = int(context['labeled_images'].count() / self.object_list.count() * 100)
+        context['labeled_percent'] = int(zero_denom_check(context['labeled_images'].count(), self.object_list.count()))
         context['inspected_images'] = InspectImage.objects.all()
-        context['inspected_percent'] = int(context['inspected_images'].count() / self.object_list.count() * 100)
-
+        context['inspected_percent'] = int(
+            zero_denom_check(context['inspected_images'].count(), self.object_list.count()))
         context['user_images'] = self.object_list.filter(labeling_user=self.request.user)
+
         context['user_labeled_images'] = LabelImage.objects.filter(image__labeling_user=self.request.user)
         context['user_labeled_percent'] = int(
-            context['user_labeled_images'].count() / context['user_images'].count() * 100)
+            zero_denom_check(context['user_labeled_images'].count(), context['user_images'].count()))
+
         context['user_inspected_images'] = InspectImage.objects.filter(image__image__labeling_user=self.request.user)
         context['user_inspected_percent'] = int(
-            context['user_inspected_images'].count() / context['user_images'].count() * 100)
+            zero_denom_check(context['user_inspected_images'].count(), context['user_images'].count()))
         return context
 
 
@@ -299,3 +312,38 @@ def delete_object_function(request, pk):
     obj = LabelImage.objects.get(id=pk)
     obj.image.image.image.delete()
     return redirect(reverse('labeling:inspect_list'))
+
+
+def excel_export(request):
+    response = HttpResponse(content_type="application/vnd.ms-excel")
+    # 다운로드 받을 때 생성될 파일명 설정
+    response["Content-Disposition"] = 'attachment; filename=labeling_' + str(datetime.date.today()) + '.xls'
+
+    # 인코딩 설정
+    wb = xlwt.Workbook(encoding='utf-8')
+    # 생성될 시트명 설정
+    ws = wb.add_sheet('신발 카테고리')
+
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['이미지', '카테고리', '아이템', '굽 높이', '밑창 모양', '소재감', '프린트', '디테일', '색상']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+    rows = InspectImage.objects.all().values_list('image__image__image__image__image', 'top_category',
+                                                  'item', 'heel_height', 'sole', 'material',
+                                                  'printing', 'detail', 'color')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
