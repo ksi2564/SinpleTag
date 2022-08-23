@@ -10,58 +10,93 @@
                 <li class="breadcrumb-item active"><a aria-current="page">Status Dashboard</a></li>
             </ol>
         </nav>
-        {% if user.is_staff == True %}
+        <h3 style="font-weight: bold; margin: 2rem 0 1.5rem 0;">내 작업 현황</h3>
+        <div class="table-responsive">
             <table class="table" style="margin-bottom: 1.6rem">
                 <thead>
                 <tr>
                     <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                            style="font-size: 16px">총 이미지 개수</span><br>{{ object_list.count }}
+                            style="font-size: 16px">내 작업 이미지 개수</span><br>{{ user_images.count }}
                         <div style="height: 1.5rem; width: 15rem;"></div>
                     </th>
                     <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                            style="font-size: 16px">라벨링된 이미지</span><br>{{ labeled_percent }}%<span
-                            style="font-size: 12px; font-weight: normal">  ({{ labeled_images.count }}개)</span>
+                            style="font-size: 16px">내가 라벨링한 이미지</span><br>{{ user_labeled_percent }}%<span
+                            style="font-size: 12px; font-weight: normal">  ({{ user_labeled_images.count }}개)</span>
                         <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
-                            <div class="progress-bar" role="progressbar" style="width: {{ labeled_percent }}%;"></div>
+                            <div class="progress-bar" role="progressbar"
+                                 style="width: {{ user_labeled_percent }}%;"></div>
                         </div>
                     </th>
                     <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                            style="font-size: 16px">검수된 이미지</span><br>{{ inspected_percent }}%<span
-                            style="font-size: 12px; font-weight: normal">  ({{ inspected_images.count }}개)</span>
+                            style="font-size: 16px">검수 통과된 이미지</span><br>{{ user_inspected_percent }}%<span
+                            style="font-size: 12px; font-weight: normal">  ({{ user_inspected_images.count }}개)</span>
                         <div class="progress" style="width: 18rem; margin-bottom: .5rem">
                             <div class="progress-bar progress-bar-custom" role="progressbar"
-                                 style="width: {{ inspected_percent }}%;"></div>
+                                 style="width: {{ user_inspected_percent }}%;"></div>
                         </div>
                     </th>
                 </tr>
                 </thead>
             </table>
+        </div>
+        {% if user.is_staff == True %}
+            <h3 style="font-weight: bold; margin: 2rem 0 1.5rem 0;">프로젝트 진행 현황</h3>
+            <div class="table-responsive">
+                <table class="table" style="margin-bottom: 1.6rem">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                                style="font-size: 16px">총 이미지 개수</span><br>{{ object_list.count }}
+                            <div style="height: 1.5rem; width: 15rem;"></div>
+                        </th>
+                        <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                                style="font-size: 16px">라벨링된 이미지</span><br>{{ labeled_percent }}%<span
+                                style="font-size: 12px; font-weight: normal">  ({{ labeled_images.count }}개)</span>
+                            <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
+                                <div class="progress-bar" role="progressbar"
+                                     style="width: {{ labeled_percent }}%;"></div>
+                            </div>
+                        </th>
+                        <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                                style="font-size: 16px">검수된 이미지</span><br>{{ inspected_percent }}%<span
+                                style="font-size: 12px; font-weight: normal">  ({{ inspected_images.count }}개)</span>
+                            <div class="progress" style="width: 18rem; margin-bottom: .5rem">
+                                <div class="progress-bar progress-bar-custom" role="progressbar"
+                                     style="width: {{ inspected_percent }}%;"></div>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
         {% endif %}
-        <table class="table" style="margin-bottom: 1.6rem">
-            <thead>
-            <tr>
-                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                        style="font-size: 16px">내 작업 이미지 개수</span><br>{{ user_images.count }}
-                    <div style="height: 1.5rem; width: 15rem;"></div>
-                </th>
-                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                        style="font-size: 16px">내가 라벨링한 이미지</span><br>{{ user_labeled_percent }}%<span
-                        style="font-size: 12px; font-weight: normal">  ({{ user_labeled_images.count }}개)</span>
-                    <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
-                        <div class="progress-bar" role="progressbar" style="width: {{ user_labeled_percent }}%;"></div>
-                    </div>
-                </th>
-                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                        style="font-size: 16px">검수 통과된 이미지</span><br>{{ user_inspected_percent }}%<span
-                        style="font-size: 12px; font-weight: normal">  ({{ user_inspected_images.count }}개)</span>
-                    <div class="progress" style="width: 18rem; margin-bottom: .5rem">
-                        <div class="progress-bar progress-bar-custom" role="progressbar"
-                             style="width: {{ user_inspected_percent }}%;"></div>
-                    </div>
-                </th>
-            </tr>
-            </thead>
-        </table>
+        <h4 style="font-weight: bold; margin: 2rem 0 1.5rem 0">이미지 라벨링 통계</h4>
+        <div class="row">
+            <div class="col-6" style="margin-bottom: 2rem;">
+                <canvas id="topCategory"></canvas>
+            </div>
+            <div class="col-6" style="margin-bottom: 2rem;">
+                <canvas id="item"></canvas>
+            </div>
+            <div class="col-6" style="margin-bottom: 2rem;">
+                <canvas id="heelHeight"></canvas>
+            </div>
+            <div class="col-6" style="margin-bottom: 2rem;">
+                <canvas id="sole"></canvas>
+            </div>
+            <div class="col-6" style="margin-bottom: 2rem;">
+                <canvas id="material"></canvas>
+            </div>
+            <div class="col-6" style="margin-bottom: 2rem;">
+                <canvas id="printing"></canvas>
+            </div>
+            <div class="col-6" style="margin-bottom: 2rem;">
+                <canvas id="detail"></canvas>
+            </div>
+            <div class="col-6" style="margin-bottom: 2rem;">
+                <canvas id="color"></canvas>
+            </div>
+        </div>
         <h3 style="font-weight: bold">데이터 내려받기</h3>
         <div class="card">
             <div class="card-body">
@@ -107,4 +142,273 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const topCategoryChart = new Chart(
+            document.getElementById('topCategory'),
+            {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for name, value in top_categories %}
+                            '{{ name }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: '카테고리',
+                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                        hoverBackgroundColor: '#8BC34A',
+                        data: [
+                            {% for name, value in top_categories %}
+                                {{ value }},
+                            {% endfor %}
+                        ],
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scale: {
+                        x: {
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            }
+        );
+
+        const itemChart = new Chart(
+            document.getElementById('item'),
+            {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for name, value in item %}
+                            '{{ name }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: '아이템',
+                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                        hoverBackgroundColor: '#8BC34A',
+                        data: [
+                            {% for name, value in item %}
+                                {{ value }},
+                            {% endfor %}
+                        ],
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scale: {
+                        x: {
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            }
+        );
+        const heelHeight = new Chart(
+            document.getElementById('heelHeight'),
+            {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for name, value in heels %}
+                            '{{ name }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: '굽 높이',
+                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                        hoverBackgroundColor: '#8BC34A',
+                    barPercentage: 0.5,
+                        data: [
+                            {% for name, value in heels %}
+                                {{ value }},
+                            {% endfor %}
+                        ],
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scale: {
+                        x: {
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            }
+        );
+        const sole = new Chart(
+            document.getElementById('sole'),
+            {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for name, value in soles %}
+                            '{{ name }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: '밑창 모양',
+                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                        hoverBackgroundColor: '#8BC34A',
+                        data: [
+                            {% for name, value in soles %}
+                                {{ value }},
+                            {% endfor %}
+                        ],
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scale: {
+                        x: {
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            }
+        );
+        const material = new Chart(
+            document.getElementById('material'),
+            {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for name, value in materials %}
+                            '{{ name }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: '소재감',
+                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                        hoverBackgroundColor: '#8BC34A',
+                        data: [
+                            {% for name, value in materials %}
+                                {{ value }},
+                            {% endfor %}
+                        ],
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scale: {
+                        x: {
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            }
+        );
+        const printing = new Chart(
+            document.getElementById('printing'),
+            {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for name, value in printings %}
+                            '{{ name }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: '프린트',
+                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                        hoverBackgroundColor: '#8BC34A',
+                        data: [
+                            {% for name, value in printings %}
+                                {{ value }},
+                            {% endfor %}
+                        ],
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scale: {
+                        x: {
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            }
+        );
+        const detail = new Chart(
+            document.getElementById('detail'),
+            {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for name, value in details %}
+                            '{{ name }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: '프린트',
+                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                        hoverBackgroundColor: '#8BC34A',
+                        data: [
+                            {% for name, value in details %}
+                                {{ value }},
+                            {% endfor %}
+                        ],
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scale: {
+                        x: {
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            }
+        );
+        const color = new Chart(
+            document.getElementById('color'),
+            {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for name, value in color %}
+                            '{{ name }}',
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: '색상',
+                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                        hoverBackgroundColor: '#8BC34A',
+                        data: [
+                            {% for name, value in color %}
+                                {{ value }},
+                            {% endfor %}
+                        ],
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    scale: {
+                        x: {
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    </script>
 {% endblock %}
