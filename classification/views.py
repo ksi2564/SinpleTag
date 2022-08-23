@@ -130,9 +130,15 @@ class ClassificationStatusBoard(ListView):
     def get_context_data(self, **kwargs):
         context = super(ClassificationStatusBoard, self).get_context_data(**kwargs)
         context['classified_images'] = ClassificationImage.objects.all()
-        context['classified_percent'] = int(context['classified_images'].count() / self.object_list.count() * 100)
+        context['classified_percent'] = int(
+            zero_denom_check(context['classified_images'].count(), self.object_list.count()))
         context['inspected_images'] = ClassificationInspectImage.objects.all()
-        context['inspected_percent'] = int(context['inspected_images'].count() / self.object_list.count() * 100)
+        context['inspected_percent'] = int(
+            zero_denom_check(context['inspected_images'].count(), self.object_list.count()))
+
+        context['inspected_detail_cut'] = context['inspected_images'].filter(image__image_type=0)
+        context['inspected_model_cut'] = context['inspected_images'].filter(image__image_type=1)
+        context['inspected_trash_cut'] = context['inspected_images'].filter(image__image_type=2)
 
         context['user_images'] = self.object_list.filter(label_user=self.request.user)
         context['user_classified_images'] = ClassificationImage.objects.filter(image__label_user=self.request.user)

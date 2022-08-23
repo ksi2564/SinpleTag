@@ -243,6 +243,40 @@ class LabelingStatusBoard(ListView):
         context['user_inspected_images'] = InspectImage.objects.filter(image__image__labeling_user=self.request.user)
         context['user_inspected_percent'] = int(
             zero_denom_check(context['user_inspected_images'].count(), context['user_images'].count()))
+
+        inspect_images = InspectImage.objects.all()
+        categories = {}
+        for category in TopCategory.objects.all():
+            categories[category.name] = inspect_images.filter(top_category=category).count()
+        context['top_categories'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        categories = {}
+        for category in Item.objects.all():
+            categories[category.name] = inspect_images.filter(item=category).count()
+        context['item'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        categories = {}
+        for category in HeelHeight.objects.all():
+            categories[category.name] = inspect_images.filter(heel_height=category).count()
+        context['heels'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        categories = {}
+        for category in Sole.objects.all():
+            categories[category.name] = inspect_images.filter(sole=category).count()
+        context['soles'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        categories = {}
+        for category in Material.objects.all():
+            categories[category.name] = inspect_images.filter(material=category).count()
+        context['materials'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        categories = {}
+        for category in Printing.objects.all():
+            categories[category.name] = inspect_images.filter(printing=category).count()
+        context['printings'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        categories = {}
+        for category in Detail.objects.all():
+            categories[category.name] = inspect_images.filter(detail=category).count()
+        context['details'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        categories = {}
+        for category in Color.objects.all():
+            categories[category.name] = inspect_images.filter(color=category).count()
+        context['color'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
         return context
 
 
