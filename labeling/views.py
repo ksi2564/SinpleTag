@@ -152,11 +152,11 @@ class LabelingInspectDetail(DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         image_pk = request.user.pk
-        url_pk = LabelImage.objects.filter(pk=self.kwargs['pk']).first()
+        url_pk = LabelImage.objects.filter(pk=self.kwargs['pk'], inspectimage__isnull=True).first()
 
         if url_pk is None or image_pk is not url_pk.image.label_inspect_user.pk:
             messages.error(request, "접근할 수 없는 정보입니다.", extra_tags='danger')
-            return redirect(reverse("labeling:label_list"))
+            return redirect(reverse("labeling:inspect_list"))
         return super(LabelingInspectDetail, self).dispatch(request)  # 해당 유저가 맞으면 기존에 있던 부모 dispatch를 사용
 
     def get_context_data(self, **kwargs):

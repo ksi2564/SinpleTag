@@ -6,7 +6,7 @@
         <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
-                <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:inspect_list' %}">Labeling</a></li>
+                <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:label_list' %}">Labeling</a></li>
                 <li class="breadcrumb-item active"><a aria-current="page">Status Dashboard</a></li>
                 {% if user.is_staff == True %}
                     <li>
@@ -79,38 +79,38 @@
                     </thead>
                 </table>
             </div>
+            <h4 style="font-weight: bold; margin: 2rem 0 1.5rem 0">이미지 라벨링 통계</h4>
+            <div class="row">
+                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
+                    <canvas id="topCategory"></canvas>
+                </div>
+                <div style="width: 1rem;"></div>
+                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
+                    <canvas id="item"></canvas>
+                </div>
+                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
+                    <canvas id="heelHeight"></canvas>
+                </div>
+                <div style="width: 1rem;"></div>
+                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
+                    <canvas id="sole"></canvas>
+                </div>
+                <div class="card p-3 overflow-auto" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
+                    <canvas id="material"></canvas>
+                </div>
+                <div style="width: 1rem;"></div>
+                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
+                    <canvas id="printing"></canvas>
+                </div>
+                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
+                    <canvas id="detail"></canvas>
+                </div>
+                <div style="width: 1rem;"></div>
+                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
+                    <canvas id="color"></canvas>
+                </div>
+            </div>
         {% endif %}
-        <h4 style="font-weight: bold; margin: 2rem 0 1.5rem 0">이미지 라벨링 통계</h4>
-        <div class="row">
-            <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                <canvas id="topCategory"></canvas>
-            </div>
-            <div style="width: 1rem;"></div>
-            <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                <canvas id="item"></canvas>
-            </div>
-            <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                <canvas id="heelHeight"></canvas>
-            </div>
-            <div style="width: 1rem;"></div>
-            <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                <canvas id="sole"></canvas>
-            </div>
-            <div class="card p-3 overflow-auto" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                <canvas id="material"></canvas>
-            </div>
-            <div style="width: 1rem;"></div>
-            <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                <canvas id="printing"></canvas>
-            </div>
-            <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                <canvas id="detail"></canvas>
-            </div>
-            <div style="width: 1rem;"></div>
-            <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                <canvas id="color"></canvas>
-            </div>
-        </div>
         {#        <h3 style="font-weight: bold">데이터 내려받기</h3>#}
         {#        <div class="card">#}
         {#            <div class="card-body">#}
