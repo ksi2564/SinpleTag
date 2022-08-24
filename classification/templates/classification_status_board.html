@@ -9,6 +9,16 @@
                 <li class="breadcrumb-item"><a class="link" href="{% url 'classification:classification_list' %}">Classification</a>
                 </li>
                 <li class="breadcrumb-item active"><a aria-current="page">Status Dashboard</a></li>
+                {% if user.is_staff == True %}
+                <li>
+                    <a class="btn btn-outline-success" type="submit" id="popoverData"
+                       href="{% url 'classification:export_excel' %}"
+                       style="margin-left: 1rem; padding: 0 .5rem" data-container="body" data-toggle="popover"
+                       data-placement="bottom" data-trigger="hover" data-content="분류 데이터 다운로드">
+                        <i class="bi bi-file-earmark-arrow-down"></i>
+                    </a>
+                </li>
+                {% endif %}
             </ol>
         </nav>
         <h3 style="font-weight: bold; margin: 2rem 0 1.5rem 0;">내 작업 현황</h3>
@@ -122,6 +132,19 @@
     </div>
 
     <script>
+        {#엑셀파일 다운로드 토글#}
+
+        function toggle(source) {
+            let checkboxes = document.getElementsByName('cb');
+            let i = 0, n = checkboxes.length;
+            for (; i < n; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+
+        $('#popoverData').popover()
+
+        {#차트#}
         const labels = [
             '제품 상세컷',
             '모델 코디컷',
