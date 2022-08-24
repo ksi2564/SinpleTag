@@ -22,7 +22,7 @@ def is_staff(func):
         if user.is_staff is True:
             return func(request, *args, **kwargs)
         else:
-            messages.error(request, '검수 권한이 없습니다. 전문가 요청 승인 시 이용 가능합니다.', extra_tags='danger')
+            messages.error(request, '권한이 없습니다. 전문가 요청 승인 시 이용 가능합니다.', extra_tags='danger')
             return redirect('mainpage')
 
     return decorated
