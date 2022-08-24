@@ -16,14 +16,6 @@
                 <li class="breadcrumb-item"><a class="link" href="{% url 'classification:classification_list' %}">Classification</a>
                 </li>
                 <li class="breadcrumb-item active"><a aria-current="page">Inspection</a></li>
-                <li>
-                    <a class="btn btn-outline-success" type="submit" id="popoverData"
-                       href="{% url 'classification:export_excel' %}"
-                       style="margin-left: 1rem; padding: 0 .5rem" data-container="body" data-toggle="popover"
-                       data-placement="bottom" data-trigger="hover" data-content="분류 데이터 다운로드">
-                        <i class="bi bi-file-earmark-arrow-down"></i>
-                    </a>
-                </li>
             </ol>
         </nav>
         <strong class="row justify-content-end" style="font-size: 70%; margin-right: .6rem;">분류 검수 대기
@@ -93,15 +85,4 @@
             </ul>
         </nav>
     </div>
-    <script>
-        function toggle(source) {
-            let checkboxes = document.getElementsByName('cb');
-            let i = 0, n = checkboxes.length;
-            for (; i < n; i++) {
-                checkboxes[i].checked = source.checked;
-            }
-        }
-        $('#popoverData').popover()
-
-    </script>
 {% endblock %}
