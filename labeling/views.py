@@ -119,7 +119,14 @@ class LabelingDetail(DetailView):
         for c in color:
             new_labeled_image.color.add(Color.objects.get(pk=c))
 
-        return redirect('labeling:label_list')
+        if not ClassificationInspectImage.objects.filter(labeling_user=self.request.user, labelimage__isnull=True,
+                                                         pk__gt=self.get_object().pk):
+            return redirect('labeling:label_list')
+        else:
+            return redirect('labeling:label_detail',
+                            ClassificationInspectImage.objects.filter(labeling_user=self.request.user,
+                                                                      labelimage__isnull=True,
+                                                                      pk__gt=self.get_object().pk).first().pk)
 
 
 @method_decorator(has_staff_permission, name='dispatch')
@@ -215,7 +222,14 @@ class LabelingInspectDetail(DetailView):
         for c in color:
             new_inspected_image.color.add(Color.objects.get(pk=c))
 
-        return redirect('labeling:inspect_list')
+        if not LabelImage.objects.filter(image__label_inspect_user=self.request.user, inspectimage__isnull=True,
+                                         pk__gt=self.get_object().pk):
+            return redirect('labeling:inspect_list')
+        else:
+            return redirect('labeling:inspect_detail',
+                            LabelImage.objects.filter(image__label_inspect_user=self.request.user,
+                                                      inspectimage__isnull=True,
+                                                      pk__gt=self.get_object().pk).first().pk)
 
 
 def zero_denom_check(numer, denom):
