@@ -51,6 +51,7 @@
                                 <label for="top-category"
                                        style="font-weight: bold; font-size: 17px; margin-top: 1rem;">카테고리</label>
                                 <select class="form-control" id="top-category" name="top-category">
+                                    <option value selected>모름</option>
                                     {% for obj in topcategory %}
                                         <option value="{{ obj.id }}">{{ obj.name }}</option>
                                     {% endfor %}
@@ -61,6 +62,7 @@
                                     <label for="item"
                                            style="font-size: 16px;">아이템</label>
                                     <select class="form-control" id="item" name="item">
+                                        <option value selected>모름</option>
                                         {% for obj in item %}
                                             <option value="{{ obj.id }}">{{ obj.name }}</option>
                                         {% endfor %}
@@ -69,6 +71,7 @@
                                 <div class="form-group col-md-6">
                                     <label for="heel-height" style="font-size: 16px;">굽 높이</label>
                                     <select class="form-control" id="heel-height" name="heel-height">
+                                        <option value selected>모름</option>
                                         {% for obj in heel_height %}
                                             <option value="{{ obj.id }}">{{ obj.name }}</option>
                                         {% endfor %}
@@ -146,7 +149,8 @@
                                 </div>
                             </div>
                             <div class="row justify-content-end" style="margin-right: 1.5rem;">
-                                <button type="submit" class="btn btn-outline-primary" style="width: 7rem;">라벨링 저장</button>
+                                <button type="submit" class="btn btn-outline-primary" style="width: 7rem;">라벨링 저장
+                                </button>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
@@ -165,9 +169,9 @@
     <script>
         $(document).ready(function () {
             let multipleCancelButton = new Choices('.choices-multiple-remove-button', {
-                shouldSort: false,  {# 자동 정렬 취소 #}
-                removeItemButton: true,  {# 선택된 아이템 취소버튼 생성 #}
-                maxItemCount: 5,  {# 최대 선택 개수 제한 #}
+                shouldSort: false, {# 자동 정렬 취소 #}
+                removeItemButton: true, {# 선택된 아이템 취소버튼 생성 #}
+                maxItemCount: 5, {# 최대 선택 개수 제한 #}
                 {#searchResultLimit: 5,#}
                 {#renderChoiceLimit: 5#}
             });
