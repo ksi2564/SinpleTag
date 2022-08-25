@@ -96,9 +96,12 @@ class LabelingDetail(DetailView):
     def post(self, request, *args, **kwargs):
         new_labeled_image = LabelImage()
         new_labeled_image.image = self.get_object()
-        new_labeled_image.top_category = TopCategory.objects.get(pk=request.POST.get('top-category'))
-        new_labeled_image.item = Item.objects.get(pk=request.POST.get('item'))
-        new_labeled_image.heel_height = HeelHeight.objects.get(pk=request.POST.get('heel-height'))
+        if request.POST.get('top-category'):
+            new_labeled_image.top_category = TopCategory.objects.get(pk=request.POST.get('top-category'))
+        if request.POST.get('item'):
+            new_labeled_image.item = Item.objects.get(pk=request.POST.get('item'))
+        if request.POST.get('heel-height'):
+            new_labeled_image.heel_height = HeelHeight.objects.get(pk=request.POST.get('heel-height'))
         new_labeled_image.save()
         sole = request.POST.getlist('sole')
         material = request.POST.getlist('material')
@@ -190,27 +193,27 @@ class LabelingInspectDetail(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        new_labeled_image = InspectImage()
-        new_labeled_image.image = self.get_object()
-        new_labeled_image.top_category = TopCategory.objects.get(pk=request.POST.get('top-category'))
-        new_labeled_image.item = Item.objects.get(pk=request.POST.get('item'))
-        new_labeled_image.heel_height = HeelHeight.objects.get(pk=request.POST.get('heel-height'))
-        new_labeled_image.save()
+        new_inspected_image = InspectImage()
+        new_inspected_image.image = self.get_object()
+        new_inspected_image.top_category = TopCategory.objects.get(pk=request.POST.get('top-category'))
+        new_inspected_image.item = Item.objects.get(pk=request.POST.get('item'))
+        new_inspected_image.heel_height = HeelHeight.objects.get(pk=request.POST.get('heel-height'))
+        new_inspected_image.save()
         sole = request.POST.getlist('sole')
         material = request.POST.getlist('material')
         printing = request.POST.getlist('printing')
         detail = request.POST.getlist('detail')
         color = request.POST.getlist('color')
         for s in sole:
-            new_labeled_image.sole.add(Sole.objects.get(pk=s))
+            new_inspected_image.sole.add(Sole.objects.get(pk=s))
         for m in material:
-            new_labeled_image.material.add(Material.objects.get(pk=m))
+            new_inspected_image.material.add(Material.objects.get(pk=m))
         for p in printing:
-            new_labeled_image.printing.add(Printing.objects.get(pk=p))
+            new_inspected_image.printing.add(Printing.objects.get(pk=p))
         for d in detail:
-            new_labeled_image.detail.add(Detail.objects.get(pk=d))
+            new_inspected_image.detail.add(Detail.objects.get(pk=d))
         for c in color:
-            new_labeled_image.color.add(Color.objects.get(pk=c))
+            new_inspected_image.color.add(Color.objects.get(pk=c))
 
         return redirect('labeling:inspect_list')
 
@@ -370,14 +373,26 @@ def excel_export(request):
 
         # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
-    rows = InspectImage.objects.all().values_list('image__image__image__image__image', 'top_category',
-                                                  'item', 'heel_height', 'sole', 'material',
-                                                  'printing', 'detail', 'color')
 
+    rows = InspectImage.objects.all()
+    attr = []
+
+    # 1행씩 들어갈 값 attr에 append
     for row in rows:
+        attr.append(row.image.image.image.image.image.name)
+        attr.append(row.top_category.name)
+        attr.append(row.item.name)
+        attr.append(row.heel_height.name)
+        attr.append([', '.join([x.name for x in row.sole.all()])])
+        attr.append([', '.join([x.name for x in row.material.all()])])
+        attr.append([', '.join([x.name for x in row.printing.all()])])
+        attr.append([', '.join([x.name for x in row.detail.all()])])
+        attr.append([', '.join([x.name for x in row.color.all()])])
         row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], font_style)
+        for col_num in range(len(attr)):
+            ws.write(row_num, col_num, attr[col_num], font_style)
+        attr = []
 
     wb.save(response)
+
     return response

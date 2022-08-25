@@ -51,7 +51,8 @@
                             <div class="form-group col-md-12">
                                 <label for="top-category"
                                        style="font-weight: bold; font-size: 17px; margin-top: 1rem;">카테고리</label>
-                                <select class="form-control" id="top-category" name="top-category">
+                                <select class="form-control" id="top-category" name="top-category" required>
+                                    <option value>모름</option>
                                     {% for obj in topcategory %}
                                         {% if object.top_category.id == obj.id %}
                                             <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
@@ -65,7 +66,8 @@
                                 <div class="form-group col-md-6">
                                     <label for="item"
                                            style="font-size: 16px;">아이템</label>
-                                    <select class="form-control" id="item" name="item">
+                                    <select class="form-control" id="item" name="item" required>
+                                        <option value>모름</option>
                                         {% for obj in item %}
                                             {% if object.item.id == obj.id %}
                                                 <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
@@ -77,7 +79,8 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="heel-height" style="font-size: 16px;">굽 높이</label>
-                                    <select class="form-control" id="heel-height" name="heel-height">
+                                    <select class="form-control" id="heel-height" name="heel-height" required>
+                                        <option value>모름</option>
                                         {% for obj in heel_height %}
                                             {% if object.heel_height.id == obj.id %}
                                                 <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
@@ -98,7 +101,7 @@
                                            style="font-size: 16px;">밑창 모양</label><br>
                                     <div>
                                         <select class="choices-multiple-remove-button" name="sole" id="sole"
-                                                placeholder="Select upto 5 tags" multiple>
+                                                placeholder="Select upto 5 tags" multiple required>
                                             {% for obj in sole %}
                                                 {% if obj in object.sole.all %}
                                                     <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
@@ -114,7 +117,7 @@
                                            style="font-size: 16px;">소재감</label><br>
                                     <div>
                                         <select class="choices-multiple-remove-button" name="material" id="material"
-                                                placeholder="Select upto 5 tags" multiple>
+                                                placeholder="Select upto 5 tags" multiple required>
                                             {% for obj in material %}
                                                 {% if obj in object.material.all %}
                                                     <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
@@ -132,7 +135,7 @@
                                            style="font-size: 16px;">프린트</label><br>
                                     <div>
                                         <select class="choices-multiple-remove-button" name="printing" id="printing"
-                                                placeholder="Select upto 5 tags" multiple>
+                                                placeholder="Select upto 5 tags" multiple required>
                                             {% for obj in printing %}
                                                 {% if obj in object.printing.all %}
                                                     <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
@@ -148,7 +151,7 @@
                                            style="font-size: 16px;">디테일</label><br>
                                     <div>
                                         <select class="choices-multiple-remove-button" name="detail" id="detail"
-                                                placeholder="Select upto 5 tags" multiple>
+                                                placeholder="Select upto 5 tags" multiple required>
                                             {% for obj in detail %}
                                                 {% if obj in object.detail.all %}
                                                     <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
@@ -166,7 +169,7 @@
                                            style="font-size: 16px;">색상</label><br>
                                     <div>
                                         <select class="choices-multiple-remove-button" name="color" id="color"
-                                                placeholder="Select upto 5 tags" multiple>
+                                                placeholder="Select upto 5 tags" multiple required>
                                             {% for obj in color %}
                                                 {% if obj in object.color.all %}
                                                     <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
