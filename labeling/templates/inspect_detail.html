@@ -43,7 +43,7 @@
                            aria-controls="nav-info" aria-selected="false">상세 정보</a>
                     </div>
                 </nav>
-                <form action="" method="post">
+                <form action="" method="post" class="needs-validation" novalidate>
                     {% csrf_token %}
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-label" role="tabpanel"
@@ -61,6 +61,8 @@
                                         {% endif %}
                                     {% endfor %}
                                 </select>
+                                <div class="valid-feedback">선택됨</div>
+                                <div class="invalid-feedback">해당 속성 라벨링을 해주세요.</div>
                             </div>
                             <div class="form-row col-12">
                                 <div class="form-group col-md-6">
@@ -76,6 +78,8 @@
                                             {% endif %}
                                         {% endfor %}
                                     </select>
+                                    <div class="valid-feedback">선택됨</div>
+                                    <div class="invalid-feedback">해당 속성 라벨링을 해주세요.</div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="heel-height" style="font-size: 16px;">굽 높이</label>
@@ -89,6 +93,8 @@
                                             {% endif %}
                                         {% endfor %}
                                     </select>
+                                    <div class="valid-feedback">선택됨</div>
+                                    <div class="invalid-feedback">해당 속성 라벨링을 해주세요.</div>
                                 </div>
                             </div>
                             <hr>
@@ -99,86 +105,78 @@
                                 <div class="form-group col-md-6">
                                     <label for="sole"
                                            style="font-size: 16px;">밑창 모양</label><br>
-                                    <div>
-                                        <select class="choices-multiple-remove-button" name="sole" id="sole"
-                                                placeholder="Select upto 5 tags" multiple required>
-                                            {% for obj in sole %}
-                                                {% if obj in object.sole.all %}
-                                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
-                                                {% else %}
-                                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                                    <select class="choices-multiple-remove-button" name="sole" id="sole"
+                                            placeholder="Select upto 5 tags" multiple required>
+                                        {% for obj in sole %}
+                                            {% if obj in object.sole.all %}
+                                                <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                            {% else %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="material"
                                            style="font-size: 16px;">소재감</label><br>
-                                    <div>
-                                        <select class="choices-multiple-remove-button" name="material" id="material"
-                                                placeholder="Select upto 5 tags" multiple required>
-                                            {% for obj in material %}
-                                                {% if obj in object.material.all %}
-                                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
-                                                {% else %}
-                                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                                    <select class="choices-multiple-remove-button" name="material" id="material"
+                                            placeholder="Select upto 5 tags" multiple required>
+                                        {% for obj in material %}
+                                            {% if obj in object.material.all %}
+                                                <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                            {% else %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-row col-12">
                                 <div class="form-group col-md-6">
                                     <label for="printing"
                                            style="font-size: 16px;">프린트</label><br>
-                                    <div>
-                                        <select class="choices-multiple-remove-button" name="printing" id="printing"
-                                                placeholder="Select upto 5 tags" multiple required>
-                                            {% for obj in printing %}
-                                                {% if obj in object.printing.all %}
-                                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
-                                                {% else %}
-                                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                                    <select class="choices-multiple-remove-button" name="printing" id="printing"
+                                            placeholder="Select upto 5 tags" multiple required>
+                                        {% for obj in printing %}
+                                            {% if obj in object.printing.all %}
+                                                <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                            {% else %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <div class="valid-feedback">선택됨</div>
+                                    <div class="invalid-feedback">해당 속성 라벨링을 해주세요.</div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="detail"
                                            style="font-size: 16px;">디테일</label><br>
-                                    <div>
-                                        <select class="choices-multiple-remove-button" name="detail" id="detail"
-                                                placeholder="Select upto 5 tags" multiple required>
-                                            {% for obj in detail %}
-                                                {% if obj in object.detail.all %}
-                                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
-                                                {% else %}
-                                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                                    <select class="choices-multiple-remove-button" name="detail" id="detail"
+                                            placeholder="Select upto 5 tags" multiple required>
+                                        {% for obj in detail %}
+                                            {% if obj in object.detail.all %}
+                                                <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                            {% else %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-row col-12">
                                 <div class="form-group col-md-6">
                                     <label for="color"
                                            style="font-size: 16px;">색상</label><br>
-                                    <div>
-                                        <select class="choices-multiple-remove-button" name="color" id="color"
-                                                placeholder="Select upto 5 tags" multiple required>
-                                            {% for obj in color %}
-                                                {% if obj in object.color.all %}
-                                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
-                                                {% else %}
-                                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                                    <select class="choices-multiple-remove-button" name="color" id="color"
+                                            placeholder="Select upto 5 tags" multiple required>
+                                        {% for obj in color %}
+                                            {% if obj in object.color.all %}
+                                                <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                            {% else %}
+                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                             <div class="row justify-content-end" style="margin-right: 1.5rem;">
@@ -234,5 +232,24 @@
                 {#renderChoiceLimit: 5#}
             });
         });
+
+        // Disable form submissions if there are invalid fields
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Get the forms we want to add validation styles to
+                const forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                const validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
     </script>
 {% endblock %}
