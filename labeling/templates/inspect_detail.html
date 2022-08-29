@@ -61,8 +61,6 @@
                                         {% endif %}
                                     {% endfor %}
                                 </select>
-                                <div class="valid-feedback">선택됨</div>
-                                <div class="invalid-feedback">해당 속성 라벨링을 해주세요.</div>
                             </div>
                             <div class="form-row col-12">
                                 <div class="form-group col-md-6">
@@ -78,8 +76,6 @@
                                             {% endif %}
                                         {% endfor %}
                                     </select>
-                                    <div class="valid-feedback">선택됨</div>
-                                    <div class="invalid-feedback">해당 속성 라벨링을 해주세요.</div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="heel-height" style="font-size: 16px;">굽 높이</label>
@@ -93,8 +89,6 @@
                                             {% endif %}
                                         {% endfor %}
                                     </select>
-                                    <div class="valid-feedback">선택됨</div>
-                                    <div class="invalid-feedback">해당 속성 라벨링을 해주세요.</div>
                                 </div>
                             </div>
                             <hr>
@@ -145,8 +139,6 @@
                                             {% endif %}
                                         {% endfor %}
                                     </select>
-                                    <div class="valid-feedback">선택됨</div>
-                                    <div class="invalid-feedback">해당 속성 라벨링을 해주세요.</div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="detail"
@@ -245,6 +237,7 @@
                         if (form.checkValidity() === false) {
                             event.preventDefault();
                             event.stopPropagation();
+                            alert('모든 항목을 채워주세요!')
                         }
                         form.classList.add('was-validated');
                     }, false);
