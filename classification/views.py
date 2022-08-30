@@ -48,12 +48,13 @@ class ClassificationDetail(DetailView):
     model = InitialImage
     template_name = 'classification_detail.html'
 
+    # url 주소에 적힌 이미지 pk가 자신이 접근할 수 있는 이미지인지 확인
     def dispatch(self, request, *args, **kwargs):
-        image_pk = request.user.pk
+        image_user_pk = request.user.pk
         url_pk = InitialImage.objects.filter(pk=self.kwargs['pk'], label_user__isnull=False,
                                              classificationimage__isnull=True).first()
 
-        if url_pk is None or image_pk is not url_pk.label_user.pk:
+        if url_pk is None or image_user_pk is not url_pk.label_user.pk:
             messages.error(request, "접근할 수 없는 정보입니다.", extra_tags='danger')
             return redirect(reverse("classification:classification_list"))
         return super(ClassificationDetail, self).dispatch(request)  # 해당 유저가 맞으면 기존에 있던 부모 dispatch를 사용
@@ -85,13 +86,14 @@ class ClassificationDetail(DetailView):
         classification_image.image_type = request.POST.get('classification')
         classification_image.save()
 
-        if not InitialImage.objects.filter(label_user=self.request.user, classificationimage__isnull=True,
-                                           pk__gt=self.get_object().pk):
-            return redirect('classification:classification_list')
-        else:
+        # 분류작업할 사진이 있다면 다음 사진으로 이동
+        if InitialImage.objects.filter(label_user=self.request.user, classificationimage__isnull=True,
+                                       pk__gt=self.get_object().pk):
             return redirect('classification:classification_detail',
                             InitialImage.objects.filter(label_user=self.request.user, classificationimage__isnull=True,
                                                         pk__gt=self.get_object().pk).first().pk)
+        else:
+            return redirect('classification:classification_list')
 
 
 @method_decorator(has_staff_permission, name='dispatch')
@@ -118,7 +120,8 @@ class ClassificationInspectList(ListView):
 
         context['waiting_images'] = InitialImage.objects.filter(label_user__isnull=False, inspect_user__isnull=True,
                                                                 classificationimage__isnull=False,
-                                                                classificationimage__classificationinspectimage__isnull=True)
+                                                                classificationimage__classificationinspectimage__isnull=
+                                                                True)
         return context
 
 
@@ -136,10 +139,6 @@ class ClassificationStatusBoard(ListView):
         context['inspected_percent'] = int(
             zero_denom_check(context['inspected_images'].count(), self.object_list.count()))
 
-        context['inspected_detail_cut'] = context['inspected_images'].filter(image__image_type=0)
-        context['inspected_model_cut'] = context['inspected_images'].filter(image__image_type=1)
-        context['inspected_trash_cut'] = context['inspected_images'].filter(image__image_type=2)
-
         context['user_images'] = self.object_list.filter(label_user=self.request.user)
         context['user_classified_images'] = ClassificationImage.objects.filter(image__label_user=self.request.user)
         context['user_classified_percent'] = int(
@@ -148,6 +147,11 @@ class ClassificationStatusBoard(ListView):
             image__image__label_user=self.request.user)
         context['user_inspected_percent'] = int(
             zero_denom_check(context['user_inspected_images'].count(), context['user_images'].count()))
+
+        context['inspected_detail_cut'] = context['inspected_images'].filter(image__image_type=0)
+        context['inspected_model_cut'] = context['inspected_images'].filter(image__image_type=1)
+        context['inspected_trash_cut'] = context['inspected_images'].filter(image__image_type=2)
+
         return context
 
 
@@ -158,7 +162,7 @@ class ClassificationLoadImage(View):
         bulk = []
 
         if n.count() >= 100:
-            messages.error(request, '보유 이미지 수가 너무 많습니다. 보유하신 이미지가 100장 이하일 때 다시 추가 해주세요.', extra_tags='danger')
+            messages.error(request, f'보유 이미지 수가 {n.count()}장입니다. 100장 미만일 때 다시 요청해주세요.', extra_tags='danger')
         elif n.count() + 20 > 100:
             plus_data = 20 - 100 + n.count()
             for image in queryset[:plus_data]:
@@ -190,7 +194,7 @@ class ClassificationInspectLoadImage(View):
                                                classificationinspectimage__isnull=True)
         bulk = []
         if n.count() == 100:
-            messages.error(request, '보유 가능 이미지는 최대 100장으로 제한됩니다. 작업 후 다시 추가 해주세요.', extra_tags='danger')
+            messages.error(request, f'보유 이미지 수가 {n.count()}장입니다. 100장 미만일 때 다시 요청해주세요.', extra_tags='danger')
         elif n.count() + 20 > 100:
             plus_data = 20 - 100 + n.count()
             for image in queryset[:plus_data]:
@@ -213,15 +217,17 @@ class ClassificationInspectLoadImage(View):
         return redirect(reverse('classification:classification_inspect_list'))
 
 
+# 이미지 api 요청하여 사진 가져오기
 @is_login
 @is_staff
 def image_api(request):
-    url = "http://118.67.133.29/naver/all-images"
+    url = "http://118.67.133.29/naver/all-images"  # 네이버 쇼핑 크롤링 주소
+    # url = "http://118.67.133.29/instagram/all-images"  # 인스타그램 크롤링 주소
     bulk1 = []
     image_list = requests.get(url).json()
     images = image_list['data']
     last_num = InitialImage.objects.count()
-    end_num = last_num + 10
+    end_num = last_num + 500
 
     for image in images[last_num:end_num]:
         image_url = image['url']

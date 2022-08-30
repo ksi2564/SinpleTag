@@ -19,6 +19,7 @@ class InitialImage(models.Model):
         ordering = ['id']
 
 
+# int 값을 화면상에서 원하는 값으로 변경하여 출력
 CHOICES_TYPE = (
     (0, '상세컷'),
     (1, '모델컷'),
