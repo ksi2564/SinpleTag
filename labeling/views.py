@@ -24,7 +24,7 @@ def main_page(request):
 
 @method_decorator(is_login, name='dispatch')
 class LabelingList(ListView):
-    paginate_by = 5
+    paginate_by = 20
     template_name = 'label_list.html'
 
     def get_queryset(self):
@@ -54,25 +54,17 @@ class LabelingDetail(DetailView):
     template_name = 'label_detail.html'
 
     def dispatch(self, request, *args, **kwargs):
-        image_pk = request.user.pk
+        image_user_pk = request.user.pk
         url_pk = ClassificationInspectImage.objects.filter(pk=self.kwargs['pk'],
                                                            label_inspect_user__isnull=True).first()
 
-        if url_pk is None or image_pk is not url_pk.labeling_user.pk:
+        if url_pk is None or image_user_pk is not url_pk.labeling_user.pk:
             messages.error(request, "접근할 수 없는 정보입니다.", extra_tags='danger')
             return redirect(reverse("labeling:label_list"))
         return super(LabelingDetail, self).dispatch(request)  # 해당 유저가 맞으면 기존에 있던 부모 dispatch를 사용
 
     def get_context_data(self, **kwargs):
         context = super(LabelingDetail, self).get_context_data(**kwargs)
-        context['topcategory'] = TopCategory.objects.all()
-        context['item'] = Item.objects.all()
-        context['heel_height'] = HeelHeight.objects.all()
-        context['sole'] = Sole.objects.all()
-        context['material'] = Material.objects.all()
-        context['printing'] = Printing.objects.all()
-        context['detail'] = Detail.objects.all()
-        context['color'] = Color.objects.all()
         # 미리보기 bar
         context['pre_images'] = ClassificationInspectImage.objects.filter(labeling_user=self.request.user,
                                                                           labelimage__isnull=True,
@@ -91,6 +83,16 @@ class LabelingDetail(DetailView):
             context['the_next'] = context['the_next'].pk
         else:
             context['the_next'] = self.object.pk
+
+        context['topcategory'] = TopCategory.objects.all()
+        context['item'] = Item.objects.all()
+        context['heel_height'] = HeelHeight.objects.all()
+        context['sole'] = Sole.objects.all()
+        context['material'] = Material.objects.all()
+        context['printing'] = Printing.objects.all()
+        context['detail'] = Detail.objects.all()
+        context['color'] = Color.objects.all()
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -102,7 +104,8 @@ class LabelingDetail(DetailView):
             new_labeled_image.item = Item.objects.get(pk=request.POST.get('item'))
         if request.POST.get('heel-height'):
             new_labeled_image.heel_height = HeelHeight.objects.get(pk=request.POST.get('heel-height'))
-        new_labeled_image.save()
+        new_labeled_image.save()  # 단일 속성 저장 후 다중 속성 설정해서 저장함.
+
         sole = request.POST.getlist('sole')
         material = request.POST.getlist('material')
         printing = request.POST.getlist('printing')
@@ -119,19 +122,19 @@ class LabelingDetail(DetailView):
         for c in color:
             new_labeled_image.color.add(Color.objects.get(pk=c))
 
-        if not ClassificationInspectImage.objects.filter(labeling_user=self.request.user, labelimage__isnull=True,
-                                                         pk__gt=self.get_object().pk):
-            return redirect('labeling:label_list')
-        else:
+        if ClassificationInspectImage.objects.filter(labeling_user=self.request.user, labelimage__isnull=True,
+                                                     pk__gt=self.get_object().pk):
             return redirect('labeling:label_detail',
                             ClassificationInspectImage.objects.filter(labeling_user=self.request.user,
                                                                       labelimage__isnull=True,
                                                                       pk__gt=self.get_object().pk).first().pk)
+        else:
+            return redirect('labeling:label_list')
 
 
 @method_decorator(has_staff_permission, name='dispatch')
 class LabelingInspectList(ListView):
-    paginate_by = 5
+    paginate_by = 20
     template_name = 'inspect_list.html'
 
     def get_queryset(self):
@@ -171,14 +174,6 @@ class LabelingInspectDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(LabelingInspectDetail, self).get_context_data(**kwargs)
-        context['topcategory'] = TopCategory.objects.all()
-        context['item'] = Item.objects.all()
-        context['heel_height'] = HeelHeight.objects.all()
-        context['sole'] = Sole.objects.all()
-        context['material'] = Material.objects.all()
-        context['printing'] = Printing.objects.all()
-        context['detail'] = Detail.objects.all()
-        context['color'] = Color.objects.all()
         # 미리보기 bar
         context['pre_images'] = LabelImage.objects.filter(image__label_inspect_user=self.request.user,
                                                           inspectimage__isnull=True,
@@ -197,6 +192,16 @@ class LabelingInspectDetail(DetailView):
             context['the_next'] = context['the_next'].pk
         else:
             context['the_next'] = self.object.pk
+
+        context['topcategory'] = TopCategory.objects.all()
+        context['item'] = Item.objects.all()
+        context['heel_height'] = HeelHeight.objects.all()
+        context['sole'] = Sole.objects.all()
+        context['material'] = Material.objects.all()
+        context['printing'] = Printing.objects.all()
+        context['detail'] = Detail.objects.all()
+        context['color'] = Color.objects.all()
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -206,6 +211,7 @@ class LabelingInspectDetail(DetailView):
         new_inspected_image.item = Item.objects.get(pk=request.POST.get('item'))
         new_inspected_image.heel_height = HeelHeight.objects.get(pk=request.POST.get('heel-height'))
         new_inspected_image.save()
+
         sole = request.POST.getlist('sole')
         material = request.POST.getlist('material')
         printing = request.POST.getlist('printing')
@@ -232,6 +238,7 @@ class LabelingInspectDetail(DetailView):
                                                       pk__gt=self.get_object().pk).first().pk)
 
 
+# 대시보드에서 백분율 계산 시 분모가 0일 때 예외처리 함수
 def zero_denom_check(numer, denom):
     if denom != 0:
         return numer / denom * 100
@@ -261,6 +268,7 @@ class LabelingStatusBoard(ListView):
         context['user_inspected_percent'] = int(
             zero_denom_check(context['user_inspected_images'].count(), context['user_images'].count()))
 
+        # 대시보드 통계 자료에 사용되는 context
         inspect_images = InspectImage.objects.all()
         categories = {}
         for category in TopCategory.objects.all():
@@ -304,10 +312,10 @@ class LabelingLoadImage(View):
         n = ClassificationInspectImage.objects.filter(labeling_user=self.request.user, labelimage__isnull=True)
         bulk = []
 
-        if n.count() >= 10:
-            messages.error(request, '보유 이미지 수가 너무 많습니다. 보유하신 이미지가 10장 이하일 때 다시 추가 해주세요.', extra_tags='danger')
-        elif n.count() + 2 > 10:
-            plus_data = 2 - 10 + n.count()
+        if n.count() >= 100:
+            messages.error(request, f'보유 이미지 수가 {n.count()}장입니다. 100장 미만일 때 다시 요청해주세요.', extra_tags='danger')
+        elif n.count() + 20 > 100:
+            plus_data = 20 - 100 + n.count()
             for image in queryset[:plus_data]:
                 image.labeling_user = self.request.user
                 bulk.append(image)
@@ -317,7 +325,7 @@ class LabelingLoadImage(View):
             else:
                 messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
         else:
-            for image in queryset[:2]:
+            for image in queryset[:20]:
                 image.labeling_user = self.request.user
                 bulk.append(image)
             ClassificationInspectImage.objects.bulk_update(bulk, ['labeling_user'])  # bulk에 있는 데이터 모두 한번에 업데이트
@@ -335,10 +343,10 @@ class LabelingInspectLoadImage(View):
         n = LabelImage.objects.filter(image__label_inspect_user=self.request.user, inspectimage__isnull=True)
         bulk = []
 
-        if n.count() >= 10:
-            messages.error(request, '보유 이미지 수가 너무 많습니다. 보유하신 이미지가 10장 이하일 때 다시 추가 해주세요.', extra_tags='danger')
-        elif n.count() + 2 > 10:
-            plus_data = 2 - 10 + n.count()
+        if n.count() >= 100:
+            messages.error(request, f'보유 이미지 수가 {n.count()}장입니다. 100장 미만일 때 다시 요청해주세요.', extra_tags='danger')
+        elif n.count() + 20 > 100:
+            plus_data = 20 - 100 + n.count()
             for image in queryset[:plus_data]:
                 image.image.label_inspect_user = self.request.user
                 bulk.append(image.image)
@@ -348,7 +356,7 @@ class LabelingInspectLoadImage(View):
             else:
                 messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
         else:
-            for image in queryset[:2]:
+            for image in queryset[:20]:
                 image.image.label_inspect_user = self.request.user
                 bulk.append(image.image)
             ClassificationInspectImage.objects.bulk_update(bulk, ['label_inspect_user'])  # bulk에 있는 데이터 모두 한번에 업데이트
