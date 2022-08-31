@@ -2,10 +2,9 @@ from django.contrib import admin
 # Register your models here.
 from django.contrib.auth.models import User
 
-from accountapp.decorators import is_login
 from accountapp.models import RequestPermission
 
-admin.site.login = is_login(admin.site.login)  # 로그인 후 어드민페이지 접속 가능
+# admin.site.login = is_login(admin.site.login)  # 로그인 후 어드민페이지 접속 가능
 admin.site.unregister(User)
 
 
