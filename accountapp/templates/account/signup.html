@@ -5,17 +5,27 @@
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Sign Up" %}</h1>
-
-<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
-
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
-</form>
+<h3 style="font-weight: bold; text-align: center; margin-top: 4rem; color: #338E3C">KRISTAG</h3>
+<p class="row justify-content-center" style="font-weight: bold">회원정보를 입력해주세요</p>
+<div class="row justify-content-center">
+    <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        <label for="email" hidden></label>
+        <input class="form-control mt-2" type="email" name="email" id="email" style="height: 3rem;"
+               placeholder="이메일을 입력하세요" required>
+        <label for="password1" hidden></label>
+        <input class="form-control mt-2" type="password" name="password1" id="password1" style="height: 3rem;"
+               placeholder="비밀번호를 입력하세요" required>
+        <label for="password2" hidden></label>
+        <input class="form-control mt-2" type="password" name="password2" id="password2" style="height: 3rem;"
+               placeholder="비밀번호를 입력하세요" required>
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <button class="btn mt-3" type="submit"
+                style="width: 25rem; height: 3rem; background-color: #8BC34A; color: white">회원가입 &raquo;
+        </button>
+    </form>
+</div>
 
 {% endblock %}

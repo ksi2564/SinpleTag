@@ -29,7 +29,10 @@ class MyInfo(DetailView):
     def post(self, request, *args, **kwargs):
         new_request = RequestPermission()
         new_request.user = self.request.user
-        new_request.name = self.request.user.socialaccount_set.all()[0].extra_data['name']
+        if self.request.user.socialaccount_set.all():
+            new_request.name = self.request.user.socialaccount_set.all()[0].extra_data['name']
+        else:
+            new_request.name = self.request.user.username
         new_request.save()
 
         messages.success(request, "전문가 권한 요청을 하였습니다.")

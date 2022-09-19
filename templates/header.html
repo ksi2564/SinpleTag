@@ -1,7 +1,7 @@
 {% load static %}
 
-<div class="container-fluid mt-2">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg  navbar-light">
         <a class="navbar-brand" href="/" style="font-weight: bold; margin-right: 3rem; font-size: 1.5rem;"><img
                 src="{% static 'images/BrandLogo.svg' %}"
                 width="32" height="32"
@@ -11,7 +11,7 @@
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link active" href="{% url 'classification:classification_list' %}" role="button"
@@ -37,14 +37,18 @@
                 </li>
             </ul>
         </div>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+        <div class="collapse navbar-collapse justify-content-end">
             <div class="inline my-2 my-lg-0">
                 {% if user.is_authenticated %}
                     <ul class="navbar-nav mr-auto my-2 my-lg-0 navbar-nav-scroll" style="max-height: 100px;">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                                aria-expanded="false">
+                                {% if user.socialaccount_set.all %}
                                 {{ user.socialaccount_set.all.0.extra_data.name }}님
+                                {% else %}
+                                {{ user.username }}님
+                                {% endif %}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a class="dropdown-item" href="{% url 'accountapp:my_info' user.id %}">내 정보 관리</a>
@@ -81,7 +85,7 @@
                         </div>
                     </div>
                 {% else %}
-                    <a class="nav-link" href="{% url 'accountapp:login' %}">로그인/회원가입</a>
+                    <a class="nav-link" href="{% url 'account_login' %}">로그인/회원가입</a>
                 {% endif %}
             </div>
         </div>

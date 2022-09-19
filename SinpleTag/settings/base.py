@@ -143,3 +143,6 @@ ACCOUNT_USERNAME_REQUIRED = False  # 유저네임(ID Default) 요구 X
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'  # 계정 인증은 email을 통해서
 ACCOUNT_LOGOUT_ON_GET = True  # 로그아웃 확인 페이지 생략
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+# ACCOUNT_FORMS = {'signup': 'accountapp.forms.CustomSignupForm'}

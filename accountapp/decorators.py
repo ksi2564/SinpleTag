@@ -11,7 +11,7 @@ def is_login(func):
             return func(request, *args, **kwargs)
         else:
             messages.error(request, '로그인을 먼저 해주세요', extra_tags='danger')
-            return redirect('accountapp:login')
+            return redirect('account_login')
 
     return decorated
 
