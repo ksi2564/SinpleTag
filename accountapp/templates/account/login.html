@@ -1,46 +1,92 @@
 {% extends "account/base.html" %}
-
+{% load static %}
 {% load i18n %}
 {% load account socialaccount %}
+<!--{% providers_media_js %}-->
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
 {% block content %}
 
-<h1>{% trans "Sign In" %}</h1>
+{% if form.errors %}
+{% if form.non_field_errors %}
+<div class="container">
+    <div class="alert alert-danger" role="alert">
+        이메일 또는 비밀번호를 다시 확인하세요. 등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.
+    </div>
+</div>
+{% else %}
+<div class="container">
+    <div class="alert alert-danger" role="alert">
+        이메일 또는 비밀번호를 다시 확인하세요. 등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.
+    </div>
+</div>
+{% endif %}
+{% endif %}
 
-{% get_providers as socialaccount_providers %}
+<h3 style="font-weight: bold; text-align: center; margin-top: 4rem; color: #338E3C">KRISTAG</h3>
+
+<!--{% get_providers as socialaccount_providers %}-->
 
 {% if socialaccount_providers %}
-<p>{% blocktrans with site.name as site_name %}Please sign in with one
-of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+<!--<p>{% blocktrans with site.name as site_name %}Please sign in with one-->
+<!--of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>-->
+<!--for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>-->
 
-<div class="socialaccount_ballot">
+<!--<div class="socialaccount_ballot">-->
 
-  <ul class="socialaccount_providers">
-    {% include "socialaccount/snippets/../socialaccount/snippets/provider_list.html" with process="login" %}
-  </ul>
+<!--  <ul class="socialaccount_providers">-->
+<!--    {% include "socialaccount/snippets/provider_list.html" with process="login" %}-->
+<!--  </ul>-->
 
-  <div class="login-or">{% trans 'or' %}</div>
+<!--  <div class="login-or">{% trans 'or' %}</div>-->
 
+<!--</div>-->
+
+<!--{% include "socialaccount/snippets/login_extra.html" %}-->
+<div class="row justify-content-center">
+    <form class="login" method="POST" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        <label for="login" hidden></label>
+        <input class="form-control mt-2" type="email" name="login" id="login" style="height: 3rem;"
+               placeholder="이메일을 입력하세요" required>
+        <label for="password" hidden></label>
+        <input class="form-control mt-2" type="password" name="password" id="password" style="height: 3rem;"
+               placeholder="비밀번호를 입력하세요" required>
+
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <button class="btn mt-3" type="submit"
+                style="width: 25rem; height: 3rem; background-color: #8BC34A; color: white">
+            로그인
+        </button>
+        <br>
+        <p style="float: right; margin-top: .3rem; color: darkgray">
+            <a href="{% url 'account_reset_password' %}">비밀번호 찾기</a> | <a href="{{ signup_url }}">회원가입</a></p>
+    </form>
 </div>
-
-{% include "socialaccount/snippets/../socialaccount/snippets/login_extra.html" %}
+<div class="row justify-content-center mt-5">
+    <form action="{% provider_login_url 'naver' %}" method="post">
+        {% csrf_token %}
+        <button class="btn btn-naver" type="submit"><img
+                src="{% static 'images/btn_naver_logo.png' %}" alt=""
+                style="padding: 0; height: 2.3rem; width: 2.3rem"><span
+                style="margin: 0 2rem;">네이버 로그인</span></button>
+    </form>
+    <form action="{% provider_login_url 'google' %}" method="post" style="margin-left: 1rem;">
+        {% csrf_token %}
+        <button class="btn btn-google" type="submit"><img
+                src="{% static 'images/btn_google_logo.svg' %}" alt=""
+                style="padding: 0"><span
+                style="margin: 0 2rem">구글 로그인</span></button>
+    </form>
+</div>
 
 {% else %}
 <p>{% blocktrans %}If you have not created an account yet, then please
-<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+    <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
 {% endif %}
 
-<form class="login" method="POST" action="{% url 'account_login' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-  <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
-</form>
 
 {% endblock %}
