@@ -227,7 +227,7 @@ def image_api(request):
     image_list = requests.get(url).json()
     images = image_list['data']
     last_num = InitialImage.objects.count()
-    end_num = last_num + 500
+    end_num = last_num + 10000
 
     for image in images[last_num:end_num]:
         image_url = image['url']
