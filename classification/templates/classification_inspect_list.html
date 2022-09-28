@@ -39,7 +39,13 @@
                         <label class="label" for="cb{{ object.id }}"><img src="{{ object.image.image }}"
                                                                           class="card-img img-size"
                                                                           alt="...">
-                            <strong class="row justify-content-center">{{ object.get_image_type_display }}</strong>
+                            {% if object.image_type == 0 %}
+                            <strong class="row justify-content-center" style="color: green">{{ object.get_image_type_display }}</strong>
+                            {% elif object.image_type == 1 %}
+                            <strong class="row justify-content-center" style="color: blue">{{ object.get_image_type_display }}</strong>
+                            {% else %}
+                            <strong class="row justify-content-center" style="color: red">{{ object.get_image_type_display }}</strong>
+                            {% endif %}
                         </label>
                     </div>
                 {% endfor %}
