@@ -47,43 +47,43 @@
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-label" role="tabpanel"
                              aria-labelledby="nav-label-tab">
-                            <div class="form-group col-md-12">
-                                <label for="top-category"
-                                       style="font-weight: bold; font-size: 17px; margin-top: 1rem;">카테고리</label>
-                                <select class="form-control" id="top-category" name="top-category">
-                                    <option value selected>모름</option>
-                                    {% for obj in topcategory %}
-                                        <option value="{{ obj.id }}">{{ obj.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-row col-12">
-                                <div class="form-group col-md-6">
+<!--                            <div class="form-group col-md-12">-->
+<!--                                <label for="top-category"-->
+<!--                                       style="font-weight: bold; font-size: 17px; margin-top: 1rem;">카테고리</label>-->
+<!--                                <select class="form-control" id="top-category" name="top-category">-->
+<!--                                    <option value selected>모름</option>-->
+<!--                                    {% for obj in topcategory %}-->
+<!--                                        <option value="{{ obj.id }}">{{ obj.name }}</option>-->
+<!--                                    {% endfor %}-->
+<!--                                </select>-->
+<!--                            </div>-->
+                            <div class="form-row col-12 mt-3">
+<!--                                <div class="form-group col-md-6">-->
                                     <label for="item"
                                            style="font-size: 16px;">아이템</label>
-                                    <select class="form-control" id="item" name="item">
+                                    <select class="form-control" id="item" name="item" autofocus>
                                         <option value selected>모름</option>
                                         {% for obj in item %}
                                             <option value="{{ obj.id }}">{{ obj.name }}</option>
                                         {% endfor %}
                                     </select>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="heel-height" style="font-size: 16px;">굽 높이</label>
-                                    <select class="form-control" id="heel-height" name="heel-height">
-                                        <option value selected>모름</option>
-                                        {% for obj in heel_height %}
-                                            <option value="{{ obj.id }}">{{ obj.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+<!--                                </div>-->
+<!--                                <div class="form-group col-md-6">-->
+<!--                                    <label for="heel-height" style="font-size: 16px;">굽 높이</label>-->
+<!--                                    <select class="form-control" id="heel-height" name="heel-height">-->
+<!--                                        <option value selected>모름</option>-->
+<!--                                        {% for obj in heel_height %}-->
+<!--                                            <option value="{{ obj.id }}">{{ obj.name }}</option>-->
+<!--                                        {% endfor %}-->
+<!--                                    </select>-->
+<!--                                </div>-->
                             </div>
                             <hr>
                             <div class="col-12 mb-2" style="margin-left: -5px">
                                 <strong style="font-size: 17px; margin-top: 1rem;">복수 선택 가능</strong>
                             </div>
-                            <div class="form-row col-12">
-                                <div class="form-group col-md-6">
+                            <div class="form-row col-12 mt-3">
+                                <div class="form-group col-md-12">
                                     <label for="sole"
                                            style="font-size: 16px;">밑창 모양</label><br>
                                     <div>
@@ -95,7 +95,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label for="material"
                                            style="font-size: 16px;">소재감</label><br>
                                     <div>
@@ -108,46 +108,46 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row col-12">
-                                <div class="form-group col-md-6">
-                                    <label for="printing"
-                                           style="font-size: 16px;">프린트</label><br>
-                                    <div>
-                                        <select class="choices-multiple-remove-button" name="printing" id="printing"
-                                                placeholder="Select upto 5 tags" multiple>
-                                            {% for obj in printing %}
-                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="detail"
-                                           style="font-size: 16px;">디테일</label><br>
-                                    <div>
-                                        <select class="choices-multiple-remove-button" name="detail" id="detail"
-                                                placeholder="Select upto 5 tags" multiple>
-                                            {% for obj in detail %}
-                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row col-12">
-                                <div class="form-group col-md-6">
-                                    <label for="color"
-                                           style="font-size: 16px;">색상</label><br>
-                                    <div>
-                                        <select class="choices-multiple-remove-button" name="color" id="color"
-                                                placeholder="Select upto 5 tags" multiple>
-                                            {% for obj in color %}
-                                                <option value="{{ obj.id }}">{{ obj.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+<!--                            <div class="form-row col-12">-->
+<!--                                <div class="form-group col-md-6">-->
+<!--                                    <label for="printing"-->
+<!--                                           style="font-size: 16px;">프린트</label><br>-->
+<!--                                    <div>-->
+<!--                                        <select class="choices-multiple-remove-button" name="printing" id="printing"-->
+<!--                                                placeholder="Select upto 5 tags" multiple>-->
+<!--                                            {% for obj in printing %}-->
+<!--                                                <option value="{{ obj.id }}">{{ obj.name }}</option>-->
+<!--                                            {% endfor %}-->
+<!--                                        </select>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="form-group col-md-6">-->
+<!--                                    <label for="detail"-->
+<!--                                           style="font-size: 16px;">디테일</label><br>-->
+<!--                                    <div>-->
+<!--                                        <select class="choices-multiple-remove-button" name="detail" id="detail"-->
+<!--                                                placeholder="Select upto 5 tags" multiple>-->
+<!--                                            {% for obj in detail %}-->
+<!--                                                <option value="{{ obj.id }}">{{ obj.name }}</option>-->
+<!--                                            {% endfor %}-->
+<!--                                        </select>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="form-row col-12">-->
+<!--                                <div class="form-group col-md-6">-->
+<!--                                    <label for="color"-->
+<!--                                           style="font-size: 16px;">색상</label><br>-->
+<!--                                    <div>-->
+<!--                                        <select class="choices-multiple-remove-button" name="color" id="color"-->
+<!--                                                placeholder="Select upto 5 tags" multiple>-->
+<!--                                            {% for obj in color %}-->
+<!--                                                <option value="{{ obj.id }}">{{ obj.name }}</option>-->
+<!--                                            {% endfor %}-->
+<!--                                        </select>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <div class="row justify-content-end" style="margin-right: 1.5rem;">
                                 <button type="submit" class="btn btn-outline-primary" style="width: 7rem;">라벨링 저장
                                 </button>
@@ -169,11 +169,11 @@
     <script>
         $(document).ready(function () {
             let multipleCancelButton = new Choices('.choices-multiple-remove-button', {
-                shouldSort: false, {# 자동 정렬 취소 #}
-                removeItemButton: true, {# 선택된 아이템 취소버튼 생성 #}
-                maxItemCount: 5, {# 최대 선택 개수 제한 #}
-                {#searchResultLimit: 5,#}
-                {#renderChoiceLimit: 5#}
+                shouldSort: false, // 자동 정렬 취소
+                removeItemButton: true, // 선택된 아이템 취소버튼 생성
+                maxItemCount: 5, // 최대 선택 개수 제한
+                // searchResultLimit: 5,
+                // renderChoiceLimit: 5
             });
         });
     </script>

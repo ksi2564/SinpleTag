@@ -226,7 +226,7 @@ def image_api(request):
     bulk1 = []
     image_list = requests.get(url).json()
     images = image_list['data']
-    last_num = InitialImage.objects.count()
+    last_num = InitialImage.objects.last().id
     end_num = last_num + 10000
 
     for image in images[last_num:end_num]:
