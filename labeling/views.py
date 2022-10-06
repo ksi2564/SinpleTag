@@ -98,29 +98,29 @@ class LabelingDetail(DetailView):
     def post(self, request, *args, **kwargs):
         new_labeled_image = LabelImage()
         new_labeled_image.image = self.get_object()
-        if request.POST.get('top-category'):
-            new_labeled_image.top_category = TopCategory.objects.get(pk=request.POST.get('top-category'))
+        # if request.POST.get('top-category'):
+        #     new_labeled_image.top_category = TopCategory.objects.get(pk=request.POST.get('top-category'))
         if request.POST.get('item'):
             new_labeled_image.item = Item.objects.get(pk=request.POST.get('item'))
-        if request.POST.get('heel-height'):
-            new_labeled_image.heel_height = HeelHeight.objects.get(pk=request.POST.get('heel-height'))
+        # if request.POST.get('heel-height'):
+        #     new_labeled_image.heel_height = HeelHeight.objects.get(pk=request.POST.get('heel-height'))
         new_labeled_image.save()  # 단일 속성 저장 후 다중 속성 설정해서 저장함.
 
         sole = request.POST.getlist('sole')
         material = request.POST.getlist('material')
-        printing = request.POST.getlist('printing')
-        detail = request.POST.getlist('detail')
-        color = request.POST.getlist('color')
+        # printing = request.POST.getlist('printing')
+        # detail = request.POST.getlist('detail')
+        # color = request.POST.getlist('color')
         for s in sole:
             new_labeled_image.sole.add(Sole.objects.get(pk=s))
         for m in material:
             new_labeled_image.material.add(Material.objects.get(pk=m))
-        for p in printing:
-            new_labeled_image.printing.add(Printing.objects.get(pk=p))
-        for d in detail:
-            new_labeled_image.detail.add(Detail.objects.get(pk=d))
-        for c in color:
-            new_labeled_image.color.add(Color.objects.get(pk=c))
+        # for p in printing:
+        #     new_labeled_image.printing.add(Printing.objects.get(pk=p))
+        # for d in detail:
+        #     new_labeled_image.detail.add(Detail.objects.get(pk=d))
+        # for c in color:
+        #     new_labeled_image.color.add(Color.objects.get(pk=c))
 
         if ClassificationInspectImage.objects.filter(labeling_user=self.request.user, labelimage__isnull=True,
                                                      pk__gt=self.get_object().pk):
@@ -207,26 +207,26 @@ class LabelingInspectDetail(DetailView):
     def post(self, request, *args, **kwargs):
         new_inspected_image = InspectImage()
         new_inspected_image.image = self.get_object()
-        new_inspected_image.top_category = TopCategory.objects.get(pk=request.POST.get('top-category'))
+        # new_inspected_image.top_category = TopCategory.objects.get(pk=request.POST.get('top-category'))
         new_inspected_image.item = Item.objects.get(pk=request.POST.get('item'))
-        new_inspected_image.heel_height = HeelHeight.objects.get(pk=request.POST.get('heel-height'))
+        # new_inspected_image.heel_height = HeelHeight.objects.get(pk=request.POST.get('heel-height'))
         new_inspected_image.save()
 
         sole = request.POST.getlist('sole')
         material = request.POST.getlist('material')
-        printing = request.POST.getlist('printing')
-        detail = request.POST.getlist('detail')
-        color = request.POST.getlist('color')
+        # printing = request.POST.getlist('printing')
+        # detail = request.POST.getlist('detail')
+        # color = request.POST.getlist('color')
         for s in sole:
             new_inspected_image.sole.add(Sole.objects.get(pk=s))
         for m in material:
             new_inspected_image.material.add(Material.objects.get(pk=m))
-        for p in printing:
-            new_inspected_image.printing.add(Printing.objects.get(pk=p))
-        for d in detail:
-            new_inspected_image.detail.add(Detail.objects.get(pk=d))
-        for c in color:
-            new_inspected_image.color.add(Color.objects.get(pk=c))
+        # for p in printing:
+        #     new_inspected_image.printing.add(Printing.objects.get(pk=p))
+        # for d in detail:
+        #     new_inspected_image.detail.add(Detail.objects.get(pk=d))
+        # for c in color:
+        #     new_inspected_image.color.add(Color.objects.get(pk=c))
 
         if not LabelImage.objects.filter(image__label_inspect_user=self.request.user, inspectimage__isnull=True,
                                          pk__gt=self.get_object().pk):
@@ -270,18 +270,18 @@ class LabelingStatusBoard(ListView):
 
         # 대시보드 통계 자료에 사용되는 context
         inspect_images = InspectImage.objects.all()
-        categories = {}
-        for category in TopCategory.objects.all():
-            categories[category.name] = inspect_images.filter(top_category=category).count()
-        context['top_categories'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        # categories = {}
+        # for category in TopCategory.objects.all():
+        #     categories[category.name] = inspect_images.filter(top_category=category).count()
+        # context['top_categories'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
         categories = {}
         for category in Item.objects.all():
             categories[category.name] = inspect_images.filter(item=category).count()
         context['item'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
-        categories = {}
-        for category in HeelHeight.objects.all():
-            categories[category.name] = inspect_images.filter(heel_height=category).count()
-        context['heels'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        # categories = {}
+        # for category in HeelHeight.objects.all():
+        #     categories[category.name] = inspect_images.filter(heel_height=category).count()
+        # context['heels'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
         categories = {}
         for category in Sole.objects.all():
             categories[category.name] = inspect_images.filter(sole=category).count()
@@ -290,18 +290,18 @@ class LabelingStatusBoard(ListView):
         for category in Material.objects.all():
             categories[category.name] = inspect_images.filter(material=category).count()
         context['materials'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
-        categories = {}
-        for category in Printing.objects.all():
-            categories[category.name] = inspect_images.filter(printing=category).count()
-        context['printings'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
-        categories = {}
-        for category in Detail.objects.all():
-            categories[category.name] = inspect_images.filter(detail=category).count()
-        context['details'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
-        categories = {}
-        for category in Color.objects.all():
-            categories[category.name] = inspect_images.filter(color=category).count()
-        context['color'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        # categories = {}
+        # for category in Printing.objects.all():
+        #     categories[category.name] = inspect_images.filter(printing=category).count()
+        # context['printings'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        # categories = {}
+        # for category in Detail.objects.all():
+        #     categories[category.name] = inspect_images.filter(detail=category).count()
+        # context['details'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
+        # categories = {}
+        # for category in Color.objects.all():
+        #     categories[category.name] = inspect_images.filter(color=category).count()
+        # context['color'] = sorted(categories.items(), key=lambda x: x[1], reverse=True)
         return context
 
 

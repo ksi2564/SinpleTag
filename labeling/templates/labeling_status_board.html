@@ -2,455 +2,481 @@
 {% load static %}
 
 {% block content %}
-    <div class="container">
-        <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
-                <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:label_list' %}">Labeling</a></li>
-                <li class="breadcrumb-item active"><a aria-current="page">Status Dashboard</a></li>
-                {% if user.is_staff == True %}
-                    <li>
-                        <a class="btn btn-outline-success" type="submit" id="popoverData"
-                           href="{% url 'labeling:export_excel' %}"
-                           style="margin-left: 1rem; padding: 0 .5rem" data-container="body" data-toggle="popover"
-                           data-placement="bottom" data-trigger="hover" data-content="라벨링 데이터 다운로드">
-                            <i class="bi bi-file-earmark-arrow-down"></i>
-                        </a>
-                    </li>
-                {% endif %}
-            </ol>
-        </nav>
-        <h3 style="font-weight: bold; margin: 2rem 0 1.5rem 0;">내 작업 현황</h3>
-        <div class="table-responsive">
-            <table class="table" style="margin-bottom: 1.6rem">
-                <thead>
-                <tr>
-                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                            style="font-size: 16px">내 작업 이미지 개수</span><br>{{ user_images.count }}
-                        <div style="height: 1.5rem; width: 15rem;"></div>
-                    </th>
-                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                            style="font-size: 16px">내가 라벨링한 이미지</span><br>{{ user_labeled_percent }}%<span
-                            style="font-size: 12px; font-weight: normal">  ({{ user_labeled_images.count }}개)</span>
-                        <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
-                            <div class="progress-bar" role="progressbar"
-                                 style="width: {{ user_labeled_percent }}%;"></div>
-                        </div>
-                    </th>
-                    <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                            style="font-size: 16px">검수 통과된 이미지</span><br>{{ user_inspected_percent }}%<span
-                            style="font-size: 12px; font-weight: normal">  ({{ user_inspected_images.count }}개)</span>
-                        <div class="progress" style="width: 18rem; margin-bottom: .5rem">
-                            <div class="progress-bar progress-bar-custom" role="progressbar"
-                                 style="width: {{ user_inspected_percent }}%;"></div>
-                        </div>
-                    </th>
-                </tr>
-                </thead>
-            </table>
-        </div>
-        {% if user.is_staff == True %}
-            <h3 style="font-weight: bold; margin: 2rem 0 1.5rem 0;">프로젝트 진행 현황</h3>
-            <div class="table-responsive">
-                <table class="table" style="margin-bottom: 1.6rem">
-                    <thead>
-                    <tr>
-                        <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                                style="font-size: 16px">총 이미지 개수</span><br>{{ object_list.count }}
-                            <div style="height: 1.5rem; width: 15rem;"></div>
-                        </th>
-                        <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                                style="font-size: 16px">라벨링된 이미지</span><br>{{ labeled_percent }}%<span
-                                style="font-size: 12px; font-weight: normal">  ({{ labeled_images.count }}개)</span>
-                            <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
-                                <div class="progress-bar" role="progressbar"
-                                     style="width: {{ labeled_percent }}%;"></div>
-                            </div>
-                        </th>
-                        <th scope="col" style="font-size: 28px; font-weight: bold;"><span
-                                style="font-size: 16px">검수된 이미지</span><br>{{ inspected_percent }}%<span
-                                style="font-size: 12px; font-weight: normal">  ({{ inspected_images.count }}개)</span>
-                            <div class="progress" style="width: 18rem; margin-bottom: .5rem">
-                                <div class="progress-bar progress-bar-custom" role="progressbar"
-                                     style="width: {{ inspected_percent }}%;"></div>
-                            </div>
-                        </th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-            <h4 style="font-weight: bold; margin: 2rem 0 1.5rem 0">이미지 라벨링 통계</h4>
-            <div class="row">
-                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                    <canvas id="topCategory"></canvas>
-                </div>
-                <div style="width: 1rem;"></div>
-                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                    <canvas id="item"></canvas>
-                </div>
-                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                    <canvas id="heelHeight"></canvas>
-                </div>
-                <div style="width: 1rem;"></div>
-                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                    <canvas id="sole"></canvas>
-                </div>
-                <div class="card p-3 overflow-auto" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                    <canvas id="material"></canvas>
-                </div>
-                <div style="width: 1rem;"></div>
-                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                    <canvas id="printing"></canvas>
-                </div>
-                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                    <canvas id="detail"></canvas>
-                </div>
-                <div style="width: 1rem;"></div>
-                <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">
-                    <canvas id="color"></canvas>
-                </div>
-            </div>
-        {% endif %}
-        {#        <h3 style="font-weight: bold">데이터 내려받기</h3>#}
-        {#        <div class="card">#}
-        {#            <div class="card-body">#}
-        {#                <h5 style="font-weight: bold">카테고리 선택</h5>#}
-        {#                <div class="form-check">#}
-        {#                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">#}
-        {#                    <label class="form-check-label" for="defaultCheck1">#}
-        {#                        전체선택#}
-        {#                    </label>#}
-        {#                </div>#}
-        {#                <p>#}
-        {#                <h5 style="font-weight: bold">내려받을 파일 형식</h5>#}
-        {#                <div class="form-check">#}
-        {#                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"#}
-        {#                           value="option2">#}
-        {#                    <label class="form-check-label" for="exampleRadios2">#}
-        {#                        CSV파일(.csv 형식)#}
-        {#                    </label>#}
-        {#                </div>#}
-        {#            </div>#}
-        {#        </div>#}
-        {#        <div class="row justify-content-center">#}
-        {#            <a type="button" class="btn btn-outline-primary btn-m" style="margin-top: .6rem;" href="#"#}
-        {#               data-toggle="modal" data-target="#Unsatisfied">내려받기</a>#}
-        {#        </div>#}
-        {#        <div class="modal" id="Unsatisfied">#}
-        {#            <div class="modal-dialog">#}
-        {#                <div class="modal-content">#}
-        {#                    <div class="modal-header">#}
-        {#                        <h5 class="modal-title">카테고리 및 관련 속성 선택</h5>#}
-        {#                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-        {#                            <span aria-hidden="true">&times;</span>#}
-        {#                        </button>#}
-        {#                    </div>#}
-        {#                    <div class="modal-body">#}
-        {#                        <p>카테고리 혹은 관련 속성이 선택되지 않았습니다.<br>#}
-        {#                            카테고리와 관련 속성을 모두 최소 1개 이상 선택해주세요.</p>#}
-        {#                    </div>#}
-        {#                    <div class="modal-footer">#}
-        {#                        <button type="button" class="btn btn-secondary" data-dismiss="modal">확인</button>#}
-        {#                    </div>#}
-        {#                </div>#}
-        {#            </div>#}
-        {#        </div>#}
+<div class="container">
+    <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
+            <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:label_list' %}">Labeling</a></li>
+            <li class="breadcrumb-item active"><a aria-current="page">Status Dashboard</a></li>
+            {% if user.is_staff == True %}
+            <li>
+                <a class="btn btn-outline-success" type="submit" id="popoverData"
+                   href="{% url 'labeling:export_excel' %}"
+                   style="margin-left: 1rem; padding: 0 .5rem" data-container="body" data-toggle="popover"
+                   data-placement="bottom" data-trigger="hover" data-content="라벨링 데이터 다운로드">
+                    <i class="bi bi-file-earmark-arrow-down"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ol>
+    </nav>
+    <h3 style="font-weight: bold; margin: 2rem 0 1.5rem 0;">내 작업 현황</h3>
+    <div class="table-responsive">
+        <table class="table" style="margin-bottom: 1.6rem">
+            <thead>
+            <tr>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">내 작업 이미지 개수</span><br>{{ user_images.count }}
+                    <div style="height: 1.5rem; width: 15rem;"></div>
+                </th>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">내가 라벨링한 이미지</span><br>{{ user_labeled_percent }}%<span
+                        style="font-size: 12px; font-weight: normal">  ({{ user_labeled_images.count }}개)</span>
+                    <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
+                        <div class="progress-bar" role="progressbar"
+                             style="width: {{ user_labeled_percent }}%;"></div>
+                    </div>
+                </th>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">검수 통과된 이미지</span><br>{{ user_inspected_percent }}%<span
+                        style="font-size: 12px; font-weight: normal">  ({{ user_inspected_images.count }}개)</span>
+                    <div class="progress" style="width: 18rem; margin-bottom: .5rem">
+                        <div class="progress-bar progress-bar-custom" role="progressbar"
+                             style="width: {{ user_inspected_percent }}%;"></div>
+                    </div>
+                </th>
+            </tr>
+            </thead>
+        </table>
     </div>
+    {% if user.is_staff == True %}
+    <h3 style="font-weight: bold; margin: 2rem 0 1.5rem 0;">프로젝트 진행 현황</h3>
+    <div class="table-responsive">
+        <table class="table" style="margin-bottom: 1.6rem">
+            <thead>
+            <tr>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">총 이미지 개수</span><br>{{ object_list.count }}
+                    <div style="height: 1.5rem; width: 15rem;"></div>
+                </th>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">라벨링된 이미지</span><br>{{ labeled_percent }}%<span
+                        style="font-size: 12px; font-weight: normal">  ({{ labeled_images.count }}개)</span>
+                    <div class="progress" style="width: 18rem; margin-bottom: .5rem;">
+                        <div class="progress-bar" role="progressbar"
+                             style="width: {{ labeled_percent }}%;"></div>
+                    </div>
+                </th>
+                <th scope="col" style="font-size: 28px; font-weight: bold;"><span
+                        style="font-size: 16px">검수된 이미지</span><br>{{ inspected_percent }}%<span
+                        style="font-size: 12px; font-weight: normal">  ({{ inspected_images.count }}개)</span>
+                    <div class="progress" style="width: 18rem; margin-bottom: .5rem">
+                        <div class="progress-bar progress-bar-custom" role="progressbar"
+                             style="width: {{ inspected_percent }}%;"></div>
+                    </div>
+                </th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <h4 style="font-weight: bold; margin: 2rem 0 1.5rem 0">이미지 라벨링 통계</h4>
+    <div class="row">
+<!--        <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">-->
+<!--            <canvas id="topCategory"></canvas>-->
+<!--        </div>-->
+        <div style="width: 1rem;"></div>
+        <div class="card p-3 col-12" style="width: 34.5rem; height: 20rem; margin-bottom: 2rem;">
+            <canvas id="item"></canvas>
+        </div>
+<!--        <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">-->
+<!--            <canvas id="heelHeight"></canvas>-->
+<!--        </div>-->
+<!--        <div style="width: 1rem;"></div>-->
+        <div class="card p-3 col-12" style="width: 34.5rem; height: 20rem; margin-bottom: 2rem;">
+            <canvas id="sole"></canvas>
+        </div>
+        <div class="card p-3 col-12 overflow-auto" style="width: 34.5rem; height: 20rem; margin-bottom: 2rem;">
+            <canvas id="material"></canvas>
+        </div>
+        <div style="width: 1rem;"></div>
+<!--        <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">-->
+<!--            <canvas id="printing"></canvas>-->
+<!--        </div>-->
+<!--        <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">-->
+<!--            <canvas id="detail"></canvas>-->
+<!--        </div>-->
+<!--        <div style="width: 1rem;"></div>-->
+<!--        <div class="card p-3" style="width: 34.5rem; height: 25rem; margin-bottom: 2rem;">-->
+<!--            <canvas id="color"></canvas>-->
+<!--        </div>-->
+    </div>
+    {% endif %}
+</div>
 
-    <script>
-        {#엑셀파일 다운로드 토글#}
+<script>
+    // 엑셀파일 다운로드 토글
 
-        function toggle(source) {
-            let checkboxes = document.getElementsByName('cb');
-            let i = 0, n = checkboxes.length;
-            for (; i < n; i++) {
-                checkboxes[i].checked = source.checked;
+    function toggle(source) {
+        let checkboxes = document.getElementsByName('cb');
+        let i = 0, n = checkboxes.length;
+        for (; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+
+    $('#popoverData').popover()
+
+    // 차트
+    // const topCategoryChart = new Chart(
+    //     document.getElementById('topCategory'),
+    //     {
+    //         type: 'bar',
+    //         data: {
+    //             labels: [
+    //                 { % for name, value in top_categories %
+    //         }
+    //         '{{ name }}',
+    // {%
+    //     endfor %
+    // }
+    // ],
+    // datasets: [{
+    //     label: '카테고리',
+    //     backgroundColor: 'rgba(201, 203, 207, 0.8)',
+    //     hoverBackgroundColor: '#8BC34A',
+    //     data: [
+    //         { % for name, value in top_categories %
+    // }
+    //     {{value}
+    // },
+    // {%
+    //     endfor %
+    // }
+    // ],
+    // }]
+    // },
+    // options: {
+    //     responsive: true,
+    //         maintainAspectRatio
+    // :
+    //     false,
+    //         indexAxis
+    // :
+    //     'y',
+    //         scale
+    // :
+    //     {
+    //         x: {
+    //             ticks: {
+    //                 stepSize: 1
+    //             }
+    //         }
+    //     }
+    // }
+    // }
+    // );
+    const itemChart = new Chart(
+        document.getElementById('item'),
+        {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for name, value in item %}
+                        '{{ name }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: '아이템',
+                    backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                    hoverBackgroundColor: '#8BC34A',
+                    data: [
+                        {% for name, value in item %}
+                            {{value}},
+                        {% endfor %}
+                    ],
+                }]
+            },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'x',
+            scale:{
+                    y: {
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+            }
+        }}
+    );
+    // const heelHeight = new Chart(
+    //     document.getElementById('heelHeight'),
+    //     {
+    //         type: 'bar',
+    //         data: {
+    //             labels: [
+    //                 { % for name, value in heels %
+    //         }
+    //         '{{ name }}',
+    // {%
+    //     endfor %
+    // }
+    // ],
+    // datasets: [{
+    //     label: '굽 높이',
+    //     backgroundColor: 'rgba(201, 203, 207, 0.8)',
+    //     hoverBackgroundColor: '#8BC34A',
+    //     barPercentage: 0.5,
+    //     data: [
+    //         { % for name, value in heels %
+    // }
+    //     {{value}
+    // },
+    // {%
+    //     endfor %
+    // }
+    // ],
+    // }]
+    // },
+    // options: {
+    //     responsive: true,
+    //         maintainAspectRatio
+    // :
+    //     false,
+    //         indexAxis
+    // :
+    //     'y',
+    //         scale
+    // :
+    //     {
+    //         x: {
+    //             ticks: {
+    //                 stepSize: 1
+    //             }
+    //         }
+    //     }
+    // }
+    // }
+    // )
+    // ;
+    const sole = new Chart(
+        document.getElementById('sole'),
+        {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for name, value in soles %}
+                        '{{ name }}',
+                    {% endfor %}
+                ],
+            datasets: [{
+                label: '밑창 모양',
+                backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                hoverBackgroundColor: '#8BC34A',
+                data: [
+                    {% for name, value in soles %}
+                        {{value}},
+                    {% endfor %}
+                    ],
+            }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'x',
+                scale:
+                {
+                    y: {
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
             }
         }
-
-        $('#popoverData').popover()
-
-        {#차트#}
-        const topCategoryChart = new Chart(
-            document.getElementById('topCategory'),
-            {
-                type: 'bar',
-                data: {
-                    labels: [
-                        {% for name, value in top_categories %}
-                            '{{ name }}',
-                        {% endfor %}
-                    ],
-                    datasets: [{
-                        label: '카테고리',
-                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
-                        hoverBackgroundColor: '#8BC34A',
-                        data: [
-                            {% for name, value in top_categories %}
-                                {{ value }},
-                            {% endfor %}
-                        ],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    scale: {
-                        x: {
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            }
-        );
-        const itemChart = new Chart(
-            document.getElementById('item'),
-            {
-                type: 'bar',
-                data: {
-                    labels: [
-                        {% for name, value in item %}
-                            '{{ name }}',
-                        {% endfor %}
-                    ],
-                    datasets: [{
-                        label: '아이템',
-                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
-                        hoverBackgroundColor: '#8BC34A',
-                        data: [
-                            {% for name, value in item %}
-                                {{ value }},
-                            {% endfor %}
-                        ],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    scale: {
-                        x: {
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            }
-        );
-        const heelHeight = new Chart(
-            document.getElementById('heelHeight'),
-            {
-                type: 'bar',
-                data: {
-                    labels: [
-                        {% for name, value in heels %}
-                            '{{ name }}',
-                        {% endfor %}
-                    ],
-                    datasets: [{
-                        label: '굽 높이',
-                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
-                        hoverBackgroundColor: '#8BC34A',
-                        barPercentage: 0.5,
-                        data: [
-                            {% for name, value in heels %}
-                                {{ value }},
-                            {% endfor %}
-                        ],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    scale: {
-                        x: {
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            }
-        );
-        const sole = new Chart(
-            document.getElementById('sole'),
-            {
-                type: 'bar',
-                data: {
-                    labels: [
-                        {% for name, value in soles %}
-                            '{{ name }}',
-                        {% endfor %}
-                    ],
-                    datasets: [{
-                        label: '밑창 모양',
-                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
-                        hoverBackgroundColor: '#8BC34A',
-                        data: [
-                            {% for name, value in soles %}
-                                {{ value }},
-                            {% endfor %}
-                        ],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    scale: {
-                        x: {
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            }
-        );
-        const material = new Chart(
-            document.getElementById('material'),
-            {
-                type: 'bar',
-                data: {
-                    labels: [
+    );
+    const material = new Chart(
+        document.getElementById('material'),
+        {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for name, value in materials %}
+                        '{{ name }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: '소재감',
+                    backgroundColor: 'rgba(201, 203, 207, 0.8)',
+                    hoverBackgroundColor: '#8BC34A',
+                    data: [
                         {% for name, value in materials %}
-                            '{{ name }}',
+                            {{value}},
                         {% endfor %}
                     ],
-                    datasets: [{
-                        label: '소재감',
-                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
-                        hoverBackgroundColor: '#8BC34A',
-                        data: [
-                            {% for name, value in materials %}
-                                {{ value }},
-                            {% endfor %}
-                        ],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    scale: {
-                        x: {
-                            ticks: {
-                                stepSize: 1
-                            }
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'x',
+                scale:
+                {
+                    y: {
+                        ticks: {
+                            stepSize: 1
                         }
                     }
                 }
             }
-        );
-        const printing = new Chart(
-            document.getElementById('printing'),
-            {
-                type: 'bar',
-                data: {
-                    labels: [
-                        {% for name, value in printings %}
-                            '{{ name }}',
-                        {% endfor %}
-                    ],
-                    datasets: [{
-                        label: '프린트',
-                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
-                        hoverBackgroundColor: '#8BC34A',
-                        data: [
-                            {% for name, value in printings %}
-                                {{ value }},
-                            {% endfor %}
-                        ],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    scale: {
-                        x: {
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            }
-        );
-        const detail = new Chart(
-            document.getElementById('detail'),
-            {
-                type: 'bar',
-                data: {
-                    labels: [
-                        {% for name, value in details %}
-                            '{{ name }}',
-                        {% endfor %}
-                    ],
-                    datasets: [{
-                        label: '프린트',
-                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
-                        hoverBackgroundColor: '#8BC34A',
-                        data: [
-                            {% for name, value in details %}
-                                {{ value }},
-                            {% endfor %}
-                        ],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    scale: {
-                        x: {
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            }
-        );
-        const color = new Chart(
-            document.getElementById('color'),
-            {
-                type: 'bar',
-                data: {
-                    labels: [
-                        {% for name, value in color %}
-                            '{{ name }}',
-                        {% endfor %}
-                    ],
-                    datasets: [{
-                        label: '색상',
-                        backgroundColor: 'rgba(201, 203, 207, 0.8)',
-                        hoverBackgroundColor: '#8BC34A',
-                        data: [
-                            {% for name, value in color %}
-                                {{ value }},
-                            {% endfor %}
-                        ],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    scale: {
-                        x: {
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            }
-        );
-    </script>
+        }
+    );
+    // const printing = new Chart(
+    //     document.getElementById('printing'),
+    //     {
+    //         type: 'bar',
+    //         data: {
+    //             labels: [
+    //                 { % for name, value in printings %
+    //         }
+    //         '{{ name }}',
+    // {%
+    //     endfor %
+    // }
+    // ],
+    // datasets: [{
+    //     label: '프린트',
+    //     backgroundColor: 'rgba(201, 203, 207, 0.8)',
+    //     hoverBackgroundColor: '#8BC34A',
+    //     data: [
+    //         { % for name, value in printings %
+    // }
+    //     {{value}
+    // },
+    // {%
+    //     endfor %
+    // }
+    // ],
+    // }]
+    // },
+    // options: {
+    //     responsive: true,
+    //         maintainAspectRatio
+    // :
+    //     false,
+    //         indexAxis
+    // :
+    //     'y',
+    //         scale
+    // :
+    //     {
+    //         x: {
+    //             ticks: {
+    //                 stepSize: 1
+    //             }
+    //         }
+    //     }
+    // }
+    // }
+    // )
+    // ;
+    // const detail = new Chart(
+    //     document.getElementById('detail'),
+    //     {
+    //         type: 'bar',
+    //         data: {
+    //             labels: [
+    //                 { % for name, value in details %
+    //         }
+    //         '{{ name }}',
+    // {%
+    //     endfor %
+    // }
+    // ],
+    // datasets: [{
+    //     label: '프린트',
+    //     backgroundColor: 'rgba(201, 203, 207, 0.8)',
+    //     hoverBackgroundColor: '#8BC34A',
+    //     data: [
+    //         { % for name, value in details %
+    // }
+    //     {{value}
+    // },
+    // {%
+    //     endfor %
+    // }
+    // ],
+    // }]
+    // },
+    // options: {
+    //     responsive: true,
+    //         maintainAspectRatio
+    // :
+    //     false,
+    //         indexAxis
+    // :
+    //     'y',
+    //         scale
+    // :
+    //     {
+    //         x: {
+    //             ticks: {
+    //                 stepSize: 1
+    //             }
+    //         }
+    //     }
+    // }
+    // }
+    // )
+    // ;
+    // const color = new Chart(
+    //     document.getElementById('color'),
+    //     {
+    //         type: 'bar',
+    //         data: {
+    //             labels: [
+    //                 { % for name, value in color %
+    //         }
+    //         '{{ name }}',
+    // {%
+    //     endfor %
+    // }
+    // ],
+    // datasets: [{
+    //     label: '색상',
+    //     backgroundColor: 'rgba(201, 203, 207, 0.8)',
+    //     hoverBackgroundColor: '#8BC34A',
+    //     data: [
+    //         { % for name, value in color %
+    // }
+    //     {{value}
+    // },
+    // {%
+    //     endfor %
+    // }
+    // ],
+    // }]
+    // },
+    // options: {
+    //     responsive: true,
+    //         maintainAspectRatio
+    // :
+    //     false,
+    //         indexAxis
+    // :
+    //     'y',
+    //         scale
+    // :
+    //     {
+    //         x: {
+    //             ticks: {
+    //                 stepSize: 1
+    //             }
+    //         }
+    //     }
+    // }
+    // }
+    // )
+    // ;
+</script>
 {% endblock %}
