@@ -56,7 +56,7 @@ class LabelingDetail(DetailView):
     def dispatch(self, request, *args, **kwargs):
         image_user_pk = request.user.pk
         url_pk = ClassificationInspectImage.objects.filter(pk=self.kwargs['pk'],
-                                                           label_inspect_user__isnull=True).first()
+                                                           labelimage__isnull=True).first()
 
         if url_pk is None or image_user_pk is not url_pk.labeling_user.pk:
             messages.error(request, "접근할 수 없는 정보입니다.", extra_tags='danger')
