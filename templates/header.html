@@ -7,11 +7,11 @@
                 width="32" height="32"
                 class="d-inline-block align-top"
                 alt="">RISTAG</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link active" href="{% url 'classification:classification_list' %}" role="button"
@@ -26,7 +26,8 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link active" href="{% url 'labeling:label_list' %}" role="button" aria-expanded="false">이미지라벨링</a>
+                    <a class="nav-link active" href="{% url 'labeling:label_list' %}" role="button"
+                       aria-expanded="false">이미지라벨링</a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="{% url 'labeling:label_list' %}">이미지 라벨링</a>
                         <div class="dropdown-divider"></div>
@@ -36,56 +37,55 @@
                     </div>
                 </li>
             </ul>
-        </div>
-        <div class="collapse navbar-collapse justify-content-end">
-            <div class="inline my-2 my-lg-0">
+            <div class="inline my-2 my-lg-0 justify-content-end">
                 {% if user.is_authenticated %}
-                    <ul class="navbar-nav mr-auto my-2 my-lg-0 navbar-nav-scroll" style="max-height: 100px;">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                               aria-expanded="false">
-                                {% if user.socialaccount_set.all %}
-                                {{ user.socialaccount_set.all.0.extra_data.name }}님
-                                {% else %}
-                                {{ user.username }}님
-                                {% endif %}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a class="dropdown-item" href="{% url 'accountapp:my_info' user.id %}">내 정보 관리</a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <button class="dropdown-item" data-toggle="modal" data-target="#Logout">로그아웃
-                                    </button>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                    {#                    로그아웃 클릭 시 모달 생성#}
-                    <div class="modal" id="Logout">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">계정 로그아웃</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>로그아웃을 진행합니다.<br>
-                                        정말로 로그아웃할까요?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <a type="button" class="btn btn-outline-danger" href="{% url 'account_logout' %}">로그아웃</a>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                                </div>
+                <ul class="navbar-nav mr-auto my-2 my-lg-0 navbar-nav-scroll" style="max-height: 100px;">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                           aria-expanded="false">
+                            {% if user.socialaccount_set.all %}
+                            {{ user.socialaccount_set.all.0.extra_data.name }}님
+                            {% else %}
+                            {{ user.username }}님
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a class="dropdown-item" href="{% url 'accountapp:my_info' user.id %}">내 정보 관리</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <button class="dropdown-item" data-toggle="modal" data-target="#Logout">로그아웃
+                                </button>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                {# 로그아웃 클릭 시 모달 생성#}
+                <div class="modal" id="Logout">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">계정 로그아웃</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>로그아웃을 진행합니다.<br>
+                                    정말로 로그아웃할까요?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-outline-danger"
+                                   href="{% url 'account_logout' %}">로그아웃</a>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                             </div>
                         </div>
                     </div>
+                </div>
                 {% else %}
-                    <a class="nav-link" href="{% url 'account_login' %}">로그인/회원가입</a>
+                <a class="nav-link" href="{% url 'account_login' %}">로그인/회원가입</a>
                 {% endif %}
             </div>
         </div>
