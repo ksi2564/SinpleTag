@@ -19,7 +19,7 @@ SECRET_KEY = env('SECRET_KEY')
 # DEBUG = False
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['118.67.132.70']
+ALLOWED_HOSTS = ['*']
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
