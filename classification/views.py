@@ -1,4 +1,8 @@
 import datetime
+import os
+from io import BytesIO
+from urllib.request import urlopen
+from zipfile import ZipFile
 
 import requests
 import xlwt
@@ -260,25 +264,25 @@ def pass_or_not(request):
     return redirect(reverse('classification:classification_inspect_list'))
 
 
-# # 분류된 이미지 zip 파일 다운로드
-# def classification_dataset(request):
-#     dataset = ClassificationInspectImage.objects.all()
-#     f = BytesIO()  # 버퍼 할당
-#     zip_f = ZipFile(f, 'w')  # 해당 버퍼에 zip할 파일들 쓰기
-#
-#     for photo in dataset:
-#         url = urlopen(str(photo.image.image.image))  # 사진 url
-#         if photo.image.image_type == 0:  # 상세컷
-#             filename = os.path.join('detail_cut', str(photo.image.image.image).split('/')[-1])
-#         elif photo.image.image_type == 1:  # 모델컷
-#             filename = os.path.join('model_cut', str(photo.image.image.image).split('/')[-1])
-#         else:
-#             filename = os.path.join('trash_cut', str(photo.image.image.image).split('/')[-1])
-#         zip_f.writestr(filename, url.read())
-#     zip_f.close()
-#     response = HttpResponse(f.getvalue(), content_type='application/zip')
-#     response['Content-Disposition'] = 'attachment; filename=image-test.zip'  # 다운받게 될 zip 파일 이름 설정
-#     return response
+# 분류된 이미지 zip 파일 다운로드
+def classification_dataset(request):
+    dataset = ClassificationInspectImage.objects.filter(image__image_type=0)
+    f = BytesIO()  # 버퍼 할당
+    zip_f = ZipFile(f, 'w')  # 해당 버퍼에 zip할 파일들 쓰기
+
+    for photo in dataset:
+        url = urlopen(str(photo.image.image.image))  # 사진 url
+        filename = os.path.join(str(photo.image.image.image).split('/')[-1])
+        # if photo.image.image_type == 0:  # 상세컷
+        # elif photo.image.image_type == 1:  # 모델컷
+        #     filename = os.path.join('model_cut', str(photo.image.image.image).split('/')[-1])
+        # else:
+        #     filename = os.path.join('trash_cut', str(photo.image.image.image).split('/')[-1])
+        zip_f.writestr(filename, url.read())
+    zip_f.close()
+    response = HttpResponse(f.getvalue(), content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename=' + str(datetime.date.today()) + '.zip'  # 다운받게 될 zip 파일 이름 설정
+    return response
 
 
 def excel_export(request):
