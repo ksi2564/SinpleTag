@@ -102,7 +102,7 @@ class ClassificationDetail(DetailView):
 
 @method_decorator(has_staff_permission, name='dispatch')
 class ClassificationInspectList(ListView):
-    paginate_by = 20
+    paginate_by = 100
     template_name = 'classification_inspect_list.html'
 
     def get_queryset(self):
@@ -165,10 +165,11 @@ class ClassificationLoadImage(View):
         n = InitialImage.objects.filter(label_user=self.request.user, classificationimage__isnull=True)
         bulk = []
 
-        if n.count() >= 100:
-            messages.error(request, f'보유 이미지 수가 {n.count()}장입니다. 100장 미만일 때 다시 요청해주세요.', extra_tags='danger')
-        elif n.count() + 20 > 100:
-            plus_data = 20 - 100 + n.count()
+        if n.count() >= 500:
+            messages.error(request, f'보유 이미지 수가 {n.count()}장입니다. 500장 미만일 때 다시 요청해주세요.', extra_tags='danger')
+        elif n.count() + 500 > 500:
+            # plus_data = 20 - 100 + n.count()
+            plus_data = 500 - n.count()
             for image in queryset[:plus_data]:
                 image.label_user = self.request.user
                 bulk.append(image)
@@ -178,7 +179,7 @@ class ClassificationLoadImage(View):
             else:
                 messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
         else:
-            for image in queryset[:20]:
+            for image in queryset[:500]:
                 image.label_user = self.request.user
                 bulk.append(image)
             InitialImage.objects.bulk_update(bulk, ['label_user'])  # bulk에 있는 데이터 모두 한번에 업데이트
@@ -197,10 +198,11 @@ class ClassificationInspectLoadImage(View):
         n = ClassificationImage.objects.filter(image__inspect_user=self.request.user,
                                                classificationinspectimage__isnull=True)
         bulk = []
-        if n.count() == 100:
+        if n.count() >= 500:
             messages.error(request, f'보유 이미지 수가 {n.count()}장입니다. 100장 미만일 때 다시 요청해주세요.', extra_tags='danger')
-        elif n.count() + 20 > 100:
-            plus_data = 20 - 100 + n.count()
+        elif n.count() + 500 > 500:
+            # plus_data = 20 - 100 + n.count()
+            plus_data = 500 - n.count()
             for image in queryset[:plus_data]:
                 image.inspect_user = self.request.user
                 bulk.append(image)
@@ -210,7 +212,7 @@ class ClassificationInspectLoadImage(View):
             else:
                 messages.success(request, '추가할 수 있는 데이터가 없습니다.', extra_tags='danger')
         else:
-            for image in queryset[:20]:
+            for image in queryset[:500]:
                 image.inspect_user = self.request.user
                 bulk.append(image)
             InitialImage.objects.bulk_update(bulk, ['inspect_user'])  # bulk에 있는 데이터 모두 한번에 업데이트
