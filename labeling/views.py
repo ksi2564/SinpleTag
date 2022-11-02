@@ -388,7 +388,8 @@ def excel_export(request):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
-    columns = ['이미지', '카테고리', '아이템', '굽 높이', '밑창 모양', '소재감', '프린트', '디테일', '색상']
+    # columns = ['이미지', '카테고리', '아이템', '굽 높이', '밑창 모양', '소재감', '프린트', '디테일', '색상']
+    columns = ['이미지', '아이템', '밑창 모양', '소재감']
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
@@ -402,14 +403,14 @@ def excel_export(request):
     # 1행씩 들어갈 값 attr에 append
     for row in rows:
         attr.append(row.image.image.image.image.image.name)
-        attr.append(row.top_category.name)
+        # attr.append(row.top_category.name)
         attr.append(row.item.name)
-        attr.append(row.heel_height.name)
+        # attr.append(row.heel_height.name)
         attr.append([', '.join([x.name for x in row.sole.all()])])
         attr.append([', '.join([x.name for x in row.material.all()])])
-        attr.append([', '.join([x.name for x in row.printing.all()])])
-        attr.append([', '.join([x.name for x in row.detail.all()])])
-        attr.append([', '.join([x.name for x in row.color.all()])])
+        # attr.append([', '.join([x.name for x in row.printing.all()])])
+        # attr.append([', '.join([x.name for x in row.detail.all()])])
+        # attr.append([', '.join([x.name for x in row.color.all()])])
         row_num += 1
         for col_num in range(len(attr)):
             ws.write(row_num, col_num, attr[col_num], font_style)
