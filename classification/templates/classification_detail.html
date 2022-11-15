@@ -35,15 +35,15 @@
             </div>
         </div>
         <div class="row justify-content-center" style="margin: 1.5rem 0 0 3rem;">
-            <form action="" method="post">
+            <form action="" method="post" id="classificationForm">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-outline-primary" value="0" name="classification"
+                <button type="submit" class="btn btn-outline-primary" value="0" id="b1" name="classification"
                         style="width: 10rem; height: 5rem; margin-right: 3rem;" autofocus><strong>제품 상세컷</strong>
                 </button>
-                <button type="submit" class="btn btn-outline-info" value="1" name="classification"
+                <button type="submit" class="btn btn-outline-info" value="1" id="b2" name="classification"
                         style="width: 10rem; height: 5rem; margin-right: 3rem;"><strong>모델 코디컷</strong>
                 </button>
-                <button type="submit" class="btn btn-outline-danger" value="2" name="classification"
+                <button type="submit" class="btn btn-outline-danger" value="2" id="b3" name="classification"
                         style="width: 10rem; height: 5rem; margin-right: 3rem;"><strong>해당 사항 없음</strong>
                 </button>
             </form>
@@ -76,4 +76,35 @@
 {#            </div>#}
         </div>
     </div>
+
+<script>
+window.addEventListener('keydown', keyPressed, false)
+window.addEventListener('keyup', keyReleased, false)
+
+function keyReleased(e) {
+    const keys = [];
+    keys[e.key] = true;
+
+    if (keys['1']) {
+         $("#b1").click();
+    } else if (keys['2']) {
+        $("#b2").click();
+    } else if (keys['3']) {
+        $("#b3").click();
+    }
+}
+
+function keyPressed(e) {
+    const keys = [];
+    keys[e.key] = true;
+
+    if (keys['1']) {
+         $("#b1").focus();
+    } else if (keys['2']) {
+        $("#b2").focus();
+    } else if (keys['3']) {
+        $("#b3").focus();
+    }
+}
+</script>
 {% endblock %}
