@@ -2,12 +2,12 @@ from django.urls import path
 
 from classification.views import ClassificationList, ClassificationDetail, ClassificationInspectList, \
     ClassificationLoadImage, ClassificationInspectLoadImage, pass_or_not, \
-    image_api, ClassificationStatusBoard, excel_export, classification_dataset
+    ClassificationStatusBoard, excel_export, classification_dataset, image_api1
 
 app_name = 'classification'
 
 urlpatterns = [
-    path('imageapi/', image_api, name='image_api'),
+    path('imageapi/', image_api1, name='image_api'),
 
     path('', ClassificationList.as_view(), name='classification_list'),
     path('<int:pk>/', ClassificationDetail.as_view(), name='classification_detail'),

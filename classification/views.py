@@ -243,6 +243,21 @@ def image_api(request):
     return redirect(reverse('classification:classification_list'))
 
 
+# 이미지 api 요청하여 사진 가져오기
+@is_login
+@is_staff
+def image_api1(request):
+    file_list = os.listdir('media/images/')
+    bulk1 = []
+
+    for image in file_list:
+        image_url = 'http://118.67.133.192/media/images/' + image
+        bulk1.append(InitialImage(image=image_url))
+    InitialImage.objects.bulk_create(bulk1)
+
+    return redirect(reverse('classification:classification_list'))
+
+
 def delete_object_function(request, pk):
     obj = InitialImage.objects.get(id=pk)
     obj.delete()
