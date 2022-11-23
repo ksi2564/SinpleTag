@@ -247,11 +247,11 @@ def image_api(request):
 @is_login
 @is_staff
 def image_api1(request):
-    file_list = os.listdir('media/images/')
+    file_list = os.listdir('media/images2/')
     bulk1 = []
 
     for image in file_list:
-        image_url = 'http://118.67.133.192/media/images/' + image
+        image_url = 'http://118.67.133.192/media/images2/' + image
         bulk1.append(InitialImage(image=image_url))
     InitialImage.objects.bulk_create(bulk1)
 
