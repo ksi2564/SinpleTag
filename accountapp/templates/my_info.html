@@ -1,48 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}" role="alert">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-        <h2 style="font-weight: bold; text-align: center; margin-top: 50px">내 정보 관리</h2>
-        <div class="row justify-content-center">
-            <table class="table" style="margin-top: 2rem; width: 25rem;">
-                <tr>
-                    <th scope="row">이메일</th>
-                    <td>{{ user.email }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">이름</th>
-                    <td>{{ user.socialaccount_set.all.0.extra_data.name }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">권한</th>
-                    {% if user.is_staff == False %}
-                        <td>작업자</td>
-                    {% else %}
-                        <td>전문가</td>
-                    {% endif %}
-                </tr>
-            </table>
-        </div>
-        <div class="row justify-content-start" style="float:right; width: 30rem;">
-            <form action="" method="post">
-                {% csrf_token %}
-                {% if user.is_staff == True or user.requestpermission %}
-                    <button type="submit" class="badge badge-info" style="background-color: #ABB5BE" disabled>전문가 권한
-                        요청
-                    </button>
-                {% else %}
-                    <button type="submit" class="badge badge-info">
-                        전문가 권한 요청
-                    </button>
-                {% endif %}
-            </form>
-        </div>
+<div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert">
+        {{ message }}
     </div>
+    {% endfor %}
+    {% endif %}
+    <h2 style="font-weight: bold; text-align: center; margin-top: 50px">내 정보 관리</h2>
+    <div class="row justify-content-center">
+        <table class="table" style="margin-top: 2rem; width: 25rem;">
+            <tr>
+                <th scope="row">이메일</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th scope="row">이름</th>
+                <td>{{ user.socialaccount_set.all.0.extra_data.name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">권한</th>
+                {% if user.is_staff == False %}
+                <td>작업자</td>
+                {% else %}
+                <td>전문가</td>
+                {% endif %}
+            </tr>
+        </table>
+    </div>
+    <div class="row justify-content-start" style="float:right; width: 30rem;">
+        <form action="" method="post">
+            {% csrf_token %}
+            {% if user.is_staff == True or user.requestpermission %}
+            <button type="submit" class="badge badge-info" style="background-color: #ABB5BE" disabled>전문가 권한
+                요청
+            </button>
+            {% else %}
+            <button type="submit" class="badge badge-info">
+                전문가 권한 요청
+            </button>
+            {% endif %}
+        </form>
+    </div>
+</div>
 {% endblock %}

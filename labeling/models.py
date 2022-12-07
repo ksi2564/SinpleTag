@@ -1,9 +1,11 @@
+import time
+
 from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
 from category.models import TopCategory, Item, HeelHeight, Sole, Material, Printing, Detail, Color
-from classification.models import ClassificationInspectImage
+from classification.models import ClassificationInspectImage, InitialImage
 
 
 class LabelImage(models.Model):
@@ -45,4 +47,17 @@ class InspectImage(models.Model):
     class Meta:
         verbose_name = '라벨링 검수된 이미지'
         verbose_name_plural = '라벨링 검수된 이미지'
+        ordering = ['id']
+
+
+class OutsourcingLabeling(models.Model):
+    image = models.ImageField(upload_to='outsourcing')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    sole = models.ManyToManyField(Sole, related_name='outsourcing_sole')
+    material = models.ManyToManyField(Material, related_name='outsourcing_material')
+    date_load = models.DateTimeField(auto_now_add=True, auto_now=False)
+    
+    class Meta:
+        verbose_name = '외주 라벨링 이미지'
+        verbose_name_plural = '외주 라벨링 이미지'
         ordering = ['id']

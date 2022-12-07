@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb" style="margin-bottom: 1rem;">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="link" href="/">Home</a></li>
+            <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:label_list' %}">Labeling</a></li>
+            <li class="breadcrumb-item"><a class="link" href="{% url 'labeling:outsourcing_list' %}">Outsourcing</a>
+            </li>
+            <li class="breadcrumb-item active"><a aria-current="page">Data</a></li>
+        </ol>
+    </nav>
+    {# 상위 10개 미리보기#}
+    <div class="justify-content-center" style="display: inline">
+        <a href="{% url 'labeling:outsourcing_detail' the_prev %}"><i class="bi bi-chevron-left"></i></a>
+        {% for pre_image in pre_images %}
+        {% if pre_image == object %}
+        <a class="col-1 btn p-0 pre-item selected-item"
+           href="{% url 'labeling:outsourcing_detail' pre_image.id %}">
+            <img src="{{ pre_image.image }}" class="card-img-top pre-img-size" alt="...">
+        </a>
+        {% else %}
+        <a class="col-1 btn p-0 pre-item"
+           href="{% url 'labeling:outsourcing_detail' pre_image.id %}">
+            <img src="{{ pre_image.image }}" class="card-img-top pre-img-size" alt="...">
+        </a>
+        {% endif %}
+        {% endfor %}
+        <a href="{% url 'labeling:outsourcing_detail' the_next %}"
+           style="float: right; margin: 1.5rem 2.5rem 0 0;"><i class="bi bi-chevron-right"></i></a>
+    </div>
+    <div class="row" style="margin-top: 3rem;">
+        <div class="col-6 card" style="height: fit-content;">
+            <img src="{{ object.image }}" class="card-img-top" alt="">
+        </div>
+        <div class="col">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-link active" id="nav-label-tab" data-toggle="tab" href="#nav-label" role="tab"
+                       aria-controls="nav-label" aria-selected="true">라벨링</a>
+                    <a class="nav-link" id="nav-info-tab" data-toggle="tab" href="#nav-info" role="tab"
+                       aria-controls="nav-info" aria-selected="false">상세 정보</a>
+                </div>
+            </nav>
+            <form action="" method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-label" role="tabpanel"
+                         aria-labelledby="nav-label-tab">
+                        <div class="form-row col-12 mt-3">
+                            <label for="item"
+                                   style="font-size: 16px;">아이템</label>
+                            <select class="form-control" id="item" name="item" required>
+                                <option value>모름</option>
+                                {% for obj in item %}
+                                {% if object.item.id == obj.id %}
+                                <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                {% else %}
+                                <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <hr>
+                        <div class="col-12 mb-2" style="margin-left: -5px">
+                            <strong style="font-size: 17px; margin-top: 1rem;">복수 선택 가능</strong>
+                        </div>
+                        <div class="form-row col-12 mt-3">
+                            <div class="form-group col-md-12">
+                                <label for="sole"
+                                       style="font-size: 16px;">밑창 모양</label><br>
+                                <select class="choices-multiple-remove-button" name="sole" id="sole"
+                                        placeholder="Select upto 5 tags" multiple required>
+                                    {% for obj in sole %}
+                                    {% if obj in object.sole.all %}
+                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                    {% else %}
+                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="material"
+                                       style="font-size: 16px;">소재감</label><br>
+                                <select class="choices-multiple-remove-button" name="material" id="material"
+                                        placeholder="Select upto 5 tags" multiple required>
+                                    {% for obj in material %}
+                                    {% if obj in object.material.all %}
+                                    <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
+                                    {% else %}
+                                    <option value="{{ obj.id }}">{{ obj.name }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end" style="margin-right: 1.5rem;">
+                            <button type="button" class="btn btn-outline-danger"
+                                    style="width: 7rem; margin-right: .7rem;" data-toggle="modal"
+                                    data-target="#DeleteData">데이터 삭제
+                            </button>
+                            <button type="submit" class="btn btn-primary" style="width: 7rem;">라벨링 저장</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
+                        <div class="col-12" style="margin-top: 1.5rem;">
+                            <h4><b>업로드 일자</b></h4>
+                            <p>{{ object.date_load|date:'Y년 m월 d일 H:i' }}</p>
+                            <h4><b>이미지 ID</b></h4>
+                            <p>{{ object.pk }}</p>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </form>
+            <!--                데이터 삭제 버튼 클릭 시 모달 생성-->
+            <div class="modal" id="DeleteData">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">데이터 삭제</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>데이터 삭제 시 복구할 수 없습니다.<br>
+                                정말로 데이터 삭제를 삭제할까요?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a type="button" class="btn btn-outline-danger"
+                               href="{% url 'labeling:labeling_object_delete' object.id %}">삭제</a>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let multipleCancelButton = new Choices('.choices-multiple-remove-button', {
+            shouldSort: false, // 자동 정렬 취소
+            removeItemButton: true, // 선택된 아이템 취소버튼 생성
+            maxItemCount: 5, // 최대 선택 개수 제한
+            // searchResultLimit: 5,
+            // renderChoiceLimit: 5
+        });
+    });
+
+    // invalid 필드가 있을 시
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Get the forms we want to add validation styles to
+            const forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            const validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        alert('모든 항목을 채워주세요!')
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

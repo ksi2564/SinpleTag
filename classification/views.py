@@ -7,6 +7,7 @@ from zipfile import ZipFile
 import requests
 import xlwt
 from django.contrib import messages
+from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import redirect
 # Create your views here.
@@ -298,7 +299,8 @@ def classification_dataset(request):
         zip_f.writestr(filename, url.read())
     zip_f.close()
     response = HttpResponse(f.getvalue(), content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename=' + str(datetime.date.today()) + '.zip'  # 다운받게 될 zip 파일 이름 설정
+    response['Content-Disposition'] = 'attachment; filename=' + str(
+        datetime.date.today()) + '.zip'  # 다운받게 될 zip 파일 이름 설정
     return response
 
 
