@@ -206,3 +206,16 @@ input[type="checkbox"][id^="cb"] {
     box-shadow: 0 0 5px #333;
     z-index: -1;
 }
+
+.filter {
+    text-align: right;
+}
+
+.filter label {
+    display: block;
+    text-align: center;
+}
+
+.filter select option:checked {
+    text-align: center;
+}

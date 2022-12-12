@@ -53,7 +53,6 @@
                             <label for="item"
                                    style="font-size: 16px;">아이템</label>
                             <select class="form-control" id="item" name="item" required>
-                                <option value>모름</option>
                                 {% for obj in item %}
                                 {% if object.item.id == obj.id %}
                                 <option value="{{ obj.id }}" selected>{{ obj.name }}</option>
@@ -116,7 +115,7 @@
                     </div>
                 </div>
             </form>
-            <!--                데이터 삭제 버튼 클릭 시 모달 생성-->
+<!--                            데이터 삭제 버튼 클릭 시 모달 생성-->
             <div class="modal" id="DeleteData">
                 <div class="modal-dialog">
                     <div class="modal-content">

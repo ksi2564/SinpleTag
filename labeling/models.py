@@ -55,9 +55,22 @@ class OutsourcingLabeling(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     sole = models.ManyToManyField(Sole, related_name='outsourcing_sole')
     material = models.ManyToManyField(Material, related_name='outsourcing_material')
-    date_load = models.DateTimeField(auto_now_add=True, auto_now=False)
-    
+    date_load = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name = '외주 라벨링 이미지'
         verbose_name_plural = '외주 라벨링 이미지'
+        ordering = ['id']
+
+
+class InspectOutsourcingLabeling(models.Model):
+    image = models.OneToOneField(OutsourcingLabeling, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    sole = models.ManyToManyField(Sole, related_name='outsourcing_inspect_sole')
+    material = models.ManyToManyField(Material, related_name='outsourcing_inspect_material')
+    date_inspected = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = '외주 검수 완료 이미지'
+        verbose_name_plural = '외주 검수 완료 이미지'
         ordering = ['id']
