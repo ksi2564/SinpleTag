@@ -505,13 +505,12 @@ def outsourcing_json_deserializer(request):
         except Item.DoesNotExist:
             pass
 
-        created_labeling = OutsourcingLabeling.objects.bulk_create(bulk)
-        # ManyToMany field add attr
-        for attr in created_labeling:
-            for s in sole:
-                attr.sole.add(Sole.objects.get(name=s))
-            for m in material:
-                attr.material.add(Material.objects.get(name=m))
-
+    created_labeling = OutsourcingLabeling.objects.bulk_create(bulk)
+    # ManyToMany field add attr
+    for attr in created_labeling:
+        for s in sole:
+            attr.sole.add(Sole.objects.get(name=s))
+        for m in material:
+            attr.material.add(Material.objects.get(name=m))
 
     return redirect(reverse('labeling:outsourcing_list'))
