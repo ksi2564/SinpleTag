@@ -492,13 +492,18 @@ def outsourcing_json_deserializer(request):
     json_data.close()
     bulk = []
 
-    try:
-        for data in data_list:
+    for data in data_list:
+        try:
             image = 'http://' + request.get_host() + '/media/outsourcing/' + data['img_name'] + '.jpg'
             item = data["shoes_type"]
-            bulk.append(OutsourcingLabeling(image=image, item=Item.objects.get(name=item)))
             material = data["material"]
             sole = data["sole"]
+            bulk.append(OutsourcingLabeling(image=image, item=Item.objects.get(name=item)))
+
+        except KeyError:
+            pass
+        except Item.DoesNotExist:
+            pass
 
         created_labeling = OutsourcingLabeling.objects.bulk_create(bulk)
         # ManyToMany field add attr
@@ -507,9 +512,6 @@ def outsourcing_json_deserializer(request):
                 attr.sole.add(Sole.objects.get(name=s))
             for m in material:
                 attr.material.add(Material.objects.get(name=m))
-    except KeyError:
-        pass
-    except Item.DoesNotExist:
-        pass
+
 
     return redirect(reverse('labeling:outsourcing_list'))
