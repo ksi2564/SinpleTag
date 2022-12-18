@@ -485,8 +485,7 @@ def excel_export(request):
     return response
 
 
-def outsourcing_json_deserializer(request):
-    sole, material = [], []
+def outsourcing_json_deserializer1(request):
     json_data = open("static/outsourcing.json")
     data_list = json.load(json_data)
     json_data.close()
@@ -494,25 +493,41 @@ def outsourcing_json_deserializer(request):
 
     for data in data_list:
         try:
-            image = 'http://' + request.get_host() + '/media/outsourcing/' + data['img_name'] + '.jpg'
-            item = data["shoes_type"]
-            material.append(data["material"])
-            sole.append(data["sole"])
-            bulk.append(OutsourcingLabeling(image=image, item=Item.objects.get(name=item)))
+            if data["material"] and data["sole"]:
+                image = 'http://' + request.get_host() + '/media/outsourcing/' + data['img_name'] + '.jpg'
+                item = data["shoes_type"]
+                bulk.append(OutsourcingLabeling(image=image, item=Item.objects.get(name=item)))
 
         except KeyError:
             pass
         except Item.DoesNotExist:
             pass
+    OutsourcingLabeling.objects.bulk_create(bulk)
+    return redirect(reverse('labeling:outsourcing_json_deserializer2'))
 
-    created_labeling = OutsourcingLabeling.objects.bulk_create(bulk)
-    # ManyToMany field add attr
-    for attr in created_labeling:
-        for sole_attr in sole:
-            for s in sole_attr:
-                attr.sole.add(Sole.objects.get(name=s))
-        for material_attr in material:
-            for m in material_attr:
-                attr.material.add(Material.objects.get(name=m))
 
+def outsourcing_json_deserializer2(request):
+    image_dict = {}
+    json_data = open("static/outsourcing.json")
+    data_list = json.load(json_data)
+    json_data.close()
+
+    for data in data_list:
+        try:
+            image_dict['http://' + request.get_host() + '/media/outsourcing/' + data['img_name'] + '.jpg'] = [
+                data["material"], data["sole"]]
+
+        except KeyError:
+            pass
+        except Item.DoesNotExist:
+            pass
+        # ManyToMany field add attr
+        for image in image_dict:
+            obj = OutsourcingLabeling.objects.get(image=image)
+            material = image_dict[image][0]
+            sole = image_dict[image[1]]
+            for m in material:
+                obj.material.add(Material.objects.get(name=m))
+            for s in sole:
+                obj.sole.add(Sole.objects.get(name=s))
     return redirect(reverse('labeling:outsourcing_list'))

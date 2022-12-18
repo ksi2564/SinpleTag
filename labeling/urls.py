@@ -2,7 +2,8 @@ from django.urls import path
 
 from labeling.views import LabelingList, LabelingLoadImage, LabelingDetail, \
     LabelingInspectList, LabelingInspectLoadImage, LabelingInspectDetail, delete_object_function, LabelingStatusBoard, \
-    excel_export, outsourcing_json_deserializer, LabelingOutsourcingList, LabelingOutsourcingDetail
+    excel_export, LabelingOutsourcingList, LabelingOutsourcingDetail, \
+    outsourcing_json_deserializer1, outsourcing_json_deserializer2
 
 app_name = 'labeling'
 
@@ -21,5 +22,6 @@ urlpatterns = [
 
     path('export/', excel_export, name='export_excel'),
 
-    path('osc/', outsourcing_json_deserializer, name='outsourcing_json_deserializer'),
+    path('osc/', outsourcing_json_deserializer1, name='outsourcing_json_deserializer1'),
+    path('osc/mtm', outsourcing_json_deserializer2, name='outsourcing_json_deserializer2'),
 ]
