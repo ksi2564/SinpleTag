@@ -513,14 +513,9 @@ def outsourcing_json_deserializer2(request):
     json_data.close()
 
     for data in data_list[:2]:
-        try:
-            image_dict['http://' + request.get_host() + '/media/outsourcing/' + data['img_name'] + '.jpg'] = [
-                data["material"], data["sole"]]
+        image_dict['http://' + request.get_host() + '/media/outsourcing/' + data['img_name'] + '.jpg'] = [
+            data["material"], data["sole"]]
 
-        except KeyError:
-            pass
-        except Item.DoesNotExist:
-            pass
         # ManyToMany field add attr
         for image in image_dict:
             obj = OutsourcingLabeling.objects.get(image=image)
