@@ -512,7 +512,7 @@ def outsourcing_json_deserializer2(request):
     data_list = json.load(json_data)
     json_data.close()
 
-    for data in data_list:
+    for data in data_list[:2]:
         try:
             image_dict['http://' + request.get_host() + '/media/outsourcing/' + data['img_name'] + '.jpg'] = [
                 data["material"], data["sole"]]
@@ -527,7 +527,9 @@ def outsourcing_json_deserializer2(request):
             material = image_dict[image][0]
             sole = image_dict[image][1]
             for m in material:
+                obj.material.clear()
                 obj.material.add(Material.objects.get(name=m))
             for s in sole:
+                obj.sole.clear()
                 obj.sole.add(Sole.objects.get(name=s))
     return redirect(reverse('labeling:outsourcing_list'))
