@@ -525,7 +525,7 @@ def outsourcing_json_deserializer2(request):
         for image in image_dict:
             obj = OutsourcingLabeling.objects.get(image=image)
             material = image_dict[image][0]
-            sole = image_dict[image[1]]
+            sole = image_dict[image][1]
             for m in material:
                 obj.material.add(Material.objects.get(name=m))
             for s in sole:
