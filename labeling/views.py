@@ -492,7 +492,7 @@ def outsourcing_json_deserializer1(request):
     json_data.close()
     bulk = []
 
-    for data in data_list:
+    for data in data_list[:2]:
         try:
             if data["material"] and data["sole"]:
                 image = 'http://' + request.get_host() + '/media/outsourcing/' + data['img_name'] + '.jpg'
@@ -503,6 +503,7 @@ def outsourcing_json_deserializer1(request):
             pass
         except Item.DoesNotExist:
             pass
+    print(len(bulk))
     OutsourcingLabeling.objects.bulk_create(bulk)
     return redirect(reverse('labeling:outsourcing_list'))
 

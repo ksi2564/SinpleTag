@@ -15,6 +15,7 @@ class RequestPermissionInline(admin.TabularInline):
     model = RequestPermission
 
 
+@admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_filter = ('is_staff', ('requestpermission', admin.EmptyFieldListFilter))  # requestpermission 요청 유뮤를 필터로 추가
     list_display = ('username', 'email', 'is_staff', 'is_superuser', 'classification_pass', 'labeling_pass')
@@ -22,15 +23,16 @@ class UserAdmin(admin.ModelAdmin):
     inlines = [RequestPermissionInline]
     search_fields = ('email',)
 
-    def author_staff(self, request, queryset):
-        queryset.update(is_staff=True)
-
-    def unauthor_staff(self, request, queryset):
-        queryset.update(is_staff=False)
-
     def permission_delete(self, request, queryset):
         for obj in queryset.all():
             RequestPermission.objects.filter(user_id=obj).delete()
+
+    def author_staff(self, request, queryset):
+        queryset.update(is_staff=True)
+        self.permission_delete(request, queryset)
+
+    def unauthor_staff(self, request, queryset):
+        queryset.update(is_staff=False)
 
     def classification_pass(self, obj):
         return obj.classification_pass
@@ -50,5 +52,6 @@ class UserAdmin(admin.ModelAdmin):
     permission_delete.short_description = '전문가 권한 요청 삭제'
 
 
-admin.site.register(User, UserAdmin)
-admin.site.register(RequestPermission)
+@admin.register(RequestPermission)
+class RequestPermissionAdmin(admin.ModelAdmin):
+    pass

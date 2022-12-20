@@ -1,4 +1,7 @@
+from allauth.account.views import SignupView
 from django.contrib import messages, admin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
@@ -13,27 +16,26 @@ def login(request):
     return render(request, 'login.html')
 
 
-class MyInfo(DetailView):
+class MyInfo(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'my_info.html'
 
     def dispatch(self, request, *args, **kwargs):
-        user_pk = request.user.pk
-        url_pk = self.kwargs['pk']
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+        if request.user.pk != self.kwargs['pk']:
+            return redirect(reverse("accountapp:my_info", kwargs={"pk": request.user.pk}))
+        return super().dispatch(request, *args, **kwargs)
 
-        if user_pk is not url_pk:
-            messages.error(request, "접근할 수 없는 정보입니다.", extra_tags='danger')
-            return redirect(reverse("mainpage"))
-        return super(MyInfo, self).dispatch(request)  # 해당 유저가 맞으면 기존에 있던 부모 dispatch를 사용
 
-    def post(self, request, *args, **kwargs):
-        new_request = RequestPermission()
-        new_request.user = self.request.user
-        if self.request.user.socialaccount_set.all():
-            new_request.name = self.request.user.socialaccount_set.all()[0].extra_data['name']
-        else:
-            new_request.name = self.request.user.username
-        new_request.save()
+my_info = MyInfo.as_view()
 
-        messages.success(request, "전문가 권한 요청을 하였습니다.")
-        return redirect(self.request.path_info)  # url 주소에 따라 참조되어야하는 view를 결정 즉, self 참조
+
+@login_required
+def permission_req(request):
+    request_user = RequestPermission(user=request.user)
+    social_account = request.user.socialaccount_set.all()[0].extra_data['name']
+    request_user.name = social_account if social_account else request.user.username
+    request_user.save()
+    messages.success(request, "전문가 권한을 요청했습니다.")
+    return redirect(reverse("accountapp:my_info", kwargs={"pk": request.user.pk}))

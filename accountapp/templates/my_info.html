@@ -31,18 +31,9 @@
         </table>
     </div>
     <div class="row justify-content-start" style="float:right; width: 30rem;">
-        <form action="" method="post">
-            {% csrf_token %}
-            {% if user.is_staff == True or user.requestpermission %}
-            <button type="submit" class="badge badge-info" style="background-color: #ABB5BE" disabled>전문가 권한
-                요청
-            </button>
-            {% else %}
-            <button type="submit" class="badge badge-info">
-                전문가 권한 요청
-            </button>
-            {% endif %}
-        </form>
+        {% if not user.is_staff and not user.requestpermission %}
+        <a href="{% url 'accountapp:permission_req' %}" class="badge badge-info">전문가 권한 요청</a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
