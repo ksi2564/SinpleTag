@@ -3,6 +3,7 @@ import json
 
 import xlwt
 from django.contrib import messages, admin
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 # Create your views here.
@@ -491,7 +492,7 @@ def outsourcing_json_deserializer1(request):
     json_data.close()
     bulk = []
 
-    for data in data_list:
+    for data in data_list[:2]:
         try:
             if data["material"] and data["sole"]:
                 image = 'http://' + request.get_host() + '/media/outsourcing/' + data['img_name'] + '.jpg'
@@ -503,7 +504,7 @@ def outsourcing_json_deserializer1(request):
         except Item.DoesNotExist:
             pass
     OutsourcingLabeling.objects.bulk_create(bulk)
-    return redirect(reverse('labeling:outsourcing_json_deserializer2'))
+    return redirect(reverse('labeling:outsourcing_list'))
 
 
 def outsourcing_json_deserializer2(request):
@@ -511,8 +512,10 @@ def outsourcing_json_deserializer2(request):
     json_data = open("static/outsourcing.json")
     data_list = json.load(json_data)
     json_data.close()
+    end_object = OutsourcingLabeling.objects.last()
+    start = end_object.pk + 1 if end_object is True else 0
 
-    for data in data_list[:2]:
+    for data in data_list[start:start + 10000]:
         image_dict['http://' + request.get_host() + '/media/outsourcing/' + data['img_name'] + '.jpg'] = [
             data["material"], data["sole"]]
 
