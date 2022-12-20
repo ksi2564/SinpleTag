@@ -492,7 +492,7 @@ def outsourcing_json_deserializer1(request):
     json_data.close()
     bulk = []
 
-    for data in data_list[:2]:
+    for data in data_list:
         try:
             if data["material"] and data["sole"]:
                 image = 'http://' + request.get_host() + '/media/outsourcing/' + data['img_name'] + '.jpg'
